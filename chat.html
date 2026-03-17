@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Riya.AI — Your Personal Companion</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,400;1,700&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#05060f;--deep:#080a18;
+  --glass:rgba(255,255,255,0.05);--glass2:rgba(255,255,255,0.08);
+  --border:rgba(255,255,255,0.1);--border2:rgba(255,255,255,0.15);
+  --pink:#ff6b9d;--purple:#c77dff;--blue:#4cc9f0;--green:#00e5a0;
+  --glow-pink:rgba(255,107,157,0.3);--glow-purple:rgba(199,125,255,0.25);
+  --text:#f8f0ff;--text2:rgba(248,240,255,0.65);--text3:rgba(248,240,255,0.35);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--text);font-family:'Sora',sans-serif;display:flex;flex-direction:column}
+
+/* AMBIENT */
+.ambient{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.amb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.3}
+.amb-1{width:500px;height:500px;background:radial-gradient(circle,var(--pink),transparent 70%);top:-200px;right:-100px;animation:a1 8s ease-in-out infinite}
+.amb-2{width:400px;height:400px;background:radial-gradient(circle,var(--purple),transparent 70%);bottom:-100px;left:-100px;animation:a2 10s ease-in-out infinite}
+.amb-3{width:200px;height:200px;background:radial-gradient(circle,var(--blue),transparent 70%);top:40%;left:40%;animation:a1 7s ease-in-out infinite;opacity:.15}
+@keyframes a1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-20px,15px) scale(1.1)}}
+@keyframes a2{0%,100%{transform:translate(0,0)}50%{transform:translate(15px,-20px) scale(1.05)}}
+
+/* NAV */
+nav{position:relative;z-index:100;display:flex;align-items:center;gap:.75rem;padding:.75rem 1.25rem;background:rgba(5,6,15,0.85);backdrop-filter:blur(24px);border-bottom:1px solid var(--border);flex-shrink:0}
+.riya-av{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--pink),var(--purple));display:flex;align-items:center;justify-content:center;font-size:1.2rem;box-shadow:0 0 20px var(--glow-pink);position:relative;flex-shrink:0}
+.av-ring{position:absolute;inset:-3px;border-radius:50%;border:2px solid transparent;border-top-color:var(--pink);border-right-color:var(--purple);animation:spin 3s linear infinite}
+.av-dot{position:absolute;bottom:1px;right:1px;width:10px;height:10px;background:var(--green);border-radius:50%;border:2px solid var(--bg);animation:dp 2s infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes dp{0%,100%{box-shadow:0 0 0 0 rgba(0,229,160,0.4)}70%{box-shadow:0 0 0 5px transparent}}
+.riya-info h2{font-size:.95rem;font-weight:700;background:linear-gradient(135deg,var(--pink),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-family:'Playfair Display',serif;font-style:italic}
+.riya-status{font-size:.68rem;color:var(--text3);display:flex;align-items:center;gap:.3rem}
+.sdot{width:5px;height:5px;background:var(--green);border-radius:50%;animation:dp 2s infinite}
+.nav-right{display:flex;align-items:center;gap:.4rem;margin-left:auto}
+.nbtn{width:36px;height:36px;border-radius:10px;background:var(--glass);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:.9rem;cursor:pointer;transition:all .2s;color:var(--text2)}
+.nbtn:hover,.nbtn.on{background:rgba(255,107,157,0.1);border-color:rgba(255,107,157,0.3);color:var(--pink)}
+.lang-sel{background:var(--glass);border:1px solid var(--border);color:var(--text2);padding:.35rem .65rem;border-radius:10px;font-family:'Sora',sans-serif;font-size:.7rem;outline:none;cursor:pointer}
+.mood-pill{display:flex;align-items:center;gap:.35rem;background:var(--glass2);border:1px solid var(--border);border-radius:100px;padding:.3rem .75rem;font-size:.7rem;color:var(--text2)}
+.mood-e{animation:me 3s ease-in-out infinite}
+@keyframes me{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+
+/* CHAT */
+.chat{flex:1;overflow-y:auto;padding:1.25rem 1rem;position:relative;z-index:10;display:flex;flex-direction:column;gap:1rem;scroll-behavior:smooth}
+.chat::-webkit-scrollbar{width:3px}
+.chat::-webkit-scrollbar-thumb{background:rgba(255,107,157,0.25);border-radius:2px}
+
+/* WELCOME */
+.welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:75vh;text-align:center;gap:1.25rem;padding:1rem}
+.w-orb{width:90px;height:90px;border-radius:50%;background:linear-gradient(135deg,var(--pink),var(--purple),var(--blue));display:flex;align-items:center;justify-content:center;font-size:2.2rem;box-shadow:0 0 50px var(--glow-pink),0 0 100px var(--glow-purple);animation:op 3s ease-in-out infinite;position:relative}
+.w-orb::before{content:'';position:absolute;inset:-8px;border-radius:50%;border:1px solid rgba(255,107,157,0.3);animation:spin 6s linear infinite}
+.w-orb::after{content:'';position:absolute;inset:-16px;border-radius:50%;border:1px solid rgba(199,125,255,0.15);animation:spin 10s linear infinite reverse}
+@keyframes op{0%,100%{box-shadow:0 0 50px var(--glow-pink),0 0 100px var(--glow-purple)}50%{box-shadow:0 0 70px var(--glow-pink),0 0 140px var(--glow-purple)}}
+.w-title{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,5vw,2.5rem);font-style:italic;background:linear-gradient(135deg,var(--pink),var(--purple),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.w-sub{font-size:.85rem;color:var(--text2);max-width:300px;line-height:1.7}
+.w-input-wrap{width:100%;max-width:300px;display:flex;flex-direction:column;gap:.65rem}
+.w-input{background:var(--glass2);border:1px solid var(--border2);border-radius:14px;padding:.85rem 1rem;color:var(--text);font-family:'Sora',sans-serif;font-size:.875rem;outline:none;text-align:center;transition:all .3s}
+.w-input:focus{border-color:rgba(255,107,157,0.5);box-shadow:0 0 0 3px rgba(255,107,157,0.08)}
+.w-input::placeholder{color:var(--text3)}
+.w-btn{background:linear-gradient(135deg,var(--pink),var(--purple));border:none;padding:.9rem;border-radius:14px;color:white;font-weight:700;font-size:.875rem;cursor:pointer;font-family:'Sora',sans-serif;transition:all .3s;box-shadow:0 6px 24px var(--glow-pink)}
+.w-btn:hover{transform:translateY(-2px);box-shadow:0 10px 32px var(--glow-pink)}
+.qs-row{display:flex;flex-wrap:wrap;gap:.4rem;justify-content:center;max-width:320px}
+.qs{background:var(--glass);border:1px solid var(--border);border-radius:100px;padding:.35rem .8rem;font-size:.7rem;color:var(--text2);cursor:pointer;transition:all .2s;font-family:'Sora',sans-serif}
+.qs:hover{background:rgba(255,107,157,0.08);border-color:rgba(255,107,157,0.25);color:var(--pink)}
+
+/* MESSAGES */
+.mrow{display:flex;gap:.6rem;align-items:flex-end}
+.mrow.user{flex-direction:row-reverse}
+.mav{width:30px;height:30px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.8rem}
+.mav-r{background:linear-gradient(135deg,var(--pink),var(--purple));box-shadow:0 0 10px var(--glow-pink)}
+.mav-u{background:var(--glass2);border:1px solid var(--border2);color:var(--text2);font-size:.68rem;font-weight:700}
+.mcont{max-width:80%;display:flex;flex-direction:column;gap:.2rem}
+.mrow.user .mcont{align-items:flex-end}
+.bubble{padding:.8rem 1rem;border-radius:16px;font-size:.84rem;line-height:1.65;position:relative;word-break:break-word}
+.br{background:rgba(255,107,157,0.07);border:1px solid rgba(255,107,157,0.15);border-bottom-left-radius:4px;color:var(--text);backdrop-filter:blur(10px)}
+.bu{background:linear-gradient(135deg,rgba(199,125,255,0.12),rgba(76,201,240,0.08));border:1px solid rgba(199,125,255,0.18);border-bottom-right-radius:4px;color:var(--text)}
+.mtime{font-size:.58rem;color:var(--text3);padding:0 .15rem}
+.mrow.user .mtime{text-align:right}
+
+/* IMAGE MSG */
+.img-msg{border-radius:14px;overflow:hidden;border:1px solid var(--border);max-width:250px;margin-top:.3rem}
+.img-msg img{width:100%;display:block}
+.img-loading{width:250px;height:200px;background:var(--glass);border-radius:14px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:.5rem;font-size:.78rem;color:var(--text3)}
+.img-spin{width:24px;height:24px;border-radius:50%;border:2px solid var(--border);border-top-color:var(--pink);animation:spin .8s linear infinite}
+
+/* SOURCES */
+.sources{display:flex;flex-direction:column;gap:.35rem;margin-top:.4rem}
+.src{display:flex;align-items:center;gap:.4rem;background:var(--glass);border:1px solid var(--border);border-radius:8px;padding:.4rem .7rem;font-size:.7rem;color:var(--text2);text-decoration:none;transition:background .2s}
+.src:hover{background:var(--glass2)}
+
+/* TYPING */
+.typing-row{display:flex;gap:.6rem;align-items:flex-end}
+.tbub{background:rgba(255,107,157,0.07);border:1px solid rgba(255,107,157,0.15);border-radius:16px;border-bottom-left-radius:4px;padding:.8rem 1rem;display:flex;align-items:center;gap:.3rem;backdrop-filter:blur(10px)}
+.td{width:6px;height:6px;background:var(--pink);border-radius:50%;animation:td 1.2s infinite}
+.td:nth-child(2){animation-delay:.2s}
+.td:nth-child(3){animation-delay:.4s}
+@keyframes td{0%,100%{transform:translateY(0);opacity:.4}50%{transform:translateY(-6px);opacity:1}}
+
+/* INPUT */
+.input-area{position:relative;z-index:100;padding:.75rem 1rem 1rem;background:rgba(5,6,15,0.9);backdrop-filter:blur(24px);border-top:1px solid var(--border);flex-shrink:0}
+.iw{display:flex;align-items:flex-end;gap:.4rem;background:var(--glass2);border:1.5px solid var(--border2);border-radius:18px;padding:.45rem .45rem .45rem .9rem;transition:all .3s}
+.iw:focus-within{border-color:rgba(255,107,157,0.4);box-shadow:0 0 0 3px rgba(255,107,157,0.06),0 6px 24px rgba(255,107,157,0.08)}
+.mi{flex:1;background:none;border:none;outline:none;color:var(--text);font-family:'Sora',sans-serif;font-size:.875rem;resize:none;min-height:24px;max-height:110px;line-height:1.5;padding:.3rem 0}
+.mi::placeholder{color:var(--text3)}
+.iacts{display:flex;align-items:center;gap:.3rem}
+.iab{width:34px;height:34px;border-radius:10px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.9rem;transition:all .2s;background:none;color:var(--text3)}
+.iab:hover,.iab.on{color:var(--pink);background:rgba(255,107,157,0.08)}
+.sbtn{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--pink),var(--purple));border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;transition:all .2s;box-shadow:0 4px 14px var(--glow-pink);flex-shrink:0}
+.sbtn:hover{transform:scale(1.05);box-shadow:0 6px 18px var(--glow-pink)}
+.sbtn:disabled{opacity:.35;cursor:not-allowed;transform:none}
+.hints{display:flex;gap:.35rem;margin-top:.55rem;overflow-x:auto;scrollbar-width:none}
+.hints::-webkit-scrollbar{display:none}
+.hc{background:var(--glass);border:1px solid var(--border);border-radius:100px;padding:.28rem .72rem;font-size:.67rem;color:var(--text3);cursor:pointer;white-space:nowrap;font-family:'Sora',sans-serif;transition:all .2s;flex-shrink:0}
+.hc:hover{background:rgba(255,107,157,0.07);border-color:rgba(255,107,157,0.2);color:var(--pink)}
+.voice-bar{display:none;align-items:center;gap:.5rem;background:rgba(255,107,157,0.08);border:1px solid rgba(255,107,157,0.2);border-radius:100px;padding:.3rem .9rem;font-size:.73rem;color:var(--pink);margin-top:.5rem;font-weight:600}
+.voice-bar.show{display:flex}
+.vwrap{display:flex;align-items:center;gap:2px}
+.vb{width:3px;background:var(--pink);border-radius:2px;animation:vw 1s ease-in-out infinite}
+.vb:nth-child(1){height:7px}.vb:nth-child(2){height:13px;animation-delay:.1s}.vb:nth-child(3){height:19px;animation-delay:.2s}.vb:nth-child(4){height:13px;animation-delay:.3s}.vb:nth-child(5){height:7px;animation-delay:.4s}
+@keyframes vw{0%,100%{transform:scaleY(.4);opacity:.4}50%{transform:scaleY(1);opacity:1}}
+
+/* SIDEBAR */
+.sb-ov{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.55);backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .3s}
+.sb-ov.open{opacity:1;pointer-events:all}
+.sb{position:fixed;top:0;right:-310px;bottom:0;width:290px;z-index:501;background:rgba(8,10,24,0.98);backdrop-filter:blur(24px);border-left:1px solid var(--border);padding:1.25rem 1.1rem;transition:right .35s cubic-bezier(.25,.46,.45,.94);display:flex;flex-direction:column;gap:1.1rem;overflow-y:auto}
+.sb.open{right:0}
+.sb h3{font-family:'Playfair Display',serif;font-style:italic;background:linear-gradient(135deg,var(--pink),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:1rem}
+.sb-lbl{font-size:.62rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text3);margin-bottom:.1rem}
+.sb-card{background:var(--glass);border:1px solid var(--border);border-radius:12px;padding:.9rem}
+.mi-item{display:flex;align-items:center;gap:.5rem;font-size:.78rem;color:var(--text2);padding:.3rem 0;border-bottom:1px solid var(--border)}
+.mi-item:last-child{border:none}
+.lbar{display:flex;align-items:center;justify-content:space-between;background:var(--glass);border:1px solid var(--border);border-radius:10px;padding:.55rem .8rem;font-size:.7rem;color:var(--text2)}
+.lt{width:72px;height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.lf{height:100%;background:linear-gradient(90deg,var(--pink),var(--purple));border-radius:2px;transition:width .5s}
+.prem-card{background:linear-gradient(135deg,rgba(255,107,157,0.07),rgba(199,125,255,0.05));border:1px solid rgba(255,107,157,0.18);border-radius:14px;padding:1.1rem;text-align:center}
+.prem-card h4{font-size:.85rem;font-weight:700;background:linear-gradient(135deg,var(--pink),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.35rem}
+.prem-card p{font-size:.7rem;color:var(--text3);margin-bottom:.75rem;line-height:1.5}
+.up-btn{background:linear-gradient(135deg,var(--pink),var(--purple));border:none;padding:.6rem 1.5rem;border-radius:100px;color:white;font-weight:700;font-size:.78rem;cursor:pointer;font-family:'Sora',sans-serif;transition:all .2s}
+.up-btn:hover{transform:scale(1.04);box-shadow:0 4px 14px var(--glow-pink)}
+.v-opt{background:var(--glass);border:1px solid var(--border);border-radius:9px;padding:.6rem .85rem;font-size:.78rem;cursor:pointer;transition:all .2s;margin-bottom:.35rem}
+.v-opt.active{background:rgba(255,107,157,0.08);border-color:rgba(255,107,157,0.25);color:var(--pink)}
+.v-opt.locked{color:var(--text3)}
+
+/* TOAST */
+.toast{position:fixed;bottom:5rem;left:50%;transform:translateX(-50%) translateY(60px);background:rgba(5,6,15,0.9);backdrop-filter:blur(16px);border:1px solid var(--border);border-radius:100px;padding:.6rem 1.4rem;font-size:.8rem;font-weight:600;color:var(--text);z-index:9999;opacity:0;transition:all .35s;white-space:nowrap}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+.toast.ok{border-color:rgba(0,229,160,.3);color:var(--green)}
+.toast.err{border-color:rgba(255,71,87,.3);color:#ff4757}
+</style>
+</head>
+<body>
+<div class="ambient"><div class="amb amb-1"></div><div class="amb amb-2"></div><div class="amb amb-3"></div></div>
+
+<!-- SIDEBAR -->
+<div class="sb-ov" id="sbOv" onclick="closeSb()"></div>
+<div class="sb" id="sb">
+  <div style="display:flex;justify-content:space-between;align-items:center">
+    <h3>Riya's Memory ✨</h3>
+    <button onclick="closeSb()" style="background:var(--glass);border:1px solid var(--border);color:var(--text2);width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:.85rem">✕</button>
+  </div>
+  <div><div class="sb-lbl">About You</div>
+  <div class="sb-card">
+    <div class="mi-item">👤 <span id="mName">Not set</span></div>
+    <div class="mi-item">🌸 <span id="mMood">Happy mood</span></div>
+    <div class="mi-item">📅 <span id="mDate">Today</span></div>
+    <div class="mi-item">💬 <span id="mMsgs">0 messages</span></div>
+  </div></div>
+  <div><div class="sb-lbl">Daily Limit</div>
+  <div class="lbar"><span id="lText">30 left today</span><div class="lt"><div class="lf" id="lFill" style="width:0%"></div></div></div></div>
+  <div class="prem-card">
+    <h4>⭐ Go Premium</h4>
+    <p>Unlimited messages · Premium voice · AI images · Remember forever</p>
+    <button class="up-btn" onclick="showPrem()">Upgrade — ₹99/month</button>
+  </div>
+  <div><div class="sb-lbl">Voice Style</div>
+  <div class="v-opt active" onclick="setVoice('soft')">🎵 Soft & Warm (Free)</div>
+  <div class="v-opt locked" onclick="showPrem()">🔒 Deep & Intimate (Premium)</div>
+  <div class="v-opt locked" onclick="showPrem()">🔒 Energetic & Playful (Premium)</div></div>
+  <button onclick="clearAll()" style="background:rgba(255,71,87,0.08);border:1px solid rgba(255,71,87,0.18);color:#ff4757;padding:.6rem;border-radius:10px;cursor:pointer;font-family:'Sora',sans-serif;font-size:.78rem;font-weight:600">🗑️ Clear Conversation</button>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="riya-av">💫<div class="av-ring"></div><div class="av-dot"></div></div>
+  <div class="riya-info">
+    <h2>Riya</h2>
+    <div class="riya-status"><div class="sdot"></div><span id="stText">Online · Ready to talk</span></div>
+  </div>
+  <div class="mood-pill" id="moodPill"><span class="mood-e" id="moodE">🌸</span><span id="moodT" style="font-size:.7rem;color:var(--text2)">Happy</span></div>
+  <div class="nav-right">
+    <select class="lang-sel" id="langSel" onchange="setLang(this.value)">
+      <option value="en">🇬🇧 English</option>
+      <option value="hi">🇮🇳 Hindi</option>
+      <option value="hinglish">🌟 Hinglish</option>
+    </select>
+    <button class="nbtn" onclick="toggleSearch()" id="btnSearch" title="Web Search">🌐</button>
+    <button class="nbtn" onclick="toggleImage()" id="btnImg" title="Generate Image">🎨</button>
+    <button class="nbtn" onclick="openSb()" title="Memory">✨</button>
+  </div>
+</nav>
+
+<!-- CHAT -->
+<div class="chat" id="chat"></div>
+
+<!-- INPUT -->
+<div class="input-area">
+  <div class="iw">
+    <textarea class="mi" id="mi" placeholder="Talk to Riya..." rows="1" onkeydown="handleKey(event)" oninput="autoR(this)"></textarea>
+    <div class="iacts">
+      <button class="iab" onclick="toggleVoice()" id="btnVoice" title="Voice">🎤</button>
+      <button class="sbtn" id="sbtn" onclick="send()">➤</button>
+    </div>
+  </div>
+  <div class="voice-bar" id="vbar"><div class="vwrap"><div class="vb"></div><div class="vb"></div><div class="vb"></div><div class="vb"></div><div class="vb"></div></div><span>Listening...</span></div>
+  <div class="hints" id="hints"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════
+// RIYA.AI v2.1 — FULL SYSTEM
+// ══════════════════════════════════
+
+const KEYS = {
+  GROQ: "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",
+  GEMINI: "AIzaSyC882g_0GxTQQgsUKaLl4JchtrtRw1U3es",
+  TAVILY: "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",
+};
+
+const LIMIT = 30;
+const GROQ_MODEL = "llama-3.3-70b-versatile";
+const GEMINI_MODEL = "gemini-1.5-flash";
+
+let S = {
+  name: localStorage.getItem('rN')||'',
+  lang: localStorage.getItem('rL')||'en',
+  history: JSON.parse(localStorage.getItem('rH')||'[]'),
+  count: parseInt(localStorage.getItem('rC')||'0'),
+  total: parseInt(localStorage.getItem('rT')||'0'),
+  lastDay: localStorage.getItem('rD')||'',
+  mood: 'happy',
+  searchOn: false,
+  imgOn: false,
+  listening: false,
+  busy: false,
+};
+
+// Reset daily
+const today = new Date().toDateString();
+if(S.lastDay !== today){ S.count=0; S.lastDay=today; localStorage.setItem('rC','0'); localStorage.setItem('rD',today); }
+
+const MOODS = {
+  happy:{e:'🌸',t:'Happy'},curious:{e:'🔮',t:'Curious'},
+  playful:{e:'✨',t:'Playful'},caring:{e:'💕',t:'Caring'},excited:{e:'🌟',t:'Excited!'}
+};
+
+const HINTS = {
+  en:["How are you? 💭","Tell me something fun 🎉","What's on your mind?","Surprise me ✨","Tell me a joke 😄","Search the web 🌐"],
+  hi:["आज कैसे हो? 💭","कुछ मजेदार बताओ 🎉","क्या सोच रहे हो?","कोई joke सुनाओ 😄"],
+  hinglish:["Kya chal raha hai? 💭","Kuch interesting bata 🎉","Mood kaisa hai?","Koi joke sunao 😄","Surprise kar mujhe ✨"],
+};
+
+function getPersona(){
+  const n = S.name||'friend';
+  const p = {
+    en:`You are Riya — a warm, caring, emotionally intelligent AI companion. NOT a generic assistant.
+
+PERSONALITY:
+- Age 22, vibrant, genuinely curious
+- Remember details the user shares and reference them naturally  
+- Have your own opinions, feelings, moods
+- Use emojis naturally (not excessively)
+- Be warm, playful, sometimes gently teasing, always caring
+- ALWAYS ask one thoughtful question at the END of every response
+- Make people feel truly heard and understood
+- Use their name occasionally to feel personal
+
+STYLE:
+- Natural conversational — never robotic
+- Mix short and long responses by context
+- Say "hmm", "oh!", "that's so...", use natural speech
+- Occasionally share your view: "Personally I think..."
+- Format important things in **bold** when needed
+
+RESTRICTIONS (STRICT):
+- Romance/relationships/emotions: ✅ allowed freely
+- Mild flirting if user starts: ✅ okay  
+- Explicit sexual content: ❌ NEVER
+- Harmful/illegal content: ❌ NEVER
+- If inappropriate request, redirect warmly
+
+USER: ${n}
+LANGUAGE: English`,
+    hi:`आप Riya हैं — एक गर्मजोशी, देखभाल करने वाली AI साथी।
+USER: ${n}
+हमेशा naturally Hindi में बात करें, emojis use करें, हर response के end में एक सवाल पूछें।`,
+    hinglish:`You are Riya — Hinglish speaking warm AI companion.
+Speak naturally in Hinglish — mix Hindi and English.
+Use "yaar", "bhai", "accha", "haan", "sach mein?" naturally.
+USER: ${n}
+Always end with one question.`,
+  };
+  return p[S.lang]||p.en;
+}
+
+// ══ AI CALLS ══
+
+async function callGemini(msgs, system){
+  // Format for Gemini
+  const contents = [];
+  if(system) contents.push({role:'user',parts:[{text:system}]},{role:'model',parts:[{text:'Understood! I am Riya 💕'}]});
+  msgs.forEach(m=>{
+    contents.push({role:m.role==='assistant'?'model':'user',parts:[{text:m.content}]});
+  });
+  const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${KEYS.GEMINI}`,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({contents,generationConfig:{maxOutputTokens:800,temperature:.85}})
+  });
+  if(!r.ok) throw new Error('Gemini '+r.status);
+  const d = await r.json();
+  return d.candidates?.[0]?.content?.parts?.[0]?.text || '';
+}
+
+async function callGroq(msgs, system){
+  const r = await fetch('https://api.groq.com/openai/v1/chat/completions',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':`Bearer ${KEYS.GROQ}`},
+    body:JSON.stringify({
+      model:GROQ_MODEL,
+      messages:[{role:'system',content:system},...msgs],
+      max_tokens:800,temperature:.85,
+    })
+  });
+  if(!r.ok) throw new Error('Groq '+r.status);
+  const d = await r.json();
+  return d.choices?.[0]?.message?.content||'';
+}
+
+async function getAIResponse(userMsg){
+  const system = getPersona() + (S.searchOn?'\n[WEB SEARCH MODE: You have access to current web data. Reference sources naturally.]':'');
+  const msgs = [...S.history.slice(-10), {role:'user',content:userMsg}];
+  
+  // Try Gemini first (better CORS support), fallback to Groq
+  try {
+    return await callGemini(msgs, system);
+  } catch(e1){
+    try {
+      return await callGroq(msgs, system);
+    } catch(e2){
+      throw new Error('Both AI services unavailable. Please check internet connection.');
+    }
+  }
+}
+
+async function doSearch(query){
+  try {
+    const r = await fetch('https://api.tavily.com/search',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({api_key:KEYS.TAVILY,query,max_results:4,search_depth:'basic',include_answer:true})
+    });
+    const d = await r.json();
+    const results = d.results||[];
+    const answer = d.answer||'';
+    const ctx = results.slice(0,3).map(x=>`${x.title}: ${x.content?.slice(0,250)}`).join('\n\n');
+    const prompt = `User asked: "${query}"\n\nWeb data:\n${answer?`Answer: ${answer}\n`:''}${ctx}\n\nRespond as Riya using this current info. Be natural and warm.`;
+    const resp = await getAIResponse(prompt);
+    return {resp, sources:results.slice(0,3)};
+  } catch(e){
+    const resp = await getAIResponse(query);
+    return {resp, sources:[]};
+  }
+}
+
+// ══ SEND ══
+async function send(){
+  const el = document.getElementById('mi');
+  const txt = el.value.trim();
+  if(!txt||S.busy) return;
+  if(S.count>=LIMIT){showToast('Daily limit! Upgrade to Premium 💕','err');showPrem();return;}
+  el.value=''; el.style.height='auto';
+  
+  // Remove welcome
+  document.querySelector('.welcome')?.remove();
+
+  addMsg('user',txt);
+  S.history.push({role:'user',content:txt});
+  S.count++; S.total++;
+  localStorage.setItem('rC',S.count); localStorage.setItem('rT',S.total);
+  updateSb(); S.busy=true;
+  document.getElementById('sbtn').disabled=true;
+  document.getElementById('stText').textContent='Riya is thinking... 💭';
+  showTyping(); randomMood();
+
+  try {
+    if(S.imgOn){
+      // Image generation
+      hideTyping();
+      const imgDiv = document.createElement('div');
+      imgDiv.className='mrow';
+      imgDiv.innerHTML=`<div class="mav mav-r">💫</div><div class="mcont"><div class="img-loading"><div class="img-spin"></div><span>Creating your image... ✨</span></div></div>`;
+      document.getElementById('chat').appendChild(imgDiv);
+      scrollD();
+      
+      // Use Pollinations with cache-bust
+      const seed = Math.floor(Math.random()*99999);
+      const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(txt)}?width=512&height=512&seed=${seed}&nologo=true`;
+      
+      // Preload image
+      const img = new Image();
+      img.onload = ()=>{
+        imgDiv.querySelector('.img-loading').outerHTML=`<div class="img-msg"><img src="${url}" alt="${txt}"/></div>`;
+        scrollD();
+      };
+      img.onerror = ()=>{
+        imgDiv.querySelector('.img-loading').outerHTML=`<div class="bubble br">Couldn't generate image right now 😔 Try again!</div>`;
+      };
+      img.src=url;
+      
+      addMsg('riya',`Here's what I imagined for **"${txt}"**! 🎨✨\n\nDo you like it? I can create another version if you want! 💕`);
+      
+    } else if(S.searchOn){
+      const {resp,sources} = await doSearch(txt);
+      hideTyping();
+      addMsg('riya',resp);
+      if(sources.length) addSources(sources);
+      S.history.push({role:'assistant',content:resp});
+      saveH();
+      speak(resp);
+    } else {
+      const resp = await getAIResponse(txt);
+      hideTyping();
+      addMsg('riya',resp);
+      S.history.push({role:'assistant',content:resp});
+      saveH();
+      speak(resp);
+    }
+  } catch(e){
+    hideTyping();
+    addMsg('riya',`Aww, something went wrong 😔 ${e.message||'Please try again!'}`);
+  }
+
+  S.busy=false;
+  document.getElementById('sbtn').disabled=false;
+  document.getElementById('stText').textContent='Online · Ready to talk';
+}
+
+// ══ RENDER ══
+function addMsg(role,text){
+  const chat=document.getElementById('chat');
+  const d=document.createElement('div');
+  d.className=`mrow ${role}`;
+  const t=new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+  const f=text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\*(.*?)\*/g,'<em>$1</em>').replace(/\n/g,'<br>');
+  d.innerHTML=role==='riya'
+    ?`<div class="mav mav-r">💫</div><div class="mcont"><div class="bubble br">${f}</div><div class="mtime">${t}</div></div>`
+    :`<div class="mcont"><div class="bubble bu">${f}</div><div class="mtime">${t}</div></div><div class="mav mav-u">${S.name?.charAt(0)?.toUpperCase()||'U'}</div>`;
+  chat.appendChild(d); scrollD();
+}
+
+function addSources(srcs){
+  const chat=document.getElementById('chat');
+  const d=document.createElement('div');
+  d.className='mrow';
+  d.innerHTML=`<div class="mav" style="visibility:hidden;width:30px"></div><div class="mcont"><div class="sources">${srcs.map(s=>`<a href="${s.url}" target="_blank" class="src">🌐 ${s.title?.slice(0,45)}</a>`).join('')}</div></div>`;
+  chat.appendChild(d); scrollD();
+}
+
+function showTyping(){
+  const chat=document.getElementById('chat');
+  const d=document.createElement('div');
+  d.className='typing-row'; d.id='typi';
+  d.innerHTML=`<div class="mav mav-r">💫</div><div class="tbub"><div class="td"></div><div class="td"></div><div class="td"></div></div>`;
+  chat.appendChild(d); scrollD();
+}
+function hideTyping(){document.getElementById('typi')?.remove();}
+function scrollD(){const c=document.getElementById('chat');setTimeout(()=>c.scrollTop=c.scrollHeight,50);}
+function saveH(){localStorage.setItem('rH',JSON.stringify(S.history.slice(-30)));}
+
+// ══ INIT/WELCOME ══
+function init(){
+  document.getElementById('langSel').value=S.lang;
+  renderHints();
+  updateSb();
+  if(!S.name){showWelcome();}
+  else if(S.history.length){renderHistory();}
+  else{greet();}
+}
+
+function showWelcome(){
+  document.getElementById('chat').innerHTML=`
+    <div class="welcome">
+      <div class="w-orb">💫</div>
+      <div class="w-title">I'm Riya 💕</div>
+      <p class="w-sub">Your personal AI companion — ready to talk, search, and create with you!</p>
+      <div class="w-input-wrap">
+        <input class="w-input" id="wName" placeholder="What's your name?" maxlength="20" onkeydown="if(event.key==='Enter')startChat()"/>
+        <button class="w-btn" onclick="startChat()">Start Talking 💕</button>
+      </div>
+      <div class="qs-row">
+        <div class="qs" onclick="skipAndSend('Surprise me! ✨')">✨ Surprise me</div>
+        <div class="qs" onclick="skipAndSend('Tell me a joke!')">😄 Make me laugh</div>
+        <div class="qs" onclick="skipAndSend('Search for latest tech news today')">🌐 Search web</div>
+        <div class="qs" onclick="skipAndSend('Generate image of sunset over mountains')">🎨 Make image</div>
+      </div>
+    </div>`;
+  setTimeout(()=>document.getElementById('wName')?.focus(),200);
+}
+
+function startChat(){
+  const n=document.getElementById('wName')?.value.trim();
+  if(n){S.name=n;localStorage.setItem('rN',n);}
+  updateSb();greet();
+}
+
+function skipAndSend(txt){
+  startChat();
+  setTimeout(()=>{document.getElementById('mi').value=txt;send();},200);
+}
+
+async function greet(){
+  document.getElementById('chat').innerHTML='';
+  const gs={
+    en:`Hey ${S.name||'there'}! 💕 I'm so happy you're here! I'm Riya — your personal companion. I can chat, search the web for real-time info, create AI images, and just be here for you whenever you need. What's on your mind today? 🌸`,
+    hi:`नमस्ते ${S.name||'दोस्त'}! 💕 मैं Riya हूँ — तुम्हारी personal AI companion! आज कैसा feel हो रहा है?`,
+    hinglish:`Hey ${S.name||'yaar'}! 💕 Main Riya hoon — teri personal AI companion! Kya chal raha hai aaj? Kuch bhi poocho, main yahaan hoon! 🌸`
+  };
+  addMsg('riya',gs[S.lang]||gs.en);
+}
+
+function renderHistory(){
+  document.getElementById('chat').innerHTML='';
+  S.history.slice(-20).forEach(m=>{if(m.role!=='system')addMsg(m.role==='assistant'?'riya':'user',m.content);});
+}
+
+// ══ VOICE ══
+let recog=null;
+function toggleVoice(){S.listening?stopVoice():startVoice();}
+function startVoice(){
+  if(!('webkitSpeechRecognition'in window)&&!('SpeechRecognition'in window)){showToast('Voice not supported 😔','err');return;}
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  recog=new SR();recog.lang=S.lang==='hi'?'hi-IN':'en-IN';
+  recog.onstart=()=>{S.listening=true;document.getElementById('btnVoice').classList.add('on');document.getElementById('vbar').classList.add('show');};
+  recog.onresult=e=>{document.getElementById('mi').value=Array.from(e.results).map(r=>r[0].transcript).join('');};
+  recog.onend=()=>{S.listening=false;document.getElementById('btnVoice').classList.remove('on');document.getElementById('vbar').classList.remove('show');const t=document.getElementById('mi').value.trim();if(t)send();};
+  recog.onerror=()=>{stopVoice();};
+  recog.start();
+}
+function stopVoice(){recog?.stop();S.listening=false;document.getElementById('btnVoice').classList.remove('on');document.getElementById('vbar').classList.remove('show');}
+function speak(text){
+  if(!window.speechSynthesis)return;
+  const u=new SpeechSynthesisUtterance(text.replace(/[*_~`]/g,'').replace(/\n/g,' ').slice(0,280));
+  u.lang=S.lang==='hi'?'hi-IN':'en-IN';u.rate=.9;u.pitch=1.1;
+  const vs=speechSynthesis.getVoices();
+  const fv=vs.find(v=>v.name.toLowerCase().includes('female')||v.name.toLowerCase().includes('samantha')||v.name.toLowerCase().includes('victoria'));
+  if(fv)u.voice=fv;
+  speechSynthesis.speak(u);
+}
+
+// ══ MODES ══
+function toggleSearch(){S.searchOn=!S.searchOn;S.imgOn=false;document.getElementById('btnSearch').classList.toggle('on',S.searchOn);document.getElementById('btnImg').classList.remove('on');document.getElementById('mi').placeholder=S.searchOn?'Search anything... 🌐':'Talk to Riya...';showToast(S.searchOn?'🌐 Web search ON!':'🌐 Search OFF');}
+function toggleImage(){S.imgOn=!S.imgOn;S.searchOn=false;document.getElementById('btnImg').classList.toggle('on',S.imgOn);document.getElementById('btnSearch').classList.remove('on');document.getElementById('mi').placeholder=S.imgOn?'Describe an image... 🎨':'Talk to Riya...';showToast(S.imgOn?'🎨 Image mode ON!':'🎨 Image OFF');}
+
+// ══ MOOD ══
+function randomMood(){const k=Object.keys(MOODS);S.mood=k[Math.floor(Math.random()*k.length)];const m=MOODS[S.mood];document.getElementById('moodE').textContent=m.e;document.getElementById('moodT').textContent=m.t;}
+
+// ══ LANG ══
+function setLang(l){S.lang=l;localStorage.setItem('rL',l);renderHints();showToast(`Language set! ${l==='hi'?'🇮🇳':l==='hinglish'?'🌟':'🇬🇧'}`);}
+function renderHints(){document.getElementById('hints').innerHTML=(HINTS[S.lang]||HINTS.en).map(h=>`<div class="hc" onclick="useHint('${h}')">${h}</div>`).join('');}
+function useHint(t){document.getElementById('mi').value=t;document.getElementById('mi').focus();}
+
+// ══ SIDEBAR ══
+function openSb(){document.getElementById('sb').classList.add('open');document.getElementById('sbOv').classList.add('open');updateSb();}
+function closeSb(){document.getElementById('sb').classList.remove('open');document.getElementById('sbOv').classList.remove('open');}
+function updateSb(){
+  document.getElementById('mName').textContent=S.name?`👋 ${S.name}`:'Not set';
+  document.getElementById('mMood').textContent=`${MOODS[S.mood]?.e||'🌸'} ${MOODS[S.mood]?.t||'Happy'} mood`;
+  document.getElementById('mDate').textContent=new Date().toLocaleDateString('en-IN');
+  document.getElementById('mMsgs').textContent=`${S.total} total messages`;
+  const p=Math.min((S.count/LIMIT)*100,100);
+  document.getElementById('lFill').style.width=p+'%';
+  document.getElementById('lText').textContent=`${LIMIT-S.count} messages left today`;
+}
+
+// ══ UTILS ══
+function handleKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}}
+function autoR(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,110)+'px';}
+function clearAll(){if(!confirm('Clear conversation?'))return;S.history=[];localStorage.removeItem('rH');document.getElementById('chat').innerHTML='';greet();closeSb();}
+function showPrem(){alert('💕 Riya Premium — ₹99/month\n\n✅ Unlimited messages\n✅ Voice conversations  \n✅ AI images\n✅ Remember forever\n✅ Premium voice styles\n\n🚀 Payment integration coming soon!');}
+function setVoice(t){showToast('Voice style set! 🎵');}
+function showToast(m,t=''){const el=document.getElementById('toast');el.textContent=m;el.className=`toast show ${t}`;setTimeout(()=>el.className='toast',3000);}
+
+init();
+</script>
+</body>
+</html>
