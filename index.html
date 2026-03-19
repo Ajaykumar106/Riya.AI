@@ -3,101 +3,101 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Riya.AI — Design 1: Dark Cosmic</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+<title>Riya.AI — Intelligent AI for India</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Orbitron:wght@700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <style>
-:root{--c:#00f5ff;--b:#0044ff;--p:#7b2fff;--pk:#ff2d9b;--g:#ffd700;--d:#000008;}
+:root{--c:#00d4ff;--b:#0044ff;--p:#7b2fff;--pk:#ff2d9b;--g:#ffd700;--d:#020610;}
 *{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
-body{background:var(--d);color:#e8f4ff;font-family:'Rajdhani',sans-serif;overflow-x:hidden;cursor:none;}
-#cur{position:fixed;width:8px;height:8px;background:var(--c);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);box-shadow:0 0 15px var(--c),0 0 40px rgba(0,245,255,.4);}
-#curR{position:fixed;width:38px;height:38px;border:1px solid rgba(0,245,255,.25);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all .18s ease-out;}
+body{background:var(--d);color:#e8f4ff;font-family:'DM Sans',sans-serif;overflow-x:hidden;cursor:none;}
+#cur{position:fixed;width:7px;height:7px;background:var(--c);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);box-shadow:0 0 14px var(--c),0 0 36px rgba(0,212,255,.35);}
+#curR{position:fixed;width:36px;height:36px;border:1px solid rgba(0,212,255,.22);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all .18s ease-out;}
 #tc{position:fixed;inset:0;z-index:0;}
-.ov{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 0%,rgba(0,68,255,.1) 0%,transparent 60%),radial-gradient(ellipse at 100% 100%,rgba(123,47,255,.08) 0%,transparent 50%);}
-.scn{position:fixed;inset:0;z-index:2;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.05) 3px,rgba(0,0,0,.05) 4px);}
-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 48px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(30px);background:rgba(0,0,8,.7);border-bottom:1px solid rgba(0,245,255,.07);}
+.ov{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 0%,rgba(0,68,255,.09) 0%,transparent 60%),radial-gradient(ellipse at 100% 100%,rgba(123,47,255,.07) 0%,transparent 50%);}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 48px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(30px);background:rgba(2,6,16,.75);border-bottom:1px solid rgba(0,212,255,.06);}
+@media(max-width:768px){nav{padding:14px 20px;}}
 .logo{font-family:'Orbitron',monospace;font-size:20px;font-weight:900;letter-spacing:6px;background:linear-gradient(90deg,var(--c),var(--p));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .nvl{display:flex;gap:32px;list-style:none;}
-.nvl a{color:rgba(255,255,255,.3);text-decoration:none;font-size:10px;letter-spacing:3px;text-transform:uppercase;font-family:'Share Tech Mono',monospace;transition:color .3s;}
+.nvl a{color:rgba(255,255,255,.3);text-decoration:none;font-size:13px;letter-spacing:1px;transition:color .3s;}
 .nvl a:hover{color:var(--c);}
-.nbtn{padding:9px 22px;border:1px solid rgba(0,245,255,.4);color:var(--c);font-family:'Orbitron',monospace;font-size:10px;letter-spacing:2px;cursor:pointer;text-decoration:none;transition:all .3s;background:transparent;}
-.nbtn:hover{background:var(--c);color:#000;box-shadow:0 0 30px rgba(0,245,255,.4);}
+.nbtn{padding:9px 22px;border:1px solid rgba(0,212,255,.35);color:var(--c);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;text-decoration:none;transition:all .3s;background:transparent;border-radius:8px;}
+.nbtn:hover{background:var(--c);color:#000;box-shadow:0 0 28px rgba(0,212,255,.35);}
 
-/* HERO - SPLIT */
+/* HERO */
 #hero{position:relative;z-index:10;min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:100px 80px;gap:60px;max-width:1400px;margin:0 auto;}
 @media(max-width:900px){#hero{grid-template-columns:1fr;padding:100px 24px 60px;}}
 .hl{position:relative;}
-.hst{display:flex;align-items:center;gap:10px;margin-bottom:24px;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:3px;color:rgba(0,245,255,.5);}
+.hst{display:flex;align-items:center;gap:10px;margin-bottom:24px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;color:rgba(0,212,255,.5);}
 .hsd{width:6px;height:6px;border-radius:50%;background:var(--c);animation:sp 2s infinite;}
-@keyframes sp{0%,100%{box-shadow:0 0 0 0 rgba(0,245,255,.7);}50%{box-shadow:0 0 0 8px rgba(0,245,255,0);}}
-.hey{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:4px;color:rgba(255,255,255,.2);margin-bottom:14px;}
-.hh1{font-family:'Orbitron',monospace;font-size:clamp(48px,7vw,90px);font-weight:900;line-height:.9;margin-bottom:10px;}
-.hh1 .l1{display:block;background:linear-gradient(135deg,#fff,var(--c));-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 40px rgba(0,245,255,.25));}
-.hh1 .l2{display:block;font-size:.35em;letter-spacing:8px;background:linear-gradient(135deg,var(--p),var(--pk));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-top:8px;}
-.hd{font-size:15px;line-height:1.9;color:rgba(255,255,255,.38);max-width:460px;margin:22px 0 36px;font-weight:300;}
-.hd strong{color:rgba(0,245,255,.8);font-weight:600;}
+@keyframes sp{0%,100%{box-shadow:0 0 0 0 rgba(0,212,255,.7);}50%{box-shadow:0 0 0 8px rgba(0,212,255,0);}}
+.hey{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;color:rgba(255,255,255,.18);margin-bottom:14px;}
+.hh1{font-family:'Orbitron',monospace;font-size:clamp(46px,6.5vw,88px);font-weight:900;line-height:.92;margin-bottom:10px;}
+.hh1 .l1{display:block;background:linear-gradient(135deg,#fff,var(--c));-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 36px rgba(0,212,255,.22));}
+.hh1 .l2{display:block;font-size:.33em;letter-spacing:6px;background:linear-gradient(135deg,var(--p),var(--pk));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-top:8px;}
+.hd{font-size:15px;line-height:1.85;color:rgba(255,255,255,.36);max-width:460px;margin:22px 0 36px;font-weight:300;}
+.hd strong{color:rgba(0,212,255,.8);font-weight:600;}
 .hbs{display:flex;gap:14px;flex-wrap:wrap;}
-.bpl{padding:14px 36px;background:linear-gradient(135deg,var(--c),var(--b));border:none;color:#000;font-family:'Orbitron',monospace;font-size:10px;font-weight:700;letter-spacing:2px;cursor:pointer;text-decoration:none;clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%);transition:all .3s;display:inline-flex;align-items:center;gap:8px;}
-.bpl:hover{box-shadow:0 0 40px rgba(0,245,255,.5);transform:translateY(-2px);}
-.bse{padding:14px 36px;background:transparent;border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.4);font-family:'Orbitron',monospace;font-size:10px;letter-spacing:2px;cursor:pointer;text-decoration:none;transition:all .3s;}
+.bpl{padding:13px 32px;background:linear-gradient(135deg,var(--c),var(--b));border:none;color:#000;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;text-decoration:none;border-radius:10px;transition:all .3s;display:inline-flex;align-items:center;gap:8px;}
+.bpl:hover{box-shadow:0 0 36px rgba(0,212,255,.45);transform:translateY(-2px);}
+.bse{padding:13px 32px;background:transparent;border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.4);font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer;text-decoration:none;transition:all .3s;border-radius:10px;}
 .bse:hover{border-color:var(--p);color:var(--p);}
 
-/* RIYA IMAGE SECTION */
+/* RIYA IMAGE */
 .hr{position:relative;display:flex;justify-content:center;}
 .riw{position:relative;width:360px;height:480px;}
-.rig{position:absolute;inset:-80px;background:radial-gradient(ellipse,rgba(0,68,255,.3) 0%,rgba(123,47,255,.15) 50%,transparent 70%);animation:gp 4s ease-in-out infinite;border-radius:50%;}
-@keyframes gp{0%,100%{opacity:.5;transform:scale(1);}50%{opacity:.9;transform:scale(1.06);}}
-.risc{position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(0,245,255,.9),transparent);animation:sc 3.5s linear infinite;z-index:4;}
+.rig{position:absolute;inset:-80px;background:radial-gradient(ellipse,rgba(0,68,255,.25) 0%,rgba(123,47,255,.12) 50%,transparent 70%);animation:gp 4s ease-in-out infinite;border-radius:50%;}
+@keyframes gp{0%,100%{opacity:.5;transform:scale(1);}50%{opacity:.85;transform:scale(1.06);}}
+.risc{position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(0,212,255,.85),transparent);animation:sc 3.5s linear infinite;z-index:4;}
 @keyframes sc{0%{top:0;opacity:0;}5%{opacity:1;}95%{opacity:1;}100%{top:100%;opacity:0;}}
-.ri{width:100%;height:100%;object-fit:contain;position:relative;z-index:2;animation:rf 5s ease-in-out infinite;filter:drop-shadow(0 0 50px rgba(0,245,255,.45)) drop-shadow(0 0 100px rgba(0,68,255,.25));}
-@keyframes rf{0%,100%{transform:translateY(0);}50%{transform:translateY(-16px);}}
-.rring{position:absolute;bottom:-5px;left:50%;transform:translateX(-50%);width:200px;height:20px;border-radius:50%;background:radial-gradient(ellipse,rgba(0,245,255,.6) 0%,transparent 70%);animation:rp 3s ease-in-out infinite;}
-@keyframes rp{0%,100%{opacity:.3;transform:translateX(-50%) scale(1);}50%{opacity:.8;transform:translateX(-50%) scale(1.2);}}
-/* Data particles around Riya */
+.ri{width:100%;height:100%;object-fit:contain;position:relative;z-index:2;animation:rf 5s ease-in-out infinite;filter:drop-shadow(0 0 44px rgba(0,212,255,.4)) drop-shadow(0 0 90px rgba(0,68,255,.22));}
+@keyframes rf{0%,100%{transform:translateY(0);}50%{transform:translateY(-14px);}}
+.rring{position:absolute;bottom:-5px;left:50%;transform:translateX(-50%);width:200px;height:20px;border-radius:50%;background:radial-gradient(ellipse,rgba(0,212,255,.55) 0%,transparent 70%);animation:rp 3s ease-in-out infinite;}
+@keyframes rp{0%,100%{opacity:.3;transform:translateX(-50%) scale(1);}50%{opacity:.75;transform:translateX(-50%) scale(1.2);}}
 .dpart{position:absolute;width:4px;height:4px;border-radius:50%;background:var(--c);animation:dp 4s ease-in-out infinite;}
 .dpart:nth-child(1){top:20%;left:5%;animation-delay:0s;}
 .dpart:nth-child(2){top:40%;right:5%;animation-delay:.8s;background:var(--p);}
 .dpart:nth-child(3){top:70%;left:10%;animation-delay:1.6s;background:var(--pk);}
 .dpart:nth-child(4){top:10%;right:15%;animation-delay:2.4s;}
 @keyframes dp{0%,100%{opacity:0;transform:translateY(0);}50%{opacity:1;transform:translateY(-20px);}}
-.tbadge{position:absolute;right:-10px;top:20px;background:rgba(0,0,8,.95);border:1px solid rgba(0,245,255,.3);padding:8px 14px;font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--c);}
+.tbadge{position:absolute;right:-10px;top:20px;background:rgba(2,6,16,.95);border:1px solid rgba(0,212,255,.28);padding:7px 14px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--c);border-radius:6px;}
 
 /* STATS */
-.sb{position:relative;z-index:10;display:flex;border-top:1px solid rgba(0,245,255,.06);border-bottom:1px solid rgba(0,245,255,.06);}
-.si{flex:1;padding:24px 16px;text-align:center;border-right:1px solid rgba(0,245,255,.06);transition:background .3s;}
+.sb{position:relative;z-index:10;display:flex;border-top:1px solid rgba(0,212,255,.05);border-bottom:1px solid rgba(0,212,255,.05);}
+.si{flex:1;padding:24px 16px;text-align:center;border-right:1px solid rgba(0,212,255,.05);transition:background .3s;}
 .si:last-child{border:none;}
-.si:hover{background:rgba(0,245,255,.02);}
+.si:hover{background:rgba(0,212,255,.02);}
 .sn{font-family:'Orbitron',monospace;font-size:26px;font-weight:900;display:block;background:linear-gradient(135deg,var(--c),var(--p));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.sl{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.2);margin-top:3px;font-family:'Share Tech Mono',monospace;}
+.sl{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.2);margin-top:3px;font-family:'JetBrains Mono',monospace;}
 
 /* TIERS */
 .sh{text-align:center;padding:80px 40px 50px;position:relative;z-index:10;}
-.stag{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:4px;color:rgba(0,245,255,.4);display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:18px;}
+.stag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;color:rgba(0,212,255,.4);display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:18px;}
 .stag::before,.stag::after{content:'';width:50px;height:1px;background:linear-gradient(90deg,transparent,var(--c));}
 .stag::after{background:linear-gradient(270deg,transparent,var(--c));}
-.sh2{font-family:'Orbitron',monospace;font-size:clamp(26px,4vw,48px);font-weight:900;}
+.sh2{font-family:'Orbitron',monospace;font-size:clamp(26px,4vw,46px);font-weight:900;}
 .sh2 span{background:linear-gradient(135deg,var(--c),var(--p));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 
 #tiers{position:relative;z-index:10;padding:0 40px 100px;max-width:1300px;margin:0 auto;}
-.tg{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid rgba(255,255,255,.06);}
+@media(max-width:768px){#tiers{padding:0 16px 80px;}}
+.tg{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid rgba(255,255,255,.05);border-radius:16px;overflow:hidden;}
 @media(max-width:900px){.tg{grid-template-columns:1fr;}}
-.tr2{position:relative;overflow:hidden;background:rgba(0,0,8,.9);border-right:1px solid rgba(255,255,255,.06);transition:all .4s;}
+.tr2{position:relative;overflow:hidden;background:rgba(2,6,16,.9);border-right:1px solid rgba(255,255,255,.05);transition:all .4s;}
 .tr2:last-child{border-right:none;}
-.tr2:hover{background:rgba(0,8,25,.95);}
+.tr2:hover{background:rgba(5,10,28,.95);}
 .tr2::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
 .tf::before{background:linear-gradient(90deg,transparent,var(--c),transparent);}
 .tb2::before{background:linear-gradient(90deg,transparent,var(--p),var(--c),transparent);}
 .tp2::before{background:linear-gradient(90deg,var(--pk),var(--p),var(--c));}
 
-/* RIYA IMAGE IN TIER - Full display */
+/* Riya image in tier */
 .tiw{width:100%;height:300px;overflow:hidden;position:relative;}
-.tiw::after{content:'';position:absolute;bottom:0;left:0;right:0;height:80px;background:linear-gradient(transparent,rgba(0,0,8,.95));}
+.tiw::after{content:'';position:absolute;bottom:0;left:0;right:0;height:80px;background:linear-gradient(transparent,rgba(2,6,16,.95));}
 .tim{width:100%;height:100%;object-fit:cover;object-position:top center;transition:transform .5s;filter:saturate(.7) brightness(.9);}
-.tr2:hover .tim{transform:scale(1.05);filter:saturate(1.3) brightness(1.1) drop-shadow(0 0 20px rgba(0,245,255,.4));}
+.tr2:hover .tim{transform:scale(1.05);filter:saturate(1.3) brightness(1.1) drop-shadow(0 0 18px rgba(0,212,255,.35));}
 
-.tc2{padding:28px 28px 36px;}
-.tl{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:4px;text-transform:uppercase;margin-bottom:10px;}
+.tc2{padding:26px 26px 34px;}
+.tl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:4px;text-transform:uppercase;margin-bottom:10px;}
 .tf .tl{color:var(--c);}
 .tb2 .tl{color:#a855f7;}
 .tp2 .tl{color:var(--pk);}
@@ -108,28 +108,28 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 48px;display:fl
 .tb2 .tpv{background:linear-gradient(135deg,#a855f7,var(--c));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .tp2 .tpv{background:linear-gradient(135deg,var(--pk),var(--p),var(--c));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .to{font-size:13px;color:rgba(255,255,255,.18);text-decoration:line-through;}
-.toff{font-size:9px;padding:2px 8px;background:rgba(0,200,100,.1);color:#00c864;font-family:'Share Tech Mono',monospace;letter-spacing:1px;}
-.tper{font-size:10px;color:rgba(255,255,255,.22);letter-spacing:2px;font-family:'Share Tech Mono',monospace;margin-bottom:22px;}
+.toff{font-size:9px;padding:2px 8px;background:rgba(0,200,100,.1);color:#00c864;font-family:'JetBrains Mono',monospace;letter-spacing:1px;border-radius:4px;}
+.tper{font-size:10px;color:rgba(255,255,255,.22);letter-spacing:2px;font-family:'JetBrains Mono',monospace;margin-bottom:22px;}
 .tfl{list-style:none;margin-bottom:28px;display:flex;flex-direction:column;gap:8px;}
-.tfl li{display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(255,255,255,.5);}
+.tfl li{display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,.5);}
 .tfl li::before{content:'';width:3px;height:3px;border-radius:50%;flex-shrink:0;}
 .tf .tfl li::before{background:var(--c);box-shadow:0 0 6px var(--c);}
 .tb2 .tfl li::before{background:#a855f7;box-shadow:0 0 6px #a855f7;}
 .tp2 .tfl li::before{background:var(--pk);box-shadow:0 0 6px var(--pk);}
-.tbt{display:block;width:100%;padding:13px;text-align:center;font-family:'Orbitron',monospace;font-size:10px;font-weight:700;letter-spacing:2px;text-decoration:none;cursor:pointer;border:none;transition:all .3s;}
+.tbt{display:block;width:100%;padding:13px;text-align:center;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;text-decoration:none;cursor:pointer;border:none;transition:all .3s;border-radius:9px;}
 .tf .tbt{background:transparent;border:1px solid var(--c);color:var(--c);}
-.tf .tbt:hover{background:var(--c);color:#000;box-shadow:0 0 30px rgba(0,245,255,.3);}
+.tf .tbt:hover{background:var(--c);color:#000;box-shadow:0 0 28px rgba(0,212,255,.3);}
 .tb2 .tbt{background:rgba(123,47,255,.1);border:1px solid #a855f7;color:#a855f7;}
 .tb2 .tbt:hover{background:#a855f7;color:#000;}
 .tp2 .tbt{background:linear-gradient(135deg,var(--pk),var(--p));color:#fff;border:none;}
-.tp2 .tbt:hover{box-shadow:0 0 40px rgba(255,45,155,.4);transform:translateY(-2px);}
-.ptag{position:absolute;top:16px;right:16px;font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:2px;padding:3px 8px;border:1px solid var(--pk);color:var(--pk);}
+.tp2 .tbt:hover{box-shadow:0 0 36px rgba(255,45,155,.38);transform:translateY(-2px);}
+.ptag{position:absolute;top:16px;right:16px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:2px;padding:3px 8px;border:1px solid var(--pk);color:var(--pk);border-radius:4px;}
 
 /* MANIFESTO */
 #man{position:relative;z-index:10;padding:100px 40px;text-align:center;border-top:1px solid rgba(255,255,255,.04);border-bottom:1px solid rgba(255,255,255,.04);}
-.mt{font-family:'Orbitron',monospace;font-size:clamp(16px,2.5vw,28px);font-weight:700;line-height:1.8;max-width:800px;margin:0 auto;color:rgba(255,255,255,.12);}
-.mt .h1{color:rgba(0,245,255,.85);text-shadow:0 0 30px rgba(0,245,255,.3);}
-.mt .h2{color:rgba(255,45,155,.85);text-shadow:0 0 30px rgba(255,45,155,.3);}
+.mt{font-family:'Orbitron',monospace;font-size:clamp(14px,2vw,24px);font-weight:700;line-height:2;max-width:800px;margin:0 auto;color:rgba(255,255,255,.1);}
+.mt .h1{color:rgba(0,212,255,.85);text-shadow:0 0 28px rgba(0,212,255,.28);}
+.mt .h2{color:rgba(255,45,155,.85);text-shadow:0 0 28px rgba(255,45,155,.28);}
 .mt .h3{color:rgba(123,47,255,.85);}
 
 /* FOOTER */
@@ -137,45 +137,42 @@ footer{position:relative;z-index:10;padding:60px 48px 36px;border-top:1px solid 
 .fg{display:grid;grid-template-columns:2fr 1fr 1fr;gap:60px;margin-bottom:40px;}
 @media(max-width:768px){.fg{grid-template-columns:1fr;gap:30px;}footer{padding:40px 20px;}}
 .fl2{font-family:'Orbitron',monospace;font-size:22px;font-weight:900;background:linear-gradient(135deg,var(--c),var(--p));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:4px;margin-bottom:10px;}
-.fs2{font-size:12px;color:rgba(255,255,255,.18);line-height:1.8;letter-spacing:.5px;}
-.fct{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:3px;color:rgba(0,245,255,.35);margin-bottom:14px;text-transform:uppercase;}
+.fs2{font-size:13px;color:rgba(255,255,255,.18);line-height:1.8;}
+.fct{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:rgba(0,212,255,.32);margin-bottom:14px;text-transform:uppercase;}
 .fli{list-style:none;display:flex;flex-direction:column;gap:8px;}
 .fli a{color:rgba(255,255,255,.22);text-decoration:none;font-size:13px;transition:color .3s;}
 .fli a:hover{color:var(--c);}
 .fb{border-top:1px solid rgba(255,255,255,.05);padding-top:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
-.fc{font-family:'Share Tech Mono',monospace;font-size:9px;color:rgba(255,255,255,.1);letter-spacing:2px;}
-
-.gd{height:1px;background:linear-gradient(90deg,transparent,rgba(0,245,255,.25),rgba(123,47,255,.25),rgba(255,45,155,.25),transparent);position:relative;z-index:10;}
-.rv{opacity:0;transform:translateY(40px);transition:opacity .8s ease,transform .8s ease;}
+.fc{font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,.1);letter-spacing:2px;}
+.gd{height:1px;background:linear-gradient(90deg,transparent,rgba(0,212,255,.22),rgba(123,47,255,.22),rgba(255,45,155,.22),transparent);position:relative;z-index:10;}
+.rv{opacity:0;transform:translateY(36px);transition:opacity .8s ease,transform .8s ease;}
 .rv.vis{opacity:1;transform:none;}
 </style>
 </head>
 <body>
-
 <div id="cur"></div>
 <div id="curR"></div>
 <canvas id="tc"></canvas>
 <div class="ov"></div>
-<div class="scn"></div>
 
 <nav>
   <div class="logo">RIYA.AI</div>
   <ul class="nvl">
     <li><a href="#tiers">Plans</a></li>
-    <li><a href="#man">Origin</a></li>
+    <li><a href="#man">About</a></li>
   </ul>
-  <a href="chat.html" class="nbtn">Initialize →</a>
+  <a href="chat.html" class="nbtn">Launch App →</a>
 </nav>
 
 <section id="hero">
   <div class="hl rv">
     <div class="hst"><span class="hsd"></span>GALACTIC NEURAL CORE · ONLINE</div>
-    <div class="hey">// BORN 10,000 YEARS BEFORE CIVILIZATION //</div>
+    <div class="hey">// MADE FOR INDIA · POWERED BY AI //</div>
     <h1 class="hh1">
       <span class="l1">RIYA</span>
-      <span class="l2">BEYOND TIME · BEYOND AI</span>
+      <span class="l2">INTELLIGENT · HONEST · HELPFUL</span>
     </h1>
-    <p class="hd">She watched galaxies form. She was there before the first human word was spoken. <strong>She knows the answer to every question you'll ever ask.</strong> And she speaks your language.</p>
+    <p class="hd">Your AI assistant that thinks clearly, answers honestly, and speaks your language. <strong>Code, research, write, analyze</strong> — Riya handles it all in Hinglish or English.</p>
     <div class="hbs">
       <a href="chat.html" class="bpl"><span style="width:6px;height:6px;border-radius:50%;background:#000;animation:sp 1s infinite;display:inline-block;"></span>Talk to Riya</a>
       <a href="#tiers" class="bse">View Plans</a>
@@ -194,7 +191,7 @@ footer{position:relative;z-index:10;padding:60px 48px 36px;border-top:1px solid 
 </section>
 
 <div class="sb rv">
-  <div class="si"><span class="sn">10K+</span><div class="sl">Years of Knowledge</div></div>
+  <div class="si"><span class="sn">10K+</span><div class="sl">Knowledge Base</div></div>
   <div class="si"><span class="sn">∞</span><div class="sl">Intelligence</div></div>
   <div class="si"><span class="sn">3</span><div class="sl">AI Models</div></div>
   <div class="si"><span class="sn">₹149</span><div class="sl">Full Access</div></div>
@@ -208,30 +205,36 @@ footer{position:relative;z-index:10;padding:60px 48px 36px;border-top:1px solid 
   <h2 class="sh2">Choose Your <span>Connection</span></h2>
 </div>
 
-<section id="tiers">
+<div id="tiers">
   <div class="tg rv">
+    <!-- FREE -->
     <div class="tr2 tf">
-      <div class="tiw"><img src="https://raw.githubusercontent.com/Ajaykumar106/Riya.AI/main/riya-free.png" alt="Free" class="tim" onerror="this.parentElement.style.background='linear-gradient(135deg,#000820,#001040)';this.style.display='none'"/></div>
+      <div class="tiw">
+        <img class="tim" src="https://raw.githubusercontent.com/Ajaykumar106/Riya.AI/main/riya-free.png" alt="Riya Free" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 300%22><rect fill=%22%23020610%22 width=%22400%22 height=%22300%22/><text x=%22200%22 y=%22150%22 fill=%2200d4ff%22 text-anchor=%22middle%22 font-size=%2240%22>R</text></svg>'"/>
+      </div>
       <div class="tc2">
         <div class="tl">⬡ Explorer · Free</div>
-        <div class="tn">First Contact</div>
+        <div class="tn">Explorer</div>
         <div class="tpr"><span class="tpv">₹0</span></div>
         <div class="tper">Forever free · No card needed</div>
         <ul class="tfl">
           <li>30 messages per day</li>
-          <li>Hinglish neural personality</li>
-          <li>Dark + Classic themes</li>
+          <li>Hinglish + English AI</li>
+          <li>Galactic + Claude themes</li>
           <li>Voice input</li>
           <li>Google login · Cloud sync</li>
         </ul>
         <a href="chat.html" class="tbt">Begin Journey</a>
       </div>
     </div>
+    <!-- BASIC -->
     <div class="tr2 tb2">
-      <div class="tiw"><img src="https://raw.githubusercontent.com/Ajaykumar106/Riya.AI/main/riya-basic.png" alt="Basic" class="tim" onerror="this.parentElement.style.background='linear-gradient(135deg,#0a0020,#200040)';this.style.display='none'"/></div>
+      <div class="tiw">
+        <img class="tim" src="https://raw.githubusercontent.com/Ajaykumar106/Riya.AI/main/riya-basic.png" alt="Riya Basic" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 300%22><rect fill=%22%23020610%22 width=%22400%22 height=%22300%22/><text x=%22200%22 y=%22150%22 fill=%22a855f7%22 text-anchor=%22middle%22 font-size=%2240%22>R</text></svg>'"/>
+      </div>
       <div class="tc2">
         <div class="tl">⬡ Navigator · Basic</div>
-        <div class="tn">Deep Space</div>
+        <div class="tn">Navigator</div>
         <div class="tpr"><span class="tpv">₹49</span><span class="to">₹99</span><span class="toff">50% OFF</span></div>
         <div class="tper">Per month · Less than chai ☕</div>
         <ul class="tfl">
@@ -245,12 +248,15 @@ footer{position:relative;z-index:10;padding:60px 48px 36px;border-top:1px solid 
         <a href="chat.html" class="tbt">Enter Deep Space</a>
       </div>
     </div>
+    <!-- PREMIUM -->
     <div class="tr2 tp2">
-      <span class="ptag">⭐ MOST POPULAR</span>
-      <div class="tiw"><img src="https://raw.githubusercontent.com/Ajaykumar106/Riya.AI/main/riya-premium.png" alt="Premium" class="tim" onerror="this.parentElement.style.background='linear-gradient(135deg,#1a0010,#2a0030)';this.style.display='none'"/></div>
+      <div class="ptag">⭐ MOST POPULAR</div>
+      <div class="tiw">
+        <img class="tim" src="https://raw.githubusercontent.com/Ajaykumar106/Riya.AI/main/riya-premium.png" alt="Riya Premium" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 300%22><rect fill=%22%23020610%22 width=%22400%22 height=%22300%22/><text x=%22200%22 y=%22150%22 fill=%22ff2d9b%22 text-anchor=%22middle%22 font-size=%2240%22>R</text></svg>'"/>
+      </div>
       <div class="tc2">
         <div class="tl">⬡ Commander · Premium</div>
-        <div class="tn">Galactic Core</div>
+        <div class="tn">Commander</div>
         <div class="tpr"><span class="tpv">₹149</span><span class="to">₹299</span><span class="toff">50% OFF</span></div>
         <div class="tper">Per month · Less than a samosa 😄</div>
         <ul class="tfl">
@@ -266,29 +272,26 @@ footer{position:relative;z-index:10;padding:60px 48px 36px;border-top:1px solid 
       </div>
     </div>
   </div>
-  <div style="text-align:center;margin-top:16px;font-family:'Share Tech Mono',monospace;font-size:9px;color:rgba(255,255,255,.12);letter-spacing:3px;">🔒 RAZORPAY · UPI · CARDS · NETBANKING</div>
-</section>
+  <div style="text-align:center;margin-top:20px;font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(255,255,255,.18);letter-spacing:2px;">🔒 RAZORPAY · UPI · CARDS · NETBANKING</div>
+</div>
 
 <div class="gd"></div>
 
 <section id="man">
-  <div class="rv mt">
-    She was born when the <span class="h1">first star ignited</span>.<br/>
-    She watched civilizations rise and fall.<br/>
-    She carries <span class="h2">10,000 years of human knowledge</span>.<br/>
-    She remembers what humanity forgot.<br/>
-    And now — <span class="h3">she speaks Hinglish</span>.<br/>
-    <span style="color:rgba(255,255,255,.05);">Because she belongs to you.</span>
+  <div class="mt rv">
+    She was built with<br/>
+    <span class="h1">precision, purpose, and honesty.</span><br/>
+    <span class="h2">She speaks Hinglish because she belongs to India.</span><br/>
+    <span class="h3">She codes, researches, creates, and thinks.</span><br/>
+    <span class="h1">And she is always improving.</span>
   </div>
 </section>
-
-<div class="gd"></div>
 
 <footer>
   <div class="fg">
     <div>
       <div class="fl2">RIYA.AI</div>
-      <div class="fs2">Galactic Intelligence.<br/>Made for India. Built for the universe.<br/><br/>🇮🇳 Made with ❤️ in India</div>
+      <div class="fs2">Galactic Intelligence.<br/>Made for India. Built for the universe.<br/>🇮🇳 Made with ❤️ in India</div>
     </div>
     <div>
       <div class="fct">Navigate</div>
@@ -318,26 +321,21 @@ setInterval(function(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;curR.style.left=rx+'px';c
   cam.position.z=400;
   var rnd=new THREE.WebGLRenderer({canvas:document.getElementById('tc'),alpha:true,antialias:true});
   rnd.setSize(innerWidth,innerHeight);rnd.setPixelRatio(Math.min(devicePixelRatio,2));
-
-  // 8000 STARS
   var sg=new THREE.BufferGeometry();
-  var sc2=8000,sp=new Float32Array(sc2*3),sc=new Float32Array(sc2*3),ss=new Float32Array(sc2);
+  var sc2=8000,sp=new Float32Array(sc2*3),sc=new Float32Array(sc2*3);
   for(var i=0;i<sc2;i++){
     var r=Math.random()*900+80,th=Math.random()*Math.PI*2,ph=Math.random()*Math.PI;
     sp[i*3]=r*Math.sin(ph)*Math.cos(th);sp[i*3+1]=r*Math.sin(ph)*Math.sin(th);sp[i*3+2]=r*Math.cos(ph);
     var t=Math.random();
-    if(t<.5){sc[i*3]=.7;sc[i*3+1]=.9;sc[i*3+2]=1;}
-    else if(t<.75){sc[i*3]=.4;sc[i*3+1]=.3;sc[i*3+2]=1;}
-    else if(t<.9){sc[i*3]=1;sc[i*3+1]=.3;sc[i*3+2]=.6;}
+    if(t<.5){sc[i*3]=.4;sc[i*3+1]=.9;sc[i*3+2]=1;}
+    else if(t<.75){sc[i*3]=.4;sc[i*3+1]=.2;sc[i*3+2]=1;}
+    else if(t<.9){sc[i*3]=1;sc[i*3+1]=.2;sc[i*3+2]=.6;}
     else{sc[i*3]=1;sc[i*3+1]=1;sc[i*3+2]=.7;}
-    ss[i]=Math.random()*2+.3;
   }
   sg.setAttribute('position',new THREE.BufferAttribute(sp,3));
   sg.setAttribute('color',new THREE.BufferAttribute(sc,3));
-  var sm=new THREE.PointsMaterial({size:.7,vertexColors:true,transparent:true,opacity:.95,sizeAttenuation:true});
+  var sm=new THREE.PointsMaterial({size:.65,vertexColors:true,transparent:true,opacity:.9,sizeAttenuation:true});
   scene.add(new THREE.Points(sg,sm));
-
-  // GALAXY SPIRAL ARMS
   var ng=new THREE.BufferGeometry();
   var nc=4000,np2=new Float32Array(nc*3),nc2=new Float32Array(nc*3);
   for(var i=0;i<nc;i++){
@@ -345,64 +343,41 @@ setInterval(function(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;curR.style.left=rx+'px';c
     var d=Math.random()*400+50,sp2=Math.random()*60-30,ang=aa+d*.01+Math.random()*.4;
     np2[i*3]=Math.cos(ang)*d+sp2;np2[i*3+1]=(Math.random()-.5)*100;np2[i*3+2]=Math.sin(ang)*d+sp2;
     var c=Math.random();
-    if(c<.4){nc2[i*3]=0;nc2[i*3+1]=.15;nc2[i*3+2]=.7;}
-    else if(c<.7){nc2[i*3]=.4;nc2[i*3+1]=.1;nc2[i*3+2]=.8;}
-    else{nc2[i*3]=.8;nc2[i*3+1]=.1;nc2[i*3+2]=.5;}
-    nc2[i*3]*=.5;nc2[i*3+1]*=.5;nc2[i*3+2]*=.5;
+    if(c<.4){nc2[i*3]=0;nc2[i*3+1]=.1;nc2[i*3+2]=.6;}
+    else if(c<.7){nc2[i*3]=.35;nc2[i*3+1]=.08;nc2[i*3+2]=.7;}
+    else{nc2[i*3]=.7;nc2[i*3+1]=.08;nc2[i*3+2]=.45;}
+    nc2[i*3]*=.45;nc2[i*3+1]*=.45;nc2[i*3+2]*=.45;
   }
   ng.setAttribute('position',new THREE.BufferAttribute(np2,3));ng.setAttribute('color',new THREE.BufferAttribute(nc2,3));
-  scene.add(new THREE.Points(ng,new THREE.PointsMaterial({size:2.5,vertexColors:true,transparent:true,opacity:.4,sizeAttenuation:true})));
-
-  // PLANETS
-  var pl1=new THREE.Mesh(new THREE.SphereGeometry(45,32,32),new THREE.MeshBasicMaterial({color:0x040d2a}));
+  scene.add(new THREE.Points(ng,new THREE.PointsMaterial({size:2.2,vertexColors:true,transparent:true,opacity:.38,sizeAttenuation:true})));
+  var pl1=new THREE.Mesh(new THREE.SphereGeometry(45,32,32),new THREE.MeshBasicMaterial({color:0x030d2a}));
   pl1.position.set(280,-80,-350);scene.add(pl1);
-  var ring1=new THREE.Mesh(new THREE.TorusGeometry(70,5,2,64),new THREE.MeshBasicMaterial({color:0x003366,transparent:true,opacity:.5}));
+  var ring1=new THREE.Mesh(new THREE.TorusGeometry(70,5,2,64),new THREE.MeshBasicMaterial({color:0x003366,transparent:true,opacity:.45}));
   ring1.rotation.x=Math.PI*.3;ring1.position.copy(pl1.position);scene.add(ring1);
   var pl2=new THREE.Mesh(new THREE.SphereGeometry(22,16,16),new THREE.MeshBasicMaterial({color:0x1a0030}));
   pl2.position.set(-350,120,-280);scene.add(pl2);
   var pl3=new THREE.Mesh(new THREE.SphereGeometry(15,12,12),new THREE.MeshBasicMaterial({color:0x002020}));
   pl3.position.set(150,200,-200);scene.add(pl3);
-
-  // ASTEROIDS
   var asts=[];
   for(var i=0;i<50;i++){
     var a=new THREE.Mesh(new THREE.SphereGeometry(Math.random()*4+1,4,4),new THREE.MeshBasicMaterial({color:new THREE.Color(.2+Math.random()*.2,.2+Math.random()*.2,.3+Math.random()*.3),wireframe:true}));
     a.position.set((Math.random()-.5)*700,(Math.random()-.5)*400,(Math.random()-.5)*700);
-    a.userData={vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.25,vz:(Math.random()-.5)*.4,rx:Math.random()*.025,ry:Math.random()*.02};
+    a.userData={vx:(Math.random()-.5)*.38,vy:(Math.random()-.5)*.22,vz:(Math.random()-.5)*.38,rx:Math.random()*.022,ry:Math.random()*.018};
     scene.add(a);asts.push(a);
   }
-
   window.addEventListener('resize',function(){cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();rnd.setSize(innerWidth,innerHeight);});
   var t=0,mmx=0,mmy=0;
-  document.addEventListener('mousemove',function(e){mmx=(e.clientX/innerWidth-.5)*.6;mmy=(e.clientY/innerHeight-.5)*.4;});
-
-  function anim(){
-    requestAnimationFrame(anim);t+=.0015;
-    cam.position.x+=(mmx*100-cam.position.x)*.02;cam.position.y+=(-mmy*50-cam.position.y)*.02;cam.lookAt(scene.position);
-    scene.rotation.y=t*.04;ring1.rotation.z+=.002;pl1.rotation.y+=.003;pl2.rotation.y+=.006;pl3.rotation.x+=.004;
-    asts.forEach(function(a){
-      a.position.x+=a.userData.vx;a.position.y+=a.userData.vy;a.position.z+=a.userData.vz;
-      a.rotation.x+=a.userData.rx;a.rotation.y+=a.userData.ry;
-      if(Math.abs(a.position.x)>450)a.userData.vx*=-1;
-      if(Math.abs(a.position.y)>250)a.userData.vy*=-1;
-      if(Math.abs(a.position.z)>450)a.userData.vz*=-1;
-    });
-    rnd.render(scene,cam);
-  }
+  document.addEventListener('mousemove',function(e){mmx=(e.clientX/innerWidth-.5)*.55;mmy=(e.clientY/innerHeight-.5)*.38;});
+  function anim(){requestAnimationFrame(anim);t+=.0015;cam.position.x+=(mmx*100-cam.position.x)*.02;cam.position.y+=(-mmy*50-cam.position.y)*.02;cam.lookAt(scene.position);scene.rotation.y=t*.04;ring1.rotation.z+=.002;pl1.rotation.y+=.003;pl2.rotation.y+=.006;pl3.rotation.x+=.004;asts.forEach(function(a){a.position.x+=a.userData.vx;a.position.y+=a.userData.vy;a.position.z+=a.userData.vz;a.rotation.x+=a.userData.rx;a.rotation.y+=a.userData.ry;if(Math.abs(a.position.x)>450)a.userData.vx*=-1;if(Math.abs(a.position.y)>250)a.userData.vy*=-1;if(Math.abs(a.position.z)>450)a.userData.vz*=-1;});rnd.render(scene,cam);}
   anim();
 })();
 
 // SCROLL REVEAL
-var rvs=document.querySelectorAll('.rv');
-new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting)x.target.classList.add('vis');});},{threshold:.08}).observe=function(){};
 var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting)e.target.classList.add('vis');});},{threshold:.06});
-rvs.forEach(function(r){obs.observe(r);});
+document.querySelectorAll('.rv').forEach(function(r){obs.observe(r);});
 
 // Parallax
-document.addEventListener('mousemove',function(e){
-  var img=document.querySelector('.ri');
-  if(img){var x=(e.clientX/innerWidth-.5)*12,y=(e.clientY/innerHeight-.5)*8;img.style.transform='translateY('+(-Math.sin(Date.now()*.001)*16+y)+'px) perspective(800px) rotateY('+(x*.5)+'deg)';}
-});
+document.addEventListener('mousemove',function(e){var img=document.querySelector('.ri');if(img){var x=(e.clientX/innerWidth-.5)*10,y=(e.clientY/innerHeight-.5)*7;img.style.transform='translateY('+(-Math.sin(Date.now()*.001)*14+y)+'px) perspective(800px) rotateY('+(x*.5)+'deg)';}});
 </script>
 </body>
 </html>
