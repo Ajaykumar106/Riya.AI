@@ -451,8 +451,8 @@ body.th-forest #mi{color:#d0ffd8;}
     <div class="moh"><div class="mot">⚙️ Settings</div><button class="mox" id="stcl">×</button></div>
     <div style="font-size:12px;color:rgba(255,255,255,.3);line-height:1.6;padding:10px 12px;background:rgba(255,107,157,.05);border:1px solid rgba(255,107,157,.1);border-radius:10px;margin-bottom:16px;">🔒 API keys are on your backend server. Users never see them!</div>
     <div class="fl">Backend Server URL</div>
-    <div class="fs">Your Railway.app URL — e.g. https://riya-backend.up.railway.app</div>
-    <input class="min" id="bku" type="text" placeholder="https://your-backend.up.railway.app"/>
+    <div class="fs">Your Railway.app URL — e.g. https://riya-backend.up.riya-backend-q72u.onrender.com
+    <input class="min" id="bku" type="text" placeholder="https://your-backend.up.riya-backend-q72u.onrender.com"/>
     <div class="fl">Razorpay Key ID <span style="color:rgba(255,255,255,.25);font-weight:400;">(for payments)</span></div>
     <div class="fs">dashboard.razorpay.com → Settings → API Keys</div>
     <input class="min" id="rzk" type="text" placeholder="rzp_live_..."/>
@@ -534,7 +534,7 @@ gp.setCustomParameters({prompt:'select_account'});
 var user=null,chats=[],aid=null,load=false,list=false,spk=false;
 var cid=null,mood='happy',theme='dark',ssel=0,tx=0,aprj='all';
 var mc=0,plan='free',prof={name:'',avatar:'',photo:'',dob:'',gender:'',use:'general'};
-var bkUrl='https://web-production-181b7.up.railway.app',rzKey='';
+var bkUrl='https://riya-backend-ujz7.onrender.com',rzKey='';
 var LIM={free:30,basic:150,premium:999999};
 var EMJS=['😊','🌸','💕','🌙','⭐','🦋','🌈','🎵','💎','🔥','🌺','💫','🎯','🏆','🍀','🌊','🎨','💜','🤍','🦁'];
 var STYL=[{n:'Auto',v:''},{n:'Realistic',v:'photorealistic 8k'},{n:'Anime',v:'anime vibrant'},{n:'3D',v:'3d render'},{n:'Painting',v:'oil painting'},{n:'Sketch',v:'pencil sketch'},{n:'Cyberpunk',v:'cyberpunk neon'},{n:'Watercolor',v:'watercolor'},{n:'Minimal',v:'minimalist'}];
@@ -887,7 +887,7 @@ function send(pre){
       }
     } else {
       // No backend — show setup message
-      hdTy();var em={role:'ai',text:'⚙️ **Backend setup needed!**\n\nSettings mein jao → **Backend URL** daalo (Railway.app).\n\n**Kaise setup kare:**\n1. railway.app pe free account banao\n2. GitHub se riya-backend deploy karo\n3. URL yahan paste karo\n\nFir tumhare API keys safe rahenge aur koi bhi directly use kar sakta hai! 😊'};
+      hdTy();var em={role:'ai',text:'⚙️ **Backend setup needed!**\n\nSettings mein jao → **Backend URL** daalo (Railway.app).\n\n**Kaise setup kare:**\n1. riya-backend-q72u.onrender.com pe free account banao\n2. GitHub se riya-backend deploy karo\n3. URL yahan paste karo\n\nFir tumhare API keys safe rahenge aur koi bhi directly use kar sakta hai! 😊'};
       ch.msgs.push(em);svCh(ch);svMsg(ch.id,em,ch.msgs.length-1);addM(em,true);load=false;updSnd();
     }
   });
