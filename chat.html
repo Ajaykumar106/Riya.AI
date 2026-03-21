@@ -2,6 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
+<meta name="theme-color" content="#020208"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Riya"/>
+<link rel="manifest" href="manifest.json"/>
+<link rel="apple-touch-icon" href="icon.png"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
 <title>Riya.AI</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,300;1,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
@@ -386,6 +393,24 @@ body.th-void #bgc{background:#000!important;}
 body.th-dusk{--bg:#0f0810;--sb:#180d14;}
 body.th-dusk #bgc{background:#0f0810!important;}
 body.th-dusk .bub.us{background:rgba(255,60,100,.06)!important;border-color:rgba(255,60,100,.12)!important;}
+
+/* EMOTIONAL RESPONSE STYLES */
+.bub.ai.caring-mode{
+  border-left:2px solid rgba(255,180,180,.15);
+  padding-left:12px;
+}
+.emotion-label{
+  display:inline-block;
+  font-family:'JetBrains Mono',monospace;
+  font-size:7px;
+  letter-spacing:2px;
+  color:rgba(255,255,255,.12);
+  text-transform:uppercase;
+  margin-bottom:6px;
+  padding:2px 8px;
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:10px;
+}
 </style>
 </head>
 <body>
@@ -521,6 +546,18 @@ body.th-dusk .bub.us{background:rgba(255,60,100,.06)!important;border-color:rgba
         <div class="pf-row-ico">⚙️</div>
         <div style="flex:1;"><div class="pf-row-lbl">Backend Settings</div><div class="pf-row-sub">Server URL and config</div></div>
         <div class="pf-row-arr">›</div>
+      </div>
+    </div>
+
+    <!-- MEMORY -->
+    <div class="pf-sec">What Riya Knows About You</div>
+    <div class="pf-card" id="memoryCard">
+      <div style="padding:14px;">
+        <div id="memoryDisplay" style="font-size:12px;color:rgba(255,255,255,.35);line-height:1.8;white-space:pre-wrap;min-height:40px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.3px;">Loading...</div>
+        <div style="display:flex;gap:8px;margin-top:10px;">
+          <button onclick="editMemory()" style="flex:1;padding:8px;border:1px solid rgba(255,255,255,.1);background:transparent;color:rgba(255,255,255,.3);font-size:10px;cursor:pointer;border-radius:8px;font-family:'JetBrains Mono',monospace;letter-spacing:1px;text-transform:uppercase;">Edit</button>
+          <button onclick="clearMemory()" style="flex:1;padding:8px;border:1px solid rgba(255,80,80,.15);background:transparent;color:rgba(255,80,80,.3);font-size:10px;cursor:pointer;border-radius:8px;font-family:'JetBrains Mono',monospace;letter-spacing:1px;text-transform:uppercase;">Clear</button>
+        </div>
       </div>
     </div>
 
@@ -1158,11 +1195,20 @@ function setSt(t){var e=document.getElementById('stx');if(e)e.textContent=t;}
 function scrBot(){var m=document.getElementById('msg');if(m)setTimeout(function(){m.scrollTop=m.scrollHeight;},60);}
 
 // MEMORY
-function autoSummarize(ch){if(!ch||!bkUrl||!user)return;memMsgCount++;if(memMsgCount%5!==0)return;var msgs=ch.msgs||[];if(msgs.length<4)return;fetch(bkUrl+'/api/summarize',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:msgs.slice(-20),userName:prof.name||user.displayName,existingMemory:userMemory})}).then(function(r){return r.json();}).then(function(d){if(d.memory&&d.memory.length>5)svMem(d.memory);}).catch(function(){});}
+function autoSummarize(ch){if(!ch||!bkUrl||!user)return;memMsgCount++;if(memMsgCount%3!==0)return;var msgs=ch.msgs||[];if(msgs.length<4)return;fetch(bkUrl+'/api/summarize',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:msgs.slice(-20),userName:prof.name||user.displayName,existingMemory:userMemory})}).then(function(r){return r.json();}).then(function(d){if(d.memory&&d.memory.length>5)svMem(d.memory);}).catch(function(){});}
 
 // Mood
 function setMood(m){mood=m;var map={happy:'Happy',curious:'Curious',caring:'Caring',playful:'Playful'};var mdt=document.getElementById('mdt');if(mdt)mdt.textContent=map[m]||'Happy';}
-function detMood(t){var l=t.toLowerCase();if(l.match(/sad|upset|bad|depressed|lonely/))return'caring';if(l.match(/funny|joke|lol|haha/))return'playful';if(l.match(/why|how|explain|curious/))return'curious';return'happy';}
+function detMood(t){
+  var l=t.toLowerCase();
+  var sadWords=/sad|upset|bad day|depressed|lonely|bura|dukh|rona|cry|hurt|pain|fail|failed|nahi ho|koi nahi|akela|pareshan|tension|stressed|anxious|scared|dar|nervous|tired|thak|bore|bored|frustrated|gussa|angry/;
+  var funWords=/funny|joke|lol|haha|mast|chill|fun|enjoy|happy|khush|excited|yay/;
+  var thinkWords=/why|how|explain|what is|curious|kyu|kaise|samjhao|batao|difference|compare/;
+  if(sadWords.test(l)) return 'caring';
+  if(funWords.test(l)) return 'playful';
+  if(thinkWords.test(l)) return 'curious';
+  return 'happy';
+}
 
 // SEND
 function send(pre){
@@ -1212,7 +1258,7 @@ function send(pre){
           .then(function(r){return r.json();}).then(function(d){
             var rep=d.reply||'Connection issue. Try again.';hdTy();
             var aiMsg={role:'ai',text:rep,src:src.length?src:null};ch.msgs.push(aiMsg);svCh(ch);svMsg(ch.id,aiMsg,ch.msgs.length-1);
-            addM(aiMsg,true);setSt('Online - Ready');setLogoState('idle');load=false;updSnd();autoSummarize(ch);
+            addM(aiMsg,true);setSt('Online - Ready');setLogoState('idle');load=false;updSnd();autoSummarize(ch);checkShowReview();
           }).catch(function(){hdTy();setLogoState('idle');load=false;updSnd();setSt('Online - Ready');});
       }
     }else{hdTy();setLogoState('idle');var em={role:'ai',text:'Backend not configured. Go to Settings.'};ch.msgs.push(em);svCh(ch);addM(em,true);load=false;updSnd();}
@@ -1328,7 +1374,7 @@ document.getElementById('sb2').addEventListener('click',function(){send();});
 function updSnd(){var v=(document.getElementById('mi').value||'').trim();var b=document.getElementById('sb2');b.disabled=!v||load;b.innerHTML=load?'<div style="width:12px;height:12px;border-radius:50%;border:1.5px solid rgba(255,255,255,.15);border-top-color:rgba(255,255,255,.5);animation:spin .7s linear infinite;"></div>':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9"/></svg>';}
 
 // Modals
-function opPf(){buildThemeGrid();buildArtifacts();updProfUI();document.getElementById('profilePage').classList.add('show');clsSB();}
+function opPf(){buildThemeGrid();buildArtifacts();updProfUI();showMemory();document.getElementById('profilePage').classList.add('show');clsSB();}
 function clsPf(){document.getElementById('profilePage').classList.remove('show');}
 document.getElementById('pfBack').addEventListener('click',clsPf);
 document.getElementById('sbpb').addEventListener('click',opPf);
@@ -1344,11 +1390,188 @@ document.getElementById('pcbg').addEventListener('click',function(e){if(e.target
 window.pay=function(amt,pl){if(!rzKey){alert('Add Razorpay Key in Settings.');return;}var sc=document.createElement('script');sc.src='https://checkout.razorpay.com/v1/checkout.js';sc.onload=function(){new Razorpay({key:rzKey,amount:amt*100,currency:'INR',name:'Riya.AI',description:pl==='premium'?'Pro Plan':'Basic Plan',prefill:{name:user?user.displayName:'',email:user?user.email:''},theme:{color:'#ffffff'},handler:function(res){plan=pl;svUD();updProfUI();document.getElementById('pcbg').classList.remove('open');if(user)db.collection('users').doc(user.uid).set({plan:pl,planAt:firebase.firestore.FieldValue.serverTimestamp(),payId:res.razorpay_payment_id},{merge:true}).catch(function(){});var ch=ga();if(ch){var am={role:'ai',text:'Welcome to '+(pl==='premium'?'Pro':'Basic')+'! All features unlocked. 🎉'};ch.msgs.push(am);svCh(ch);addM(am,true);}},modal:{ondismiss:function(){}}}).open();};sc.onerror=function(){alert('Payment failed.');};document.head.appendChild(sc);};
 
 // Helpers
+// REVIEW SYSTEM
+var reviewRating = 0;
+var reviewShown = false;
+
+function checkShowReview(){
+  if(reviewShown) return;
+  var key = 'riya_reviewed_' + (user ? user.uid : '');
+  try{
+    var last = localStorage.getItem(key);
+    if(last){
+      var daysSince = (Date.now() - parseInt(last)) / 86400000;
+      if(daysSince < 14) return; // ask again after 14 days
+    }
+  }catch(e){}
+  // Count total messages
+  var total = chats.reduce(function(a,c){ return a + (c.msgs ? c.msgs.length : 0); }, 0);
+  if(total >= 10 && !reviewShown){
+    reviewShown = true;
+    setTimeout(showReview, 3000);
+  }
+}
+
+function showReview(){
+  var m = document.getElementById('reviewModal');
+  if(m) m.style.display = 'flex';
+}
+
+window.closeReview = function(){
+  var m = document.getElementById('reviewModal');
+  if(m) m.style.display = 'none';
+};
+
+// Star selection
+document.addEventListener('click', function(e){
+  if(e.target.classList.contains('star-btn')){
+    reviewRating = parseInt(e.target.getAttribute('data-v'));
+    document.querySelectorAll('.star-btn').forEach(function(s){
+      s.style.opacity = parseInt(s.getAttribute('data-v')) <= reviewRating ? '1' : '0.2';
+      s.style.color = parseInt(s.getAttribute('data-v')) <= reviewRating ? 'rgba(255,200,50,.8)' : '';
+    });
+  }
+});
+
+document.getElementById('submitReview') && document.getElementById('submitReview').addEventListener('click', function(){
+  if(reviewRating === 0){ alert('Please select a rating!'); return; }
+  var text = document.getElementById('reviewText') ? document.getElementById('reviewText').value.trim() : '';
+  if(user){
+    db.collection('reviews').add({
+      userId: user.uid,
+      userName: prof.name || user.displayName || 'User',
+      rating: reviewRating,
+      text: text,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    }).then(function(){
+      try{ localStorage.setItem('riya_reviewed_' + user.uid, Date.now()); }catch(e){}
+    }).catch(function(){});
+  }
+  closeReview();
+  // Thank them
+  var ch = ga();
+  if(ch){
+    var msg = {role:'ai', text: reviewRating >= 4
+      ? 'Aww thank you so much! Your feedback means everything to me. I will keep getting better for you! ' + (reviewRating === 5 ? 'You made my day! ' : '')
+      : 'Thank you for being honest! I will work on improving. Your feedback helps me grow!'
+    };
+    ch.msgs.push(msg); svCh(ch); addM(msg, true);
+  }
+});
+
+// MEMORY FUNCTIONS
+window.editMemory = function(){
+  var md = document.getElementById('memoryDisplay');
+  if(!md) return;
+  var ta = document.createElement('textarea');
+  ta.value = userMemory;
+  ta.style.cssText = 'width:100%;padding:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:rgba(255,255,255,.6);font-size:11px;border-radius:8px;outline:none;font-family:JetBrains Mono,monospace;resize:vertical;min-height:120px;';
+  md.innerHTML = '';
+  md.appendChild(ta);
+  ta.focus();
+  // Save on blur
+  ta.addEventListener('blur', function(){
+    userMemory = ta.value.trim();
+    svMem(userMemory);
+    showMemory();
+  });
+};
+
+window.clearMemory = function(){
+  if(!confirm('Clear all memory? Riya will forget everything about you.')) return;
+  userMemory = '';
+  svMem('');
+  showMemory();
+  if(bkUrl && user){
+    fetch(bkUrl+'/api/memory/clear',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({userId:user.uid})}).catch(function(){});
+  }
+};
+
+function showMemory(){
+  var md = document.getElementById('memoryDisplay');
+  if(!md) return;
+  if(!userMemory || userMemory.trim().length < 3){
+    md.textContent = 'Riya does not know much about you yet.\nJust keep chatting - she learns as you talk!';
+    return;
+  }
+  md.textContent = userMemory;
+}
+
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function eH(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function srcI(url){try{var h=new URL(url).hostname.replace('www.','');var m={'google.com':'G','youtube.com':'YT','wikipedia.org':'W','reddit.com':'R','twitter.com':'X','github.com':'GH','stackoverflow.com':'SO'};return m[h]||h.slice(0,2).toUpperCase();}catch(e){return '?';}}
 if(window.speechSynthesis){window.speechSynthesis.getVoices();window.speechSynthesis.onvoiceschanged=function(){window.speechSynthesis.getVoices();};}
+
+// PWA Install prompt
+var deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', function(e){
+  e.preventDefault();
+  deferredPrompt = e;
+  // Show install button after 30 seconds
+  setTimeout(function(){
+    if(deferredPrompt) showInstallBanner();
+  }, 30000);
+});
+
+function showInstallBanner(){
+  if(document.getElementById('installBanner')) return;
+  var b = document.createElement('div');
+  b.id = 'installBanner';
+  b.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(6,6,18,.95);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:12px 16px;display:flex;align-items:center;gap:10px;z-index:999;backdrop-filter:blur(20px);max-width:300px;width:90%;';
+  b.innerHTML = "<div style=\"flex:1;\"><div style=\"font-size:12px;color:rgba(255,255,255,.6);font-weight:500;\">Add Riya to Home Screen</div><div style=\"font-size:10px;color:rgba(255,255,255,.2);margin-top:2px;font-family:JetBrains Mono,monospace;\">Like a real app</div></div><button onclick=\"installPWA()\" style=\"padding:7px 14px;border:1px solid rgba(255,255,255,.2);background:transparent;color:rgba(255,255,255,.55);font-size:10px;cursor:pointer;border-radius:8px;\">Add</button><button onclick=\"var el=document.getElementById('installBanner');if(el)el.remove();\" style=\"background:none;border:none;color:rgba(255,255,255,.2);cursor:pointer;font-size:18px;padding:0 4px;\">x</button>";
+  document.body.appendChild(b);
+}
+
+window.installPWA = function(){
+  if(!deferredPrompt) return;
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(function(r){
+    if(r.outcome === 'accepted'){
+      var b = document.getElementById('installBanner');
+      if(b) b.remove();
+    }
+    deferredPrompt = null;
+  });
+};
+
+// Register service worker
+if('serviceWorker' in navigator){
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('sw.js').catch(function(){});
+  });
+}
+
+// Save memory when user leaves
+window.addEventListener('beforeunload', function(){
+  var ch=ga();
+  if(ch&&ch.msgs&&ch.msgs.length>2&&bkUrl&&user){
+    autoSummarize(ch);
+  }
+});
 }
 </script>
+
+<!-- REVIEW MODAL -->
+<div id="reviewModal" style="display:none;position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.85);backdrop-filter:blur(10px);align-items:flex-end;justify-content:center;">
+  <div style="background:rgba(4,4,14,.98);border:1px solid rgba(255,255,255,.08);border-bottom:none;border-radius:18px 18px 0 0;padding:8px 20px 36px;width:100%;max-width:460px;">
+    <div style="width:28px;height:3px;background:rgba(255,255,255,.1);margin:12px auto 20px;border-radius:2px;"></div>
+    <div style="text-align:center;margin-bottom:20px;">
+      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:22px;color:rgba(255,255,255,.45);margin-bottom:6px;">How is Riya helping you?</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.2);">Your feedback makes her better</div>
+    </div>
+    <!-- Stars -->
+    <div style="display:flex;justify-content:center;gap:12px;margin-bottom:18px;" id="starRow">
+      <span class="star-btn" data-v="1" style="font-size:32px;cursor:pointer;opacity:.3;transition:all .2s;">&#9733;</span>
+      <span class="star-btn" data-v="2" style="font-size:32px;cursor:pointer;opacity:.3;transition:all .2s;">&#9733;</span>
+      <span class="star-btn" data-v="3" style="font-size:32px;cursor:pointer;opacity:.3;transition:all .2s;">&#9733;</span>
+      <span class="star-btn" data-v="4" style="font-size:32px;cursor:pointer;opacity:.3;transition:all .2s;">&#9733;</span>
+      <span class="star-btn" data-v="5" style="font-size:32px;cursor:pointer;opacity:.3;transition:all .2s;">&#9733;</span>
+    </div>
+    <textarea id="reviewText" placeholder="Tell Riya something... (optional)" style="width:100%;padding:11px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);color:rgba(255,255,255,.55);font-size:13px;border-radius:10px;outline:none;font-family:Inter,sans-serif;resize:none;height:80px;margin-bottom:12px;"></textarea>
+    <button id="submitReview" style="width:100%;padding:13px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.45);font-size:12px;cursor:pointer;font-family:'JetBrains Mono',monospace;letter-spacing:2px;text-transform:uppercase;border-radius:10px;transition:all .2s;">Share Feedback</button>
+    <button onclick="closeReview()" style="width:100%;padding:10px;border:none;background:transparent;color:rgba(255,255,255,.15);font-size:11px;cursor:pointer;margin-top:6px;font-family:'JetBrains Mono',monospace;letter-spacing:1px;">Maybe later</button>
+  </div>
+</div>
+
 </body>
 </html>
