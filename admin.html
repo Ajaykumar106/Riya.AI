@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Riya Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#020208;color:rgba(255,255,255,.75);font-family:'Inter',sans-serif;min-height:100vh;position:relative;overflow-x:hidden;}
+#adminBg{position:fixed;inset:0;z-index:0;pointer-events:none;}
+#dashboard,#loginPage{position:relative;z-index:1;}
+
+/* LOGIN */
+#loginPage{position:fixed;inset:0;background:#030308;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;z-index:100;}
+.login-box{border:1px solid rgba(255,255,255,.06);padding:40px 28px;width:100%;max-width:300px;border-radius:16px;text-align:center;background:rgba(2,2,12,.7);backdrop-filter:blur(20px);}
+.login-title{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:4px;color:rgba(255,255,255,.2);text-transform:uppercase;margin-bottom:20px;}
+.pin-input{width:100%;padding:12px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:rgba(255,255,255,.7);font-size:20px;text-align:center;letter-spacing:8px;font-family:'JetBrains Mono',monospace;outline:none;border-radius:8px;margin-bottom:12px;}
+.pin-input:focus{border-color:rgba(255,255,255,.2);}
+.pin-btn{width:100%;padding:11px;border:1px solid rgba(255,255,255,.12);background:transparent;color:rgba(255,255,255,.45);font-size:12px;cursor:pointer;font-family:'JetBrains Mono',monospace;letter-spacing:2px;text-transform:uppercase;border-radius:8px;transition:all .2s;}
+.pin-btn:hover{background:rgba(255,255,255,.05);color:rgba(255,255,255,.7);}
+.pin-err{font-size:11px;color:rgba(255,80,80,.5);font-family:'JetBrains Mono',monospace;display:none;}
+
+/* DASHBOARD */
+#dashboard{display:none;padding:20px;background:transparent;}
+.top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,.06);}
+.admin-title{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:4px;color:rgba(255,255,255,.25);text-transform:uppercase;}
+.refresh-btn{padding:6px 14px;border:1px solid rgba(255,255,255,.08);background:transparent;color:rgba(255,255,255,.25);font-size:10px;cursor:pointer;font-family:'JetBrains Mono',monospace;letter-spacing:1px;border-radius:20px;transition:all .2s;}
+.refresh-btn:hover{border-color:rgba(255,255,255,.18);color:rgba(255,255,255,.5);}
+.logout-btn{padding:6px 14px;border:1px solid rgba(255,80,80,.15);background:transparent;color:rgba(255,80,80,.3);font-size:10px;cursor:pointer;font-family:'JetBrains Mono',monospace;letter-spacing:1px;border-radius:20px;transition:all .2s;}
+.logout-btn:hover{background:rgba(255,80,80,.05);color:rgba(255,80,80,.6);}
+
+/* STAT CARDS */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px;}
+@media(max-width:800px){.stats-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:400px){.stats-grid{grid-template-columns:1fr 1fr;}}
+.stat-card{border:1px solid rgba(255,255,255,.06);background:rgba(5,5,18,.6);backdrop-filter:blur(8px);padding:18px 16px;border-radius:12px;}
+.stat-val{font-size:28px;font-weight:300;color:rgba(255,255,255,.55);font-family:'JetBrains Mono',monospace;margin-bottom:4px;}
+.stat-label{font-size:8px;color:rgba(255,255,255,.2);text-transform:uppercase;letter-spacing:2px;font-family:'JetBrains Mono',monospace;}
+.stat-sub{font-size:9px;color:rgba(255,255,255,.15);margin-top:3px;font-family:'JetBrains Mono',monospace;}
+
+/* SECTIONS */
+.sec-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+@media(max-width:700px){.sec-grid{grid-template-columns:1fr;}}
+.panel{border:1px solid rgba(255,255,255,.06);background:rgba(5,5,18,.6);backdrop-filter:blur(8px);border-radius:12px;overflow:hidden;}
+.panel-head{padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:center;justify-content:space-between;}
+.panel-title{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:3px;color:rgba(255,255,255,.2);text-transform:uppercase;}
+.panel-count{font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,.15);}
+.panel-body{padding:12px;max-height:320px;overflow-y:auto;}
+.panel-body::-webkit-scrollbar{width:2px;}
+.panel-body::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);}
+
+/* USER LIST */
+.user-row{display:flex;align-items:center;gap:10px;padding:9px 10px;border-bottom:1px solid rgba(255,255,255,.03);transition:background .15s;border-radius:8px;}
+.user-row:hover{background:rgba(255,255,255,.03);}
+.user-row:last-child{border:none;}
+.u-av{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:12px;overflow:hidden;flex-shrink:0;}
+.u-av img{width:100%;height:100%;object-fit:cover;}
+.u-info{flex:1;min-width:0;}
+.u-name{font-size:12px;color:rgba(255,255,255,.5);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.u-email{font-size:9px;color:rgba(255,255,255,.18);font-family:'JetBrains Mono',monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.u-plan{font-family:'JetBrains Mono',monospace;font-size:7px;padding:2px 7px;border-radius:10px;letter-spacing:1px;text-transform:uppercase;flex-shrink:0;}
+.plan-free{border:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.2);}
+.plan-basic{border:1px solid rgba(100,200,100,.2);color:rgba(100,200,100,.4);}
+.plan-premium{border:1px solid rgba(255,200,50,.2);color:rgba(255,200,50,.4);}
+.u-msgs{font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,.15);flex-shrink:0;}
+.u-joined{font-family:'JetBrains Mono',monospace;font-size:8px;color:rgba(255,255,255,.12);flex-shrink:0;}
+
+/* REVIEWS */
+.review-row{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.03);border-radius:8px;}
+.review-row:last-child{border:none;}
+.review-top{display:flex;align-items:center;gap:8px;margin-bottom:5px;}
+.review-user{font-size:11px;color:rgba(255,255,255,.4);font-weight:500;}
+.review-time{font-family:'JetBrains Mono',monospace;font-size:8px;color:rgba(255,255,255,.15);}
+.review-stars{color:rgba(255,200,50,.6);font-size:11px;letter-spacing:1px;}
+.review-text{font-size:12px;color:rgba(255,255,255,.3);line-height:1.6;}
+.no-reviews{text-align:center;padding:24px;font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,.12);letter-spacing:2px;text-transform:uppercase;}
+
+/* ACTIVITY FEED */
+.act-row{display:flex;align-items:center;gap:8px;padding:7px 10px;border-bottom:1px solid rgba(255,255,255,.03);}
+.act-row:last-child{border:none;}
+.act-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.act-dot.msg{background:rgba(100,180,255,.4);}
+.act-dot.join{background:rgba(100,220,100,.4);}
+.act-dot.img{background:rgba(200,100,255,.4);}
+.act-dot.voice{background:rgba(255,180,50,.4);}
+.act-txt{font-size:11px;color:rgba(255,255,255,.3);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.act-time{font-family:'JetBrains Mono',monospace;font-size:8px;color:rgba(255,255,255,.12);flex-shrink:0;}
+
+/* CHART */
+.chart-wrap{padding:16px;}
+.chart-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.chart-label{font-family:'JetBrains Mono',monospace;font-size:8px;color:rgba(255,255,255,.2);width:28px;text-align:right;flex-shrink:0;}
+.chart-bar-bg{flex:1;height:6px;background:rgba(255,255,255,.04);border-radius:3px;overflow:hidden;}
+.chart-bar-fill{height:100%;border-radius:3px;background:rgba(255,255,255,.2);transition:width .8s ease;}
+.chart-val{font-family:'JetBrains Mono',monospace;font-size:8px;color:rgba(255,255,255,.2);width:28px;flex-shrink:0;}
+
+/* FULL WIDTH PANEL */
+.full-panel{border:1px solid rgba(255,255,255,.06);background:rgba(5,5,18,.6);backdrop-filter:blur(8px);border-radius:12px;overflow:hidden;margin-bottom:14px;}
+
+/* LOADING */
+.loading{text-align:center;padding:24px;font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,.15);letter-spacing:2px;animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:.3}50%{opacity:.8}}
+
+/* EMPTY */
+.empty{text-align:center;padding:20px;font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,.1);letter-spacing:2px;text-transform:uppercase;}
+
+.config-card{border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.02);border-radius:12px;overflow:hidden;margin-bottom:14px;}
+.config-head{padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:center;justify-content:space-between;}
+.config-title{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:3px;color:rgba(255,255,255,.2);text-transform:uppercase;}
+.config-body{padding:16px;}
+.config-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.config-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;color:rgba(255,255,255,.3);text-transform:uppercase;width:100px;flex-shrink:0;}
+.config-input{flex:1;padding:9px 12px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);color:rgba(255,255,255,.6);font-size:12px;outline:none;border-radius:8px;font-family:'JetBrains Mono',monospace;transition:border-color .2s;}
+.config-input:focus{border-color:rgba(255,255,255,.18);}
+.config-save{padding:8px 18px;border:1px solid rgba(255,255,255,.12);background:transparent;color:rgba(255,255,255,.4);font-size:10px;cursor:pointer;font-family:'JetBrains Mono',monospace;letter-spacing:1px;border-radius:8px;transition:all .2s;}
+.config-save:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.7);}
+.config-status{font-size:10px;color:rgba(100,220,100,.5);font-family:'JetBrains Mono',monospace;display:none;}
+</style>
+</head>
+<body>
+
+<!-- LOGIN PAGE -->
+<canvas id="adminBg"></canvas>
+<div id="loginPage">
+  <div class="login-box">
+    <div style="margin-bottom:16px;display:flex;justify-content:center;">
+      <svg width="56" height="56" viewBox="0 0 56 56" style="overflow:visible">
+        <defs>
+          <radialGradient id="adh" cx="50%" cy="32%" r="40%">
+            <stop offset="0%" stop-color="#fff" stop-opacity="1"/>
+            <stop offset="60%" stop-color="#aabbee" stop-opacity="0.4"/>
+            <stop offset="100%" stop-color="#334477" stop-opacity="0"/>
+          </radialGradient>
+          <filter id="adg"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+        <circle cx="8" cy="9" r="0.9" fill="white" opacity="0.5"/>
+        <circle cx="46" cy="7" r="0.7" fill="white" opacity="0.4"/>
+        <circle cx="4" cy="34" r="0.8" fill="white" opacity="0.35"/>
+        <circle cx="50" cy="32" r="0.9" fill="white" opacity="0.4"/>
+        <path d="M28 44 Q20 40 18 33 Q16 26 20 20 Q24 14 28 13 Q32 14 36 20 Q40 26 38 33 Q36 40 28 44Z" fill="rgba(140,160,220,0.15)"/>
+        <path d="M28 44 Q22 49 16 54" stroke="rgba(180,200,255,0.18)" stroke-width="0.9" fill="none"/>
+        <path d="M28 44 Q34 49 40 54" stroke="rgba(180,200,255,0.18)" stroke-width="0.9" fill="none"/>
+        <path d="M20 30 Q10 27 4 30" stroke="rgba(180,200,255,0.15)" stroke-width="0.7" fill="none"/>
+        <path d="M36 30 Q46 27 52 30" stroke="rgba(180,200,255,0.15)" stroke-width="0.7" fill="none"/>
+        <circle cx="28" cy="14" r="10" fill="url(#adh)" filter="url(#adg)"/>
+        <circle cx="28" cy="14" r="5" fill="white" opacity="0.88" filter="url(#adg)"/>
+        <circle cx="28" cy="14" r="2.5" fill="white" opacity="1"/>
+        <line x1="28" y1="2" x2="28" y2="0" stroke="white" stroke-width="0.9" opacity="0.6"/>
+        <line x1="36" y1="6" x2="39" y2="3" stroke="white" stroke-width="0.8" opacity="0.5"/>
+        <line x1="20" y1="6" x2="17" y2="3" stroke="white" stroke-width="0.8" opacity="0.5"/>
+        <line x1="40" y1="14" x2="44" y2="14" stroke="white" stroke-width="0.7" opacity="0.4"/>
+        <line x1="16" y1="14" x2="12" y2="14" stroke="white" stroke-width="0.7" opacity="0.4"/>
+      </svg>
+    </div>
+    <div class="login-title">Riya Admin</div>
+    <input class="pin-input" id="pinInput" type="password" maxlength="6" placeholder="••••••" autocomplete="off"/>
+    <button class="pin-btn" id="pinBtn">Access Dashboard</button>
+    <div class="pin-err" id="pinErr">Wrong PIN. Try again.</div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+  <div class="top-bar">
+    <div class="admin-title">Riya.AI · Admin</div>
+    <div style="display:flex;gap:8px;">
+      <button class="refresh-btn" id="refreshBtn">Refresh</button>
+      <button class="logout-btn" id="logoutBtn">Logout</button>
+    </div>
+  </div>
+
+  <!-- STATS ROW -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-val" id="statUsers">-</div>
+      <div class="stat-label">Total Users</div>
+      <div class="stat-sub" id="statUsersNew">Loading...</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val" id="statMsgs">-</div>
+      <div class="stat-label">Total Messages</div>
+      <div class="stat-sub" id="statMsgsToday">Loading...</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val" id="statPro">-</div>
+      <div class="stat-label">Pro Users</div>
+      <div class="stat-sub" id="statBasic">Loading...</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val" id="statActive">-</div>
+      <div class="stat-label">Active Today</div>
+      <div class="stat-sub" id="statRating">Loading...</div>
+    </div>
+  </div>
+
+  <!-- USERS + ACTIVITY -->
+  <div class="sec-grid">
+    <div class="panel">
+      <div class="panel-head">
+        <div class="panel-title">All Users</div>
+        <div class="panel-count" id="userCount">0 users</div>
+      </div>
+      <div class="panel-body" id="userList">
+        <div class="loading">Loading users...</div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-head">
+        <div class="panel-title">Recent Activity</div>
+        <div class="panel-count" id="actCount">Live</div>
+      </div>
+      <div class="panel-body" id="actFeed">
+        <div class="loading">Loading activity...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REVIEWS + PLAN BREAKDOWN -->
+  <div class="sec-grid">
+    <div class="panel">
+      <div class="panel-head">
+        <div class="panel-title">User Reviews</div>
+        <div class="panel-count" id="reviewAvg">No reviews yet</div>
+      </div>
+      <div class="panel-body" id="reviewList">
+        <div class="no-reviews">No reviews yet</div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-head">
+        <div class="panel-title">Usage by Day</div>
+        <div class="panel-count">Last 7 days</div>
+      </div>
+      <div class="chart-wrap" id="dayChart">
+        <div class="loading">Loading chart...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BACKEND CONFIG -->
+  <div class="config-card">
+    <div class="config-head">
+      <div class="config-title">Backend Configuration</div>
+      <span class="config-status" id="cfgStatus">Saved!</span>
+    </div>
+    <div class="config-body">
+      <div class="config-row">
+        <div class="config-label">Backend URL</div>
+        <input class="config-input" id="cfgUrl" placeholder="https://riya-backend-ujz7.onrender.com" type="text"/>
+      </div>
+      <div class="config-row">
+        <div class="config-label">App Version</div>
+        <input class="config-input" id="cfgVersion" placeholder="5.0" type="text"/>
+      </div>
+      <div class="config-row">
+        <div class="config-label">Maintenance</div>
+        <select class="config-input" id="cfgMaint" style="cursor:pointer;">
+          <option value="off">Off — App is live</option>
+          <option value="on">On — Show maintenance page</option>
+        </select>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:4px;">
+        <button class="config-save" onclick="saveConfig()">Save Config</button>
+        <button class="config-save" onclick="testBackend()" style="border-color:rgba(91,231,255,.15);color:rgba(91,231,255,.4);">Test Connection</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLAN BREAKDOWN -->
+  <div class="full-panel">
+    <div class="panel-head">
+      <div class="panel-title">Plan Breakdown</div>
+    </div>
+    <div class="panel-body" style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.04);max-height:none;">
+      <div style="background:#020210;padding:20px;text-align:center;">
+        <div style="font-size:32px;font-weight:300;color:rgba(255,255,255,.4);font-family:'JetBrains Mono',monospace;" id="planFreeCount">-</div>
+        <div style="font-size:8px;color:rgba(255,255,255,.15);letter-spacing:2px;font-family:'JetBrains Mono',monospace;text-transform:uppercase;margin-top:4px;">Free</div>
+      </div>
+      <div style="background:#020210;padding:20px;text-align:center;">
+        <div style="font-size:32px;font-weight:300;color:rgba(100,200,100,.4);font-family:'JetBrains Mono',monospace;" id="planBasicCount">-</div>
+        <div style="font-size:8px;color:rgba(100,200,100,.2);letter-spacing:2px;font-family:'JetBrains Mono',monospace;text-transform:uppercase;margin-top:4px;">Basic</div>
+      </div>
+      <div style="background:#020210;padding:20px;text-align:center;">
+        <div style="font-size:32px;font-weight:300;color:rgba(255,200,50,.4);font-family:'JetBrains Mono',monospace;" id="planProCount">-</div>
+        <div style="font-size:8px;color:rgba(255,200,50,.2);letter-spacing:2px;font-family:'JetBrains Mono',monospace;text-transform:uppercase;margin-top:4px;">Pro</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+var ADMIN_PIN = '060606';
+
+function initAdmin(){
+  if(typeof firebase === 'undefined'){
+    setTimeout(initAdmin, 200);
+    return;
+  }
+
+  try{ firebase.app(); } catch(e){
+    firebase.initializeApp({
+  apiKey:"AIzaSyBl1xDUshkJEOrGTbmCGpbNcIi1pHEtDYA",
+  authDomain:"riya-ai-2c24e.firebaseapp.com",
+      projectId:"riya-ai-2c24e"
+    });
+  }
+  var db = firebase.firestore();
+
+// PIN LOGIN
+document.getElementById('pinBtn').addEventListener('click', checkPin);
+document.getElementById('pinInput').addEventListener('keydown', function(e){
+  if(e.key === 'Enter') checkPin();
+});
+
+function checkPin(){
+  var pin = document.getElementById('pinInput').value.trim();
+  if(pin === ADMIN_PIN){
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    loadDashboard();
+  } else {
+    var err = document.getElementById('pinErr');
+    err.style.display = 'block';
+    document.getElementById('pinInput').value = '';
+    setTimeout(function(){ err.style.display = 'none'; }, 2000);
+  }
+}
+
+document.getElementById('logoutBtn').addEventListener('click', function(){
+  document.getElementById('dashboard').style.display = 'none';
+  document.getElementById('loginPage').style.display = 'flex';
+  document.getElementById('pinInput').value = '';
+});
+
+document.getElementById('refreshBtn').addEventListener('click', loadDashboard);
+
+// LOAD ALL DATA
+function loadDashboard(){
+  loadUsers();
+  loadActivity();
+  loadReviews();
+}
+
+// LOAD USERS
+function loadUsers(){
+  db.collection('users').get().then(function(snap){
+    var users = [];
+    var totalMsgs = 0;
+    var proCount = 0, basicCount = 0, freeCount = 0;
+    var today = new Date().toDateString();
+    var activeToday = 0;
+    var newThisWeek = 0;
+    var weekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+
+    snap.docs.forEach(function(doc){
+      var d = doc.data();
+      d.uid = doc.id;
+      users.push(d);
+
+      // Plan counts
+      if(d.plan === 'premium') proCount++;
+      else if(d.plan === 'basic') basicCount++;
+      else freeCount++;
+
+      // Active today
+      if(d.updatedAt){
+        var upd = d.updatedAt.toDate ? d.updatedAt.toDate() : new Date(d.updatedAt);
+        if(upd.toDateString() === today) activeToday++;
+        if(upd.getTime() > weekAgo) newThisWeek++;
+      }
+    });
+
+    // Update stats
+    document.getElementById('statUsers').textContent = snap.size;
+    document.getElementById('statUsersNew').textContent = newThisWeek + ' new this week';
+    document.getElementById('statPro').textContent = proCount;
+    document.getElementById('statBasic').textContent = basicCount + ' basic users';
+    document.getElementById('statActive').textContent = activeToday;
+    document.getElementById('planFreeCount').textContent = freeCount;
+    document.getElementById('planBasicCount').textContent = basicCount;
+    document.getElementById('planProCount').textContent = proCount;
+    document.getElementById('userCount').textContent = snap.size + ' users';
+
+    // Get message counts
+    var msgPromises = users.slice(0, 20).map(function(u){
+      return db.collection('users').doc(u.uid).collection('chats').get()
+        .then(function(cs){
+          var total = 0;
+          cs.docs.forEach(function(c){ total += c.data().msgCount || 0; });
+          u.totalMsgs = total;
+          totalMsgs += total;
+          return u;
+        }).catch(function(){ u.totalMsgs = 0; return u; });
+    });
+
+    Promise.all(msgPromises).then(function(enrichedUsers){
+      document.getElementById('statMsgs').textContent = totalMsgs;
+      document.getElementById('statMsgsToday').textContent = 'across all users';
+      renderUsers(enrichedUsers);
+      buildDayChart(enrichedUsers);
+    });
+
+  }).catch(function(e){
+    document.getElementById('userList').innerHTML = '<div class="empty">Error loading users</div>';
+    console.log(e);
+  });
+}
+
+function renderUsers(users){
+  var ul = document.getElementById('userList');
+  if(!users.length){ ul.innerHTML = '<div class="empty">No users yet</div>'; return; }
+
+  // Sort by updated
+  users.sort(function(a, b){
+    var at = a.updatedAt ? (a.updatedAt.toDate ? a.updatedAt.toDate().getTime() : 0) : 0;
+    var bt = b.updatedAt ? (b.updatedAt.toDate ? b.updatedAt.toDate().getTime() : 0) : 0;
+    return bt - at;
+  });
+
+  ul.innerHTML = users.map(function(u){
+    var name = u.displayName || 'User';
+    var email = '';
+    var photo = u.photoURL || '';
+    var plan = u.plan || 'free';
+    var msgs = u.totalMsgs || 0;
+    var joined = '';
+    if(u.updatedAt){
+      var d = u.updatedAt.toDate ? u.updatedAt.toDate() : new Date(u.updatedAt);
+      joined = d.toLocaleDateString('en-IN', {day:'numeric',month:'short'});
+    }
+    var planClass = plan === 'premium' ? 'plan-premium' : plan === 'basic' ? 'plan-basic' : 'plan-free';
+    var planLabel = plan === 'premium' ? 'Pro' : plan === 'basic' ? 'Basic' : 'Free';
+    var av = photo
+      ? '<img src="' + photo + '" onerror="this.parentElement.textContent=\'' + (name[0]||'U') + '\'">'
+      : (name[0] || 'U');
+    return '<div class="user-row">' +
+      '<div class="u-av">' + av + '</div>' +
+      '<div class="u-info">' +
+        '<div class="u-name">' + esc(name) + '</div>' +
+      '</div>' +
+      '<span class="u-plan ' + planClass + '">' + planLabel + '</span>' +
+      '<div class="u-msgs">' + msgs + ' msgs</div>' +
+      '<div class="u-joined">' + joined + '</div>' +
+    '</div>';
+  }).join('');
+}
+
+// ACTIVITY FEED — from recent chat updates
+function loadActivity(){
+  db.collection('users')
+    .orderBy('updatedAt', 'desc')
+    .limit(20)
+    .get().then(function(snap){
+      var acts = [];
+      snap.docs.forEach(function(doc){
+        var d = doc.data();
+        var name = d.displayName || 'Someone';
+        var t = d.updatedAt ? (d.updatedAt.toDate ? d.updatedAt.toDate() : new Date(d.updatedAt)) : null;
+        var timeStr = t ? timeAgo(t) : '';
+        acts.push({
+          type: 'msg',
+          txt: name + ' sent a message',
+          time: timeStr,
+          dot: 'msg'
+        });
+        if(d.plan && d.plan !== 'free'){
+          acts.push({
+            type: 'plan',
+            txt: name + ' upgraded to ' + d.plan,
+            time: timeStr,
+            dot: 'join'
+          });
+        }
+      });
+      renderActivity(acts.slice(0, 20));
+    }).catch(function(){
+      document.getElementById('actFeed').innerHTML = '<div class="empty">No activity yet</div>';
+    });
+}
+
+function renderActivity(acts){
+  var feed = document.getElementById('actFeed');
+  if(!acts.length){ feed.innerHTML = '<div class="empty">No activity yet</div>'; return; }
+  feed.innerHTML = acts.map(function(a){
+    return '<div class="act-row">' +
+      '<div class="act-dot ' + a.dot + '"></div>' +
+      '<div class="act-txt">' + esc(a.txt) + '</div>' +
+      '<div class="act-time">' + a.time + '</div>' +
+    '</div>';
+  }).join('');
+}
+
+// REVIEWS
+function loadReviews(){
+  db.collection('reviews')
+    .orderBy('createdAt', 'desc')
+    .limit(20)
+    .get().then(function(snap){
+      if(snap.empty){
+        document.getElementById('reviewList').innerHTML = '<div class="no-reviews">No reviews yet</div>';
+        document.getElementById('reviewAvg').textContent = 'No reviews';
+        return;
+      }
+      var total = 0, count = 0;
+      var reviews = snap.docs.map(function(doc){
+        var d = doc.data();
+        total += d.rating || 5;
+        count++;
+        return d;
+      });
+      var avg = count > 0 ? (total/count).toFixed(1) : '5.0';
+      document.getElementById('reviewAvg').textContent = avg + ' avg · ' + count + ' reviews';
+      renderReviews(reviews);
+    }).catch(function(){
+      document.getElementById('reviewList').innerHTML = '<div class="no-reviews">No reviews collection yet</div>';
+    });
+}
+
+function renderReviews(reviews){
+  var rl = document.getElementById('reviewList');
+  rl.innerHTML = reviews.map(function(r){
+    var stars = '';
+    for(var i = 0; i < (r.rating || 5); i++) stars += '★';
+    for(var i = (r.rating || 5); i < 5; i++) stars += '☆';
+    var t = r.createdAt ? (r.createdAt.toDate ? r.createdAt.toDate() : new Date(r.createdAt)) : null;
+    return '<div class="review-row">' +
+      '<div class="review-top">' +
+        '<div class="review-user">' + esc(r.userName || 'User') + '</div>' +
+        '<div class="review-stars">' + stars + '</div>' +
+        '<div class="review-time">' + (t ? timeAgo(t) : '') + '</div>' +
+      '</div>' +
+      '<div class="review-text">' + esc(r.text || '') + '</div>' +
+    '</div>';
+  }).join('');
+}
+
+// DAY CHART
+function buildDayChart(users){
+  var days = {};
+  var now = new Date();
+  for(var i = 6; i >= 0; i--){
+    var d = new Date(now);
+    d.setDate(d.getDate() - i);
+    var key = d.toLocaleDateString('en-IN', {weekday:'short'});
+    days[key] = 0;
+  }
+
+  users.forEach(function(u){
+    if(u.updatedAt){
+      var d = u.updatedAt.toDate ? u.updatedAt.toDate() : new Date(u.updatedAt);
+      var key = d.toLocaleDateString('en-IN', {weekday:'short'});
+      if(days[key] !== undefined) days[key]++;
+    }
+  });
+
+  var max = Math.max(1, Math.max.apply(null, Object.values(days)));
+  var html = Object.entries(days).map(function(entry){
+    var pct = Math.round((entry[1] / max) * 100);
+    return '<div class="chart-bar-row">' +
+      '<div class="chart-label">' + entry[0] + '</div>' +
+      '<div class="chart-bar-bg"><div class="chart-bar-fill" style="width:' + pct + '%"></div></div>' +
+      '<div class="chart-val">' + entry[1] + '</div>' +
+    '</div>';
+  }).join('');
+
+  document.getElementById('dayChart').innerHTML = html;
+}
+
+function timeAgo(date){
+  var diff = Date.now() - date.getTime();
+  var m = Math.floor(diff / 60000);
+  var h = Math.floor(diff / 3600000);
+  var d = Math.floor(diff / 86400000);
+  if(d > 0) return d + 'd ago';
+  if(h > 0) return h + 'h ago';
+  if(m > 0) return m + 'm ago';
+  return 'just now';
+}
+
+function esc(s){
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// Auto refresh every 60 seconds
+  setInterval(loadDashboard, 60000);
+
+  // Load saved config
+  var savedUrl = localStorage.getItem('riya_admin_backend_url') || 'https://riya-backend-ujz7.onrender.com';
+  var savedVersion = localStorage.getItem('riya_admin_version') || '5.0';
+  var cfgUrl = document.getElementById('cfgUrl');
+  var cfgVer = document.getElementById('cfgVersion');
+  if(cfgUrl) cfgUrl.value = savedUrl;
+  if(cfgVer) cfgVer.value = savedVersion;
+}
+
+function saveConfig(){
+  var url = document.getElementById('cfgUrl').value.trim();
+  var ver = document.getElementById('cfgVersion').value.trim();
+  var maint = document.getElementById('cfgMaint').value;
+  if(url) localStorage.setItem('riya_admin_backend_url', url);
+  if(ver) localStorage.setItem('riya_admin_version', ver);
+  localStorage.setItem('riya_admin_maint', maint);
+  var st = document.getElementById('cfgStatus');
+  if(st){ st.style.display = 'block'; setTimeout(function(){ st.style.display = 'none'; }, 2000); }
+}
+
+function testBackend(){
+  var url = document.getElementById('cfgUrl').value.trim() || 'https://riya-backend-ujz7.onrender.com';
+  fetch(url + '/api/health')
+    .then(function(r){ alert('Backend OK! Status: ' + r.status); })
+    .catch(function(){ alert('Cannot reach backend. Check URL or Render status.'); });
+}
+
+window.addEventListener("load", initAdmin);
+
+// AI SPIRIT BACKGROUND
+(function(){
+  function startBg(){
+    var canvas = document.getElementById('adminBg');
+    if(!canvas) return;
+    var ctx = canvas.getContext('2d');
+    var W, H, stars = [], flow = [];
+
+    function resize(){
+      W = canvas.width = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    for(var i = 0; i < 200; i++) stars.push({
+      x: Math.random()*W, y: Math.random()*H,
+      r: Math.random()*.8+.1, o: Math.random()*.15+.02,
+      tw: Math.random()*Math.PI*2, s: Math.random()*.003+.001
+    });
+    for(var i = 0; i < 60; i++) flow.push({
+      x: Math.random()*W, y: Math.random()*H,
+      vx: (Math.random()-.5)*.18, vy: -(Math.random()*.15+.04),
+      o: Math.random()*.1+.02, r: Math.random()*.5+.1, life: Math.random()
+    });
+
+    (function draw(){
+      ctx.clearRect(0,0,W,H);
+      ctx.fillStyle='#020208'; ctx.fillRect(0,0,W,H);
+      stars.forEach(function(s){
+        s.tw+=s.s;
+        var op=s.o*(0.4+Math.sin(s.tw)*.6);
+        ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+        ctx.fillStyle='rgba(225,220,215,'+op+')';ctx.fill();
+      });
+      flow.forEach(function(f){
+        f.x+=f.vx; f.y+=f.vy; f.life-=.004;
+        if(f.life<=0||f.y<-10){
+          f.x=Math.random()*W; f.y=H+10; f.life=1;
+          f.vx=(Math.random()-.5)*.18; f.vy=-(Math.random()*.15+.04);
+        }
+        ctx.beginPath();ctx.arc(f.x,f.y,f.r,0,Math.PI*2);
+        ctx.fillStyle='rgba(240,235,230,'+f.o*f.life+')';ctx.fill();
+      });
+      requestAnimationFrame(draw);
+    })();
+  }
+  window.addEventListener('load', startBg);
+})();
+</script>
+</body>
+</html>
