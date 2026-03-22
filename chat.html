@@ -1849,6 +1849,16 @@ document.getElementById('glb').addEventListener('click',function(){
   });
 });
 auth.getRedirectResult().catch(function(){});
+function ldUD(){return db.collection('users').doc(user.uid).get().then(function(doc){if(doc.exists){var d=doc.data();plan=d.plan||'free';prof.name=d.displayName||user.displayName||'';prof.photo=d.photoURL||user.photoURL||'';userMemory=d.memory||'';if(d.elevenKey)userElevenKey=d.elevenKey;if(d.voiceId)userVoiceId=d.voiceId;}else{plan='free';prof.name=user.displayName||'';prof.photo=user.photoURL||'';}}).catch(function(){plan='free';});}
+
+function ldChs(){return chRef().orderBy('updatedAt','desc').get().then(function(snap){chats=snap.docs.map(function(d){return Object.assign({id:d.id},d.data(),{msgs:[]});});if(chats.length>0){aid=chats[0].id;return mRef(aid).orderBy('ts','asc').get().then(function(ms){chats[0].msgs=ms.docs.map(function(d){return d.data();});});}}).catch(function(){try{var s=JSON.parse(localStorage.getItem('rc_'+user.uid)||'null');if(s&&s.length){chats=s;aid=chats[0].id;}}catch(e){}}).then(function(){if(!chats.length)return nwCh();});}
+
+function svUD(){if(!user)return;db.collection('users').doc(user.uid).set({plan:plan,displayName:prof.name,photoURL:prof.photo,memory:userMemory,updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true}).catch(function(){});}
+
+function svMem(mem){if(!user)return;userMemory=mem;db.collection('users').doc(user.uid).set({memory:mem},{merge:true}).catch(function(){});}
+
+function svCh(ch){if(!user)return;chRef().doc(String(ch.id)).set({title:ch.title,project:ch.project||'personal',updatedAt:firebase.firestore.FieldValue.serverTimestamp(),msgCount:ch.msgs.length},{merge:true}).catch(function(){});try{localStorage.setItem('rc_'+user.uid,JSON.stringify(chats.map(function(c){return {id:c.id,title:c.title,project:c.project||'personal',msgs:[]};})));}catch(e){}}
+
 // Stub - real updProfUI defined below
 if(typeof updProfUI === 'undefined'){
   window.updProfUI = function(){ 
