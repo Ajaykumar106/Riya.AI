@@ -231,7 +231,7 @@ body{height:100dvh;overflow:hidden;background:var(--bg);color:var(--w);display:f
 .s-ring{transform-origin:50% 50%;animation:sring 6s linear infinite;}
 .s-core{animation:score 3s ease-in-out infinite;}
 @keyframes sring{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
-@keyframes score{0%,100%{opacity:.5;filter:drop-shadow(0 0 3px rgba(255,255,255,.4));}50%{opacity:1;filter:drop-shadow(0 0 8px rgba(255,255,255,.7));}}
+@keyframes score{0%,100%{opacity:.45;filter:drop-shadow(0 0 4px rgba(91,231,255,.4)) drop-shadow(0 0 8px rgba(255,255,255,.3));}50%{opacity:1;filter:drop-shadow(0 0 10px rgba(91,231,255,.7)) drop-shadow(0 0 20px rgba(255,255,255,.5));}}
 .logo-thinking .s-ring{animation:sring .7s linear infinite;}
 .logo-thinking .s-core{animation:score-think .5s ease-in-out infinite;}
 @keyframes score-think{0%,100%{opacity:1;filter:drop-shadow(0 0 10px rgba(255,255,255,.9));}50%{opacity:.3;}}
@@ -888,344 +888,6 @@ body.th-dusk .bub.us{background:rgba(255,60,100,.06)!important;border-color:rgba
   border:1px solid rgba(255,255,255,.09);
   padding:10px 14px;border-radius:14px 3px 14px 14px;
 }
-
-/* PREMIUM PROFILE */
-#profilePage{position:fixed;inset:0;z-index:60;background:#020208;display:none;flex-direction:column;overflow-y:auto;}
-
-/* Profile header */
-.pf-hdr{
-  display:flex;align-items:center;gap:12px;
-  padding:14px 18px;border-bottom:1px solid rgba(255,255,255,.07);
-  background:rgba(3,3,12,.95);
-  backdrop-filter:blur(20px);
-  position:sticky;top:0;z-index:2;
-}
-.pf-back{
-  width:32px;height:32px;background:none;
-  border:1px solid rgba(255,255,255,.1);cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-  color:rgba(255,255,255,.4);border-radius:8px;transition:all .2s;
-}
-.pf-back:hover{border-color:rgba(255,255,255,.25);color:#fff;}
-.pf-back svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;}
-.pf-title{font-size:15px;color:rgba(255,255,255,.6);font-weight:500;flex:1;}
-
-/* Avatar section - premium */
-.pf-av-section{
-  background:linear-gradient(180deg,rgba(91,231,255,.04) 0%,transparent 100%);
-  padding:32px 20px 24px;
-  text-align:center;
-  border-bottom:1px solid rgba(255,255,255,.05);
-  position:relative;
-}
-.pf-av-wrap{position:relative;display:inline-block;margin-bottom:14px;}
-.pf-av-ring-outer{
-  position:absolute;inset:-8px;border-radius:50%;
-  border:1px solid rgba(91,231,255,.12);
-  animation:av-ring 4s ease-in-out infinite;
-}
-.pf-av-ring-inner{
-  position:absolute;inset:-4px;border-radius:50%;
-  border:1px solid rgba(91,231,255,.08);
-  animation:av-ring 3s ease-in-out infinite reverse;
-}
-@keyframes av-ring{
-  0%,100%{transform:scale(1);opacity:.4;}
-  50%{transform:scale(1.04);opacity:.9;}
-}
-.pf-av{
-  width:96px;height:96px;
-  border:2px solid rgba(91,231,255,.2);
-  background:rgba(11,15,26,.8);
-  display:flex;align-items:center;justify-content:center;
-  font-size:36px;overflow:hidden;cursor:pointer;
-  position:relative;border-radius:50%;
-  box-shadow:0 0 40px rgba(91,231,255,.1),0 0 80px rgba(91,231,255,.05);
-  transition:all .3s;
-}
-.pf-av:hover{box-shadow:0 0 50px rgba(91,231,255,.2),0 0 100px rgba(91,231,255,.1);}
-.pf-av img{width:100%;height:100%;object-fit:cover;}
-.pf-av-edit-overlay{
-  position:absolute;inset:0;
-  background:rgba(0,0,0,.6);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:3px;opacity:0;transition:opacity .2s;border-radius:50%;
-  cursor:pointer;
-}
-.pf-av:hover .pf-av-edit-overlay{opacity:1;}
-.pf-av-edit-overlay span{font-size:8px;color:white;font-family:'JetBrains Mono',monospace;letter-spacing:1px;text-transform:uppercase;}
-.pf-user-name{font-size:22px;font-weight:500;color:#fff;margin-bottom:4px;}
-.pf-user-email{font-size:11px;color:rgba(169,180,208,.5);font-family:'JetBrains Mono',monospace;}
-.pf-plan-badge{
-  display:inline-flex;align-items:center;gap:5px;
-  padding:4px 12px;border-radius:20px;
-  border:1px solid rgba(91,231,255,.2);
-  background:rgba(91,231,255,.05);
-  font-family:'JetBrains Mono',monospace;
-  font-size:8px;letter-spacing:2px;
-  color:rgba(91,231,255,.7);text-transform:uppercase;
-  margin-top:8px;
-}
-
-/* Stats row */
-.pf-stats-row{
-  display:grid;grid-template-columns:repeat(4,1fr);
-  gap:1px;background:rgba(255,255,255,.04);
-  border-top:1px solid rgba(255,255,255,.04);
-  border-bottom:1px solid rgba(255,255,255,.04);
-}
-.pf-stat{
-  background:#030310;padding:18px 12px;text-align:center;
-  transition:background .2s;
-}
-.pf-stat:hover{background:rgba(255,255,255,.02);}
-.pf-stat-v{
-  font-family:'Cormorant Garamond',serif;
-  font-size:28px;font-weight:300;color:#fff;
-  line-height:1;
-}
-.pf-stat-l{
-  font-family:'JetBrains Mono',monospace;
-  font-size:7px;letter-spacing:2px;
-  color:rgba(169,180,208,.4);margin-top:4px;text-transform:uppercase;
-}
-.pf-stat.locked{opacity:.2;filter:blur(3px);}
-
-/* Profile body */
-.pf-body{max-width:480px;margin:0 auto;width:100%;padding:20px 18px 80px;}
-
-/* Section labels */
-.pf-sec-label{
-  font-family:'JetBrains Mono',monospace;
-  font-size:7px;letter-spacing:4px;
-  color:rgba(169,180,208,.4);text-transform:uppercase;
-  padding:0 2px;margin:22px 0 8px;
-}
-
-/* Feature cards - premium */
-.pf-feature-card{
-  border:1px solid rgba(255,255,255,.07);
-  background:rgba(11,15,26,.6);
-  border-radius:14px;overflow:hidden;
-  backdrop-filter:blur(10px);margin-bottom:8px;
-}
-.pf-feature-row{
-  display:flex;align-items:center;gap:12px;
-  padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.04);
-  cursor:pointer;transition:background .15s;
-}
-.pf-feature-row:last-child{border:none;}
-.pf-feature-row:hover{background:rgba(255,255,255,.03);}
-.pf-feature-ico{
-  width:36px;height:36px;border-radius:10px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:17px;flex-shrink:0;
-  background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.07);
-}
-.pf-feature-info{flex:1;min-width:0;}
-.pf-feature-title{font-size:14px;color:#fff;font-weight:500;margin-bottom:2px;}
-.pf-feature-sub{font-size:11px;color:rgba(169,180,208,.5);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.pf-feature-arr{color:rgba(255,255,255,.2);font-size:16px;}
-.pf-feature-badge{
-  font-family:'JetBrains Mono',monospace;font-size:7px;
-  padding:2px 7px;border-radius:10px;letter-spacing:1px;
-  text-transform:uppercase;flex-shrink:0;
-}
-.badge-pro{border:1px solid rgba(255,200,50,.2);color:rgba(255,200,50,.5);}
-.badge-free{border:1px solid rgba(91,231,255,.15);color:rgba(91,231,255,.4);}
-.badge-on{border:1px solid rgba(100,220,100,.2);color:rgba(100,220,100,.5);}
-
-/* Name edit inline */
-.pf-name-edit{
-  display:flex;align-items:center;gap:8px;
-  padding:12px 16px;
-}
-.pf-name-inp{
-  flex:1;background:transparent;border:none;outline:none;
-  font-size:15px;color:#fff;font-family:'Inter',sans-serif;
-  font-weight:500;
-}
-.pf-name-save{
-  padding:6px 14px;border:1px solid rgba(91,231,255,.2);
-  background:rgba(91,231,255,.06);color:rgba(91,231,255,.7);
-  font-size:10px;cursor:pointer;border-radius:8px;
-  font-family:'JetBrains Mono',monospace;letter-spacing:1px;
-  text-transform:uppercase;transition:all .2s;
-}
-.pf-name-save:hover{background:rgba(91,231,255,.12);color:#5BE7FF;}
-
-/* Danger zone */
-.pf-danger-btn{
-  width:100%;padding:13px;
-  border:1px solid rgba(255,60,60,.15);background:transparent;
-  color:rgba(255,80,80,.45);font-size:12px;cursor:pointer;
-  font-family:'JetBrains Mono',monospace;letter-spacing:1.5px;
-  text-transform:uppercase;border-radius:12px;transition:all .2s;
-  margin-bottom:8px;
-}
-.pf-danger-btn:hover{background:rgba(255,60,60,.04);color:rgba(255,80,80,.7);}
-
-/* Credit footer */
-.pf-credit{
-  text-align:center;padding:20px;margin-top:8px;
-  border:1px solid rgba(255,255,255,.04);border-radius:12px;
-  background:rgba(255,255,255,.015);
-}
-.pf-credit-logo{
-  font-family:'Cormorant Garamond',serif;
-  font-style:italic;font-size:20px;
-  color:rgba(255,255,255,.2);margin-bottom:4px;
-}
-.pf-credit-by{
-  font-family:'JetBrains Mono',monospace;
-  font-size:7px;letter-spacing:3px;
-  color:rgba(255,255,255,.1);text-transform:uppercase;
-  line-height:2;
-}
-
-/* AVATAR PICKER PAGE */
-#avatarPickerPage{
-  position:fixed;inset:0;z-index:65;
-  background:#020208;display:none;
-  flex-direction:column;overflow-y:auto;
-}
-#avatarPickerPage.show{display:flex;}
-.avp-header{
-  display:flex;align-items:center;gap:12px;
-  padding:14px 18px;border-bottom:1px solid rgba(255,255,255,.07);
-  background:rgba(3,3,12,.95);backdrop-filter:blur(20px);
-  position:sticky;top:0;z-index:2;flex-shrink:0;
-}
-.avp-title{font-size:15px;color:rgba(255,255,255,.6);font-weight:500;flex:1;}
-.avp-body{padding:20px 16px 60px;max-width:500px;margin:0 auto;width:100%;}
-.avp-sec{
-  font-family:'JetBrains Mono',monospace;font-size:7px;
-  letter-spacing:4px;color:rgba(169,180,208,.4);
-  text-transform:uppercase;margin-bottom:12px;margin-top:20px;
-}
-
-/* Upload own image */
-.avp-upload-btn{
-  width:100%;padding:14px;
-  border:2px dashed rgba(91,231,255,.2);
-  background:rgba(91,231,255,.03);
-  color:rgba(91,231,255,.5);font-size:13px;
-  cursor:pointer;border-radius:14px;
-  display:flex;align-items:center;justify-content:center;gap:10px;
-  font-family:'Inter',sans-serif;transition:all .2s;margin-bottom:16px;
-}
-.avp-upload-btn:hover{background:rgba(91,231,255,.07);border-color:rgba(91,231,255,.4);color:#5BE7FF;}
-
-/* Logo grid */
-.avp-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
-}
-.avp-logo-opt{
-  aspect-ratio:1;border:2px solid rgba(255,255,255,.06);
-  background:rgba(11,15,26,.8);border-radius:14px;
-  cursor:pointer;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:6px;
-  transition:all .22s;padding:10px;overflow:hidden;
-}
-.avp-logo-opt:hover{border-color:rgba(91,231,255,.3);background:rgba(91,231,255,.06);}
-.avp-logo-opt.selected{border-color:#5BE7FF;background:rgba(91,231,255,.1);}
-.avp-logo-name{
-  font-family:'JetBrains Mono',monospace;font-size:7px;
-  letter-spacing:1px;color:rgba(255,255,255,.35);text-align:center;
-  text-transform:uppercase;line-height:1.3;
-}
-.avp-save-btn{
-  width:100%;padding:14px;margin-top:20px;
-  border:1px solid rgba(91,231,255,.25);
-  background:rgba(91,231,255,.08);
-  color:#5BE7FF;font-size:11px;cursor:pointer;
-  font-family:'JetBrains Mono',monospace;letter-spacing:2px;
-  text-transform:uppercase;border-radius:12px;transition:all .2s;
-}
-.avp-save-btn:hover{background:rgba(91,231,255,.15);border-color:#5BE7FF;}
-
-/* VOICE SETUP PAGE */
-#voiceSetupPage{
-  position:fixed;inset:0;z-index:65;
-  background:#020208;display:none;flex-direction:column;
-}
-#voiceSetupPage.show{display:flex;}
-.vsp-header{
-  display:flex;align-items:center;gap:12px;
-  padding:14px 18px;border-bottom:1px solid rgba(255,255,255,.07);
-  background:rgba(3,3,12,.95);backdrop-filter:blur(20px);
-  flex-shrink:0;
-}
-.vsp-title{font-size:15px;color:rgba(255,255,255,.6);font-weight:500;flex:1;}
-.vsp-body{flex:1;overflow-y:auto;padding:20px 18px 60px;max-width:500px;margin:0 auto;width:100%;}
-
-/* Voice setup card */
-.vsp-step{
-  border:1px solid rgba(255,255,255,.07);
-  background:rgba(11,15,26,.6);
-  border-radius:14px;padding:18px;margin-bottom:12px;
-}
-.vsp-step-num{
-  font-family:'JetBrains Mono',monospace;font-size:8px;
-  letter-spacing:3px;color:rgba(91,231,255,.5);
-  text-transform:uppercase;margin-bottom:8px;
-}
-.vsp-step-title{font-size:14px;color:#fff;font-weight:500;margin-bottom:6px;}
-.vsp-step-desc{font-size:12px;color:rgba(169,180,208,.5);line-height:1.7;margin-bottom:12px;}
-.vsp-link{
-  display:inline-flex;align-items:center;gap:6px;
-  padding:8px 14px;border:1px solid rgba(91,231,255,.2);
-  background:rgba(91,231,255,.05);border-radius:8px;
-  color:rgba(91,231,255,.7);font-size:11px;
-  text-decoration:none;font-family:'JetBrains Mono',monospace;
-  letter-spacing:1px;transition:all .2s;cursor:pointer;
-}
-.vsp-link:hover{background:rgba(91,231,255,.1);color:#5BE7FF;}
-.vsp-inp{
-  width:100%;padding:11px 14px;
-  border:1px solid rgba(255,255,255,.1);
-  background:rgba(255,255,255,.03);
-  color:#fff;font-size:13px;outline:none;
-  font-family:'JetBrains Mono',monospace;
-  border-radius:10px;transition:border-color .2s;
-  margin-top:8px;
-}
-.vsp-inp:focus{border-color:rgba(91,231,255,.3);}
-
-/* Voice list */
-.vsp-voice-list{display:flex;flex-direction:column;gap:8px;margin-top:10px;}
-.vsp-voice-item{
-  display:flex;align-items:center;gap:10px;
-  padding:11px 14px;border:1px solid rgba(255,255,255,.07);
-  background:rgba(255,255,255,.02);border-radius:10px;
-  cursor:pointer;transition:all .2s;
-}
-.vsp-voice-item.selected{border-color:rgba(91,231,255,.3);background:rgba(91,231,255,.05);}
-.vsp-voice-item:hover{background:rgba(255,255,255,.04);}
-.vsp-voice-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
-.vsp-voice-info{flex:1;}
-.vsp-voice-name{font-size:13px;color:#fff;font-weight:500;}
-.vsp-voice-desc{font-size:10px;color:rgba(169,180,208,.5);margin-top:2px;}
-.vsp-voice-id{font-family:'JetBrains Mono',monospace;font-size:8px;color:rgba(255,255,255,.15);margin-top:2px;}
-.vsp-play-btn{
-  width:30px;height:30px;border-radius:50%;
-  border:1px solid rgba(255,255,255,.1);background:none;
-  cursor:pointer;color:rgba(255,255,255,.35);
-  display:flex;align-items:center;justify-content:center;
-  transition:all .2s;flex-shrink:0;
-}
-.vsp-play-btn:hover{border-color:rgba(91,231,255,.3);color:rgba(91,231,255,.7);}
-.vsp-play-btn svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;}
-.vsp-save-btn{
-  width:100%;padding:14px;margin-top:16px;
-  border:1px solid rgba(91,231,255,.25);
-  background:rgba(91,231,255,.08);
-  color:#5BE7FF;font-size:11px;cursor:pointer;
-  font-family:'JetBrains Mono',monospace;letter-spacing:2px;
-  text-transform:uppercase;border-radius:12px;transition:all .2s;
-}
-.vsp-save-btn:hover{background:rgba(91,231,255,.15);border-color:#5BE7FF;}
 </style>
 </head>
 <body>
@@ -1299,204 +961,99 @@ body.th-dusk .bub.us{background:rgba(255,60,100,.06)!important;border-color:rgba
 <div id="profilePage">
   <div class="pf-hdr">
     <button class="pf-back" id="pfBack"><svg viewBox="0 0 24 24"><polyline points="15,18 9,12 15,6"/></svg></button>
-    <div class="pf-title">Profile</div>
+    <div class="pf-title">Settings</div>
   </div>
-
-  <!-- Avatar + Name section -->
-  <div class="pf-av-section">
-    <div class="pf-av-wrap">
-      <div class="pf-av-ring-outer"></div>
-      <div class="pf-av-ring-inner"></div>
-      <div class="pf-av" id="pfAv" onclick="openAvatarPicker()">
-        <div id="pfAvInner" style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:36px;">R</div>
-        <div class="pf-av-edit-overlay">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-          <span>Change</span>
-        </div>
-      </div>
-    </div>
-    <div class="pf-user-name" id="pfUserName">User</div>
-    <div class="pf-user-email" id="pfEmail"></div>
-    <div class="pf-plan-badge" id="pfPlanBadge">
-      <span>&#9733;</span><span id="pfPlanText">Free</span>
-    </div>
-  </div>
-
-  <!-- Stats -->
-  <div class="pf-stats-row">
-    <div class="pf-stat"><div class="pf-stat-v" id="pfChats">0</div><div class="pf-stat-l">Chats</div></div>
-    <div class="pf-stat"><div class="pf-stat-v" id="pfMsgs">0</div><div class="pf-stat-l">Messages</div></div>
-    <div class="pf-stat" id="pfMemStat"><div class="pf-stat-v">&#129504;</div><div class="pf-stat-l">Memory</div></div>
-    <div class="pf-stat" id="pfDaysStat"><div class="pf-stat-v" id="pfDays">1</div><div class="pf-stat-l">Days</div></div>
-  </div>
-
-  <!-- Body -->
   <div class="pf-body">
 
-    <!-- Edit Name -->
-    <div class="pf-sec-label">Your Name</div>
-    <div class="pf-feature-card">
-      <div class="pf-name-edit">
-        <input class="pf-name-inp" id="pfName" placeholder="Your name..."/>
-        <button class="pf-name-save" onclick="svPrf()">Save</button>
+    <!-- AVATAR - ChatGPT style -->
+    <div class="pf-av-wrap">
+      <div class="pf-av" id="pfAv" onclick="document.getElementById('ai-file').click()"><div class="pf-av-ring"></div>R
+        <div class="pf-av-ed">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        </div>
+      </div>
+      <div class="pf-un" id="pfNameDisp" style="font-size:20px;font-weight:500;color:rgba(255,255,255,.6);margin-bottom:3px;">User</div>
+      <div class="pf-ue" id="pfEmail" style="font-size:11px;color:rgba(255,255,255,.2);font-family:'JetBrains Mono',monospace;"></div>
+      <div class="pf-plan" id="pfPlanChip" style="display:inline-block;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:2px;padding:2px 8px;border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.22);margin-top:7px;border-radius:20px;text-transform:uppercase;">Free</div>
+    </div>
+
+    <!-- EDIT NAME -->
+    <div class="pf-sec">Profile</div>
+    <div class="pf-card">
+      <div class="pf-row" style="cursor:default;">
+        <div class="pf-row-ico">✏️</div>
+        <div style="flex:1;"><div class="pf-row-lbl">Name</div>
+          <input class="pf-inp" id="pfName" placeholder="Your name..." style="margin:4px 0 0;border:none;background:transparent;padding:0;font-size:13px;color:rgba(255,255,255,.5);outline:none;width:100%;"/>
+        </div>
       </div>
     </div>
 
-    <!-- Features -->
-    <div class="pf-sec-label">Features</div>
-    <div class="pf-feature-card">
-      <div class="pf-feature-row" onclick="openWorkspace()">
-        <div class="pf-feature-ico">&#9889;</div>
-        <div class="pf-feature-info">
-          <div class="pf-feature-title">AI Workspace</div>
-          <div class="pf-feature-sub">Projects, notes and artifacts</div>
-        </div>
-        <div class="pf-feature-arr">›</div>
-      </div>
-      <div class="pf-feature-row" onclick="openPersonalSpace()">
-        <div class="pf-feature-ico">&#128274;</div>
-        <div class="pf-feature-info">
-          <div class="pf-feature-title">Personal Space</div>
-          <div class="pf-feature-sub">Private PIN-protected chat</div>
-        </div>
-        <div class="pf-feature-arr">›</div>
-      </div>
-      <div class="pf-feature-row" onclick="openVoiceSetup()">
-        <div class="pf-feature-ico">&#127908;</div>
-        <div class="pf-feature-info">
-          <div class="pf-feature-title">Voice Setup</div>
-          <div class="pf-feature-sub" id="pfVoiceStatus">Tap to configure</div>
-        </div>
-        <span class="pf-feature-badge badge-free">Free</span>
-        <div class="pf-feature-arr">›</div>
+    <!-- STATS -->
+    <div class="pf-sec">Stats</div>
+    <div class="pf-stats" id="pfStats">
+      <div class="pf-stat"><div class="pf-stat-v" id="pfChats">0</div><div class="pf-stat-l">Chats</div></div>
+      <div class="pf-stat"><div class="pf-stat-v" id="pfMsgs">0</div><div class="pf-stat-l">Messages</div></div>
+      <div class="pf-stat" id="pfMemStat"><div class="pf-stat-v">🧠</div><div class="pf-stat-l">Memory</div></div>
+      <div class="pf-stat" id="pfDaysStat"><div class="pf-stat-v" id="pfDays">1</div><div class="pf-stat-l">Days</div></div>
+    </div>
+
+    <!-- THEME -->
+    <div class="pf-sec">Theme</div>
+    <div class="theme-grid" id="themeGrid"></div>
+
+    <!-- VOICE -->
+    <div class="pf-sec">Voice</div>
+    <div class="pf-card">
+      <div class="pf-row" onclick="openVP()">
+        <div class="pf-row-ico">🎙️</div>
+        <div style="flex:1;"><div class="pf-row-lbl">Voice Settings</div><div class="pf-row-sub" id="pfVoiceSub">Tap to configure</div></div>
+        <div class="pf-row-arr">›</div>
       </div>
     </div>
 
-    <!-- Account -->
-    <div class="pf-sec-label">Account</div>
-    <div class="pf-feature-card">
-      <div class="pf-feature-row" onclick="openP()">
-        <div class="pf-feature-ico">&#11088;</div>
-        <div class="pf-feature-info">
-          <div class="pf-feature-title" id="pfPlanLabel">Upgrade to Pro</div>
-          <div class="pf-feature-sub" id="pfPlanSub">Unlock all features</div>
-        </div>
-        <span class="pf-feature-badge badge-pro">Pro</span>
-        <div class="pf-feature-arr">›</div>
+    <!-- ACCOUNT -->
+    <div class="pf-sec">Account</div>
+    <div class="pf-card">
+      <div class="pf-row" onclick="openP()">
+        <div class="pf-row-ico">⭐</div>
+        <div style="flex:1;"><div class="pf-row-lbl" id="pfPlanLabel">Upgrade to Pro</div><div class="pf-row-sub" id="pfPlanSub">Unlock unlimited features</div></div>
+        <div class="pf-row-arr">›</div>
       </div>
-      <div class="pf-feature-row" onclick="opSt()">
-        <div class="pf-feature-ico">&#9881;&#65039;</div>
-        <div class="pf-feature-info">
-          <div class="pf-feature-title">Backend Settings</div>
-          <div class="pf-feature-sub">Server URL</div>
-        </div>
-        <div class="pf-feature-arr">›</div>
+      <div class="pf-row" onclick="opSt()">
+        <div class="pf-row-ico">⚙️</div>
+        <div style="flex:1;"><div class="pf-row-lbl">Backend Settings</div><div class="pf-row-sub">Server URL and config</div></div>
+        <div class="pf-row-arr">›</div>
       </div>
     </div>
 
-    <!-- Saved Artifacts -->
-    <div class="pf-sec-label">Saved Artifacts</div>
-    <div class="pf-feature-card" id="pfArtifacts">
-      <div style="padding:18px;text-align:center;font-size:11px;color:rgba(169,180,208,.3);font-family:'JetBrains Mono',monospace;letter-spacing:1px;">No artifacts yet</div>
-    </div>
-
-    <!-- Memory -->
-    <div class="pf-sec-label">What Riya Knows About You</div>
-    <div class="pf-feature-card">
+    <!-- MEMORY -->
+    <div class="pf-sec">What Riya Knows About You</div>
+    <div class="pf-card" id="memoryCard">
       <div style="padding:14px;">
-        <div id="memoryDisplay" style="font-size:12px;color:rgba(255,255,255,.45);line-height:1.8;white-space:pre-wrap;font-family:'JetBrains Mono',monospace;font-size:10px;min-height:32px;">Loading...</div>
+        <div id="memoryDisplay" style="font-size:12px;color:rgba(255,255,255,.35);line-height:1.8;white-space:pre-wrap;min-height:40px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.3px;">Loading...</div>
         <div style="display:flex;gap:8px;margin-top:10px;">
-          <button onclick="editMemory()" style="flex:1;padding:8px;border:1px solid rgba(255,255,255,.1);background:transparent;color:rgba(255,255,255,.35);font-size:9px;cursor:pointer;border-radius:8px;font-family:'JetBrains Mono',monospace;letter-spacing:1px;text-transform:uppercase;transition:all .2s;">Edit</button>
-          <button onclick="clearMemory()" style="flex:1;padding:8px;border:1px solid rgba(255,80,80,.12);background:transparent;color:rgba(255,80,80,.35);font-size:9px;cursor:pointer;border-radius:8px;font-family:'JetBrains Mono',monospace;letter-spacing:1px;text-transform:uppercase;transition:all .2s;">Clear</button>
+          <button onclick="editMemory()" style="flex:1;padding:8px;border:1px solid rgba(255,255,255,.1);background:transparent;color:rgba(255,255,255,.3);font-size:10px;cursor:pointer;border-radius:8px;font-family:'JetBrains Mono',monospace;letter-spacing:1px;text-transform:uppercase;">Edit</button>
+          <button onclick="clearMemory()" style="flex:1;padding:8px;border:1px solid rgba(255,80,80,.15);background:transparent;color:rgba(255,80,80,.3);font-size:10px;cursor:pointer;border-radius:8px;font-family:'JetBrains Mono',monospace;letter-spacing:1px;text-transform:uppercase;">Clear</button>
         </div>
       </div>
     </div>
 
-    <!-- Settings quick link -->
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border:1px solid rgba(255,255,255,.05);border-radius:12px;margin-top:4px;margin-bottom:8px;cursor:pointer;" onclick="opSt()">
-      <div style="display:flex;align-items:center;gap:10px;">
-        <span style="font-size:14px;">&#9881;&#65039;</span>
-        <div>
-          <div style="font-size:13px;color:rgba(255,255,255,.5);font-weight:500;">App Settings</div>
-          <div style="font-size:10px;color:rgba(169,180,208,.3);">Backend URL, config</div>
-        </div>
-      </div>
-      <span style="color:rgba(255,255,255,.2);font-size:16px;">&#8250;</span>
-    </div>
-    <button class="pf-danger-btn" id="pfSignout" style="margin-top:4px;">Sign Out</button>
-
-    <!-- Credit -->
-    <div class="pf-credit">
-      <div class="pf-credit-logo">Riya</div>
-      <div class="pf-credit-by">Made by Ajay Kumar AJ<br/>Version 5.0 · India · 2026</div>
-    </div>
-  </div>
-</div>
-
-<!-- AVATAR PICKER PAGE -->
-<div id="avatarPickerPage">
-  <div class="avp-header">
-    <button class="pf-back" onclick="closeAvatarPicker()"><svg viewBox="0 0 24 24"><polyline points="15,18 9,12 15,6"/></svg></button>
-    <div class="avp-title">Choose Avatar</div>
-  </div>
-  <div class="avp-body">
-    <!-- Upload own -->
-    <div class="avp-sec">Upload Your Photo</div>
-    <div class="avp-upload-btn" onclick="document.getElementById('ai-file').click()">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-      Upload your own image
+    <!-- ARTIFACTS -->
+    <div class="pf-sec">Saved Artifacts</div>
+    <div class="pf-card" id="pfArtifacts">
+      <div style="padding:16px;text-align:center;font-size:11px;color:rgba(255,255,255,.15);font-family:'JetBrains Mono',monospace;letter-spacing:1px;">No artifacts yet</div>
     </div>
 
-    <!-- Logo options -->
-    <div class="avp-sec">Choose a Logo</div>
-    <div class="avp-grid" id="avpGrid"><div class="avp-logo-opt" data-logo="0" onclick="selectLogo(0)"><svg width="60" height="60" viewBox="0 0 60 60"><defs><radialGradient id="l1h" cx="50%" cy="35%" r="40%"><stop offset="0%" stop-color="#5BE7FF" stop-opacity=".9"/><stop offset="100%" stop-color="#5BE7FF" stop-opacity="0"/></radialGradient></defs><circle cx="30" cy="30" r="27" fill="none" stroke="rgba(91,231,255,.2)" stroke-width="1"/><circle cx="30" cy="30" r="20" fill="none" stroke="rgba(91,231,255,.08)" stroke-width="1"/><path d="M30 42 Q24 38 23 33 Q22 27 26 22 Q28 18 30 17 Q32 18 34 22 Q38 27 37 33 Q36 38 30 42Z" fill="rgba(91,231,255,.08)"/><circle cx="30" cy="17" r="5" fill="url(#l1h)"/><circle cx="30" cy="17" r="2.5" fill="#5BE7FF" opacity=".9"/><circle cx="30" cy="17" r="1.2" fill="white"/></svg><div class="avp-logo-name">Cosmic Core</div></div>
-<div class="avp-logo-opt" data-logo="1" onclick="selectLogo(1)"><svg width="60" height="60" viewBox="0 0 60 60"><defs><radialGradient id="l2h" cx="50%" cy="35%" r="40%"><stop offset="0%" stop-color="white" stop-opacity="1"/><stop offset="100%" stop-color="white" stop-opacity="0"/></radialGradient></defs><ellipse cx="30" cy="30" rx="26" ry="10" fill="none" stroke="rgba(91,231,255,.25)" stroke-width="1.2"/><path d="M30 44 Q23 40 22 34 Q21 27 25 21 Q28 16 30 15 Q32 16 35 21 Q39 27 38 34 Q37 40 30 44Z" fill="rgba(255,255,255,.06)"/><path d="M24 30 Q16 27 12 30" stroke="rgba(91,231,255,.2)" stroke-width=".7" fill="none"/><path d="M36 30 Q44 27 48 30" stroke="rgba(91,231,255,.2)" stroke-width=".7" fill="none"/><circle cx="30" cy="15" r="5" fill="url(#l2h)"/><circle cx="30" cy="15" r="2" fill="white"/></svg><div class="avp-logo-name">Neural Aura</div></div>
-<div class="avp-logo-opt" data-logo="2" onclick="selectLogo(2)"><svg width="60" height="60" viewBox="0 0 60 60"><defs><radialGradient id="l3h"><stop offset="0%" stop-color="white" stop-opacity="1"/><stop offset="100%" stop-color="#5BE7FF" stop-opacity="0"/></radialGradient></defs><ellipse cx="30" cy="30" rx="24" ry="8" fill="none" stroke="rgba(91,231,255,.3)" stroke-width="1.5" transform="rotate(-20 30 30)"/><line x1="30" y1="8" x2="30" y2="52" stroke="rgba(255,255,255,.2)" stroke-width=".8"/><line x1="8" y1="30" x2="52" y2="30" stroke="rgba(255,255,255,.2)" stroke-width=".8"/><line x1="14" y1="14" x2="46" y2="46" stroke="rgba(255,255,255,.1)" stroke-width=".6"/><line x1="46" y1="14" x2="14" y2="46" stroke="rgba(255,255,255,.1)" stroke-width=".6"/><circle cx="30" cy="30" r="6" fill="url(#l3h)"/><circle cx="30" cy="30" r="3" fill="white" opacity=".9"/><circle cx="30" cy="30" r="1.5" fill="white"/></svg><div class="avp-logo-name">Star Orbit</div></div>
-<div class="avp-logo-opt" data-logo="3" onclick="selectLogo(3)"><svg width="60" height="60" viewBox="0 0 60 60"><defs><radialGradient id="l4h" cx="50%" cy="40%" r="45%"><stop offset="0%" stop-color="#7B61FF" stop-opacity=".8"/><stop offset="100%" stop-color="#5BE7FF" stop-opacity="0"/></radialGradient></defs><circle cx="30" cy="30" r="26" fill="none" stroke="rgba(91,231,255,.15)" stroke-width="1"/><circle cx="30" cy="30" r="20" fill="none" stroke="rgba(123,97,255,.2)" stroke-width="1.5"/><path d="M30 44 Q24 40 23 34 Q22 27 26 22 Q28 18 30 17 Q32 18 34 22 Q38 27 37 34 Q36 40 30 44Z" fill="rgba(123,97,255,.08)"/><circle cx="30" cy="17" r="6" fill="url(#l4h)"/><circle cx="30" cy="17" r="2.5" fill="white"/></svg><div class="avp-logo-name">Celestial Ring</div></div>
-<div class="avp-logo-opt" data-logo="4" onclick="selectLogo(4)"><svg width="60" height="60" viewBox="0 0 60 60"><defs><radialGradient id="l5h" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="white" stop-opacity="1"/><stop offset="100%" stop-color="#5BE7FF" stop-opacity="0"/></radialGradient></defs><path d="M15 35 Q20 20 30 18 Q40 16 45 30 Q50 44 30 46 Q10 48 15 35Z" fill="none" stroke="rgba(91,231,255,.2)" stroke-width="1.2"/><path d="M20 28 Q25 15 35 20 Q45 25 42 36 Q39 47 28 44" fill="none" stroke="rgba(91,231,255,.15)" stroke-width="1"/><circle cx="30" cy="26" r="7" fill="url(#l5h)"/><circle cx="30" cy="26" r="3.5" fill="white" opacity=".9"/><circle cx="30" cy="26" r="1.8" fill="white"/></svg><div class="avp-logo-name">Energy Flow</div></div>
-<div class="avp-logo-opt" data-logo="5" onclick="selectLogo(5)"><svg width="60" height="60" viewBox="0 0 60 60"><defs><radialGradient id="l6h" cx="50%" cy="30%" r="40%"><stop offset="0%" stop-color="white" stop-opacity="1"/><stop offset="100%" stop-color="#7B61FF" stop-opacity="0"/></radialGradient></defs><path d="M30 28 Q20 22 12 26 Q16 32 24 32 Q27 32 30 28Z" fill="rgba(91,231,255,.08)" stroke="rgba(91,231,255,.2)" stroke-width=".8"/><path d="M30 28 Q40 22 48 26 Q44 32 36 32 Q33 32 30 28Z" fill="rgba(91,231,255,.08)" stroke="rgba(91,231,255,.2)" stroke-width=".8"/><line x1="30" y1="12" x2="30" y2="48" stroke="rgba(91,231,255,.15)" stroke-width="1"/><circle cx="30" cy="17" r="7" fill="url(#l6h)"/><circle cx="30" cy="17" r="3.5" fill="white" opacity=".9"/><circle cx="30" cy="17" r="1.8" fill="white"/></svg><div class="avp-logo-name">Divine Core</div></div>
-<div class="avp-logo-opt" data-logo="6" onclick="selectLogo(6)"><svg width="60" height="60" viewBox="0 0 60 60"><defs><radialGradient id="l7h" cx="50%" cy="40%" r="50%"><stop offset="0%" stop-color="#5BE7FF" stop-opacity=".6"/><stop offset="100%" stop-color="#5BE7FF" stop-opacity="0"/></radialGradient></defs><circle cx="30" cy="30" r="22" fill="rgba(91,231,255,.04)" stroke="rgba(91,231,255,.15)" stroke-width="1"/><path d="M22 28 Q23 20 30 19 Q37 18 38 26 Q39 34 34 38 Q30 42 26 38 Q21 34 22 28Z" fill="none" stroke="rgba(91,231,255,.3)" stroke-width="1.2"/><line x1="30" y1="19" x2="30" y2="12" stroke="rgba(91,231,255,.3)" stroke-width=".8"/><line x1="38" y1="26" x2="45" y2="22" stroke="rgba(91,231,255,.2)" stroke-width=".7"/><line x1="22" y1="28" x2="15" y2="24" stroke="rgba(91,231,255,.2)" stroke-width=".7"/><circle cx="30" cy="28" r="5" fill="url(#l7h)"/><circle cx="30" cy="28" r="2.5" fill="#5BE7FF" opacity=".8"/></svg><div class="avp-logo-name">Quantum Brain</div></div>
-<div class="avp-logo-opt" data-logo="7" onclick="selectLogo(7)"><svg width="60" height="60" viewBox="0 0 60 60"><defs><radialGradient id="l8h" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="white" stop-opacity="1"/><stop offset="100%" stop-color="#5BE7FF" stop-opacity="0"/></radialGradient></defs><path d="M15 30 Q15 20 22 20 Q29 20 30 30 Q31 40 38 40 Q45 40 45 30 Q45 20 38 20 Q31 20 30 30 Q29 40 22 40 Q15 40 15 30Z" fill="none" stroke="rgba(91,231,255,.4)" stroke-width="1.8"/><circle cx="30" cy="30" r="4.5" fill="url(#l8h)"/><circle cx="30" cy="30" r="2.2" fill="white"/></svg><div class="avp-logo-name">Infinity</div></div>
-<div class="avp-logo-opt" data-logo="8" onclick="selectLogo(8)"><svg width="60" height="60" viewBox="0 0 60 60"><defs><radialGradient id="l9h" cx="50%" cy="35%" r="40%"><stop offset="0%" stop-color="white" stop-opacity="1"/><stop offset="100%" stop-color="#5BE7FF" stop-opacity="0"/></radialGradient></defs><circle cx="30" cy="30" r="26" fill="none" stroke="rgba(91,231,255,.3)" stroke-width="1.5"/><circle cx="30" cy="30" r="18" fill="none" stroke="rgba(91,231,255,.15)" stroke-width="1"/><circle cx="30" cy="30" r="10" fill="none" stroke="rgba(91,231,255,.08)" stroke-width="1"/><path d="M30 42 Q25 38 24 33 Q23 27 27 22 Q29 18 30 17 Q31 18 33 22 Q37 27 36 33 Q35 38 30 42Z" fill="rgba(91,231,255,.06)"/><circle cx="30" cy="17" r="5.5" fill="url(#l9h)"/><circle cx="30" cy="17" r="2.8" fill="white" opacity=".9"/><circle cx="30" cy="17" r="1.4" fill="white"/></svg><div class="avp-logo-name">Cosmic Portal</div></div></div>
+    <button class="pf-btn" onclick="svPrf()" style="margin-top:16px;">Save Changes</button>
+    <button class="pf-btn pf-btn-danger" id="pfSignout">Sign Out</button>
 
-    <button class="avp-save-btn" onclick="saveAvatar()">Save Avatar</button>
-  </div>
-</div>
-
-<!-- VOICE SETUP PAGE -->
-<div id="voiceSetupPage">
-  <div class="vsp-header">
-    <button class="pf-back" onclick="closeVoiceSetup()"><svg viewBox="0 0 24 24"><polyline points="15,18 9,12 15,6"/></svg></button>
-    <div class="vsp-title">Voice Setup</div>
-  </div>
-  <div class="vsp-body">
-
-    <div class="vsp-step">
-      <div class="vsp-step-num">Step 1 of 3</div>
-      <div class="vsp-step-title">Get Your Free ElevenLabs Key</div>
-      <div class="vsp-step-desc">ElevenLabs gives you 10,000 characters free every month. Sign up takes 1 minute. No credit card needed.</div>
-      <a class="vsp-link" href="https://elevenlabs.io" target="_blank">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        Open elevenlabs.io
-      </a>
+    <!-- ABOUT -->
+    <div style="margin-top:28px;padding:14px;border:1px solid rgba(255,255,255,.05);border-radius:10px;text-align:center;">
+      <div style="font-size:13px;color:rgba(255,255,255,.22);margin-bottom:5px;font-family:'Cormorant Garamond',serif;font-style:italic;">Riya.AI</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:2px;color:rgba(255,255,255,.14);text-transform:uppercase;">Made by Ajay Kumar AJ</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:1px;color:rgba(255,255,255,.07);margin-top:3px;text-transform:uppercase;">Version 5.1 · India · 2026</div>
     </div>
 
-    <div class="vsp-step">
-      <div class="vsp-step-num">Step 2 of 3</div>
-      <div class="vsp-step-title">Paste Your API Key</div>
-      <div class="vsp-step-desc">After signing up, go to Profile Settings in ElevenLabs and copy your API key.</div>
-      <input class="vsp-inp" id="vspKey" placeholder="Paste your ElevenLabs API key here..." type="password"/>
-      <div style="font-size:10px;color:rgba(169,180,208,.3);margin-top:6px;font-family:'JetBrains Mono',monospace;">Your key stays on your device only</div>
-    </div>
-
-    <div class="vsp-step">
-      <div class="vsp-step-num">Step 3 of 3</div>
-      <div class="vsp-step-title">Choose Riya's Voice</div>
-      <div class="vsp-step-desc">Tap play to preview each voice. Select the one you like.</div>
-      <div class="vsp-voice-list" id="vspVoiceList"></div>
-    </div>
-
-    <button class="vsp-save-btn" onclick="saveVoiceSettings()">Save Voice Settings</button>
   </div>
 </div>
 
@@ -1571,17 +1128,14 @@ body.th-dusk .bub.us{background:rgba(255,60,100,.06)!important;border-color:rgba
             </radialGradient>
             <filter id="tsf2"><feGaussianBlur stdDeviation=".8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
           </defs>
-          <!-- Main rays -->
           <line x1="14" y1="2" x2="14" y2="0" stroke="rgba(255,255,255,.65)" stroke-width="1.2" stroke-linecap="round"/>
           <line x1="14" y1="26" x2="14" y2="28" stroke="rgba(255,255,255,.65)" stroke-width="1.2" stroke-linecap="round"/>
           <line x1="2" y1="14" x2="0" y2="14" stroke="rgba(255,255,255,.65)" stroke-width="1.2" stroke-linecap="round"/>
           <line x1="26" y1="14" x2="28" y2="14" stroke="rgba(255,255,255,.65)" stroke-width="1.2" stroke-linecap="round"/>
-          <!-- Diagonal rays -->
           <line x1="5" y1="5" x2="3" y2="3" stroke="rgba(255,255,255,.4)" stroke-width="1" stroke-linecap="round"/>
           <line x1="23" y1="5" x2="25" y2="3" stroke="rgba(255,255,255,.4)" stroke-width="1" stroke-linecap="round"/>
           <line x1="5" y1="23" x2="3" y2="25" stroke="rgba(255,255,255,.4)" stroke-width="1" stroke-linecap="round"/>
           <line x1="23" y1="23" x2="25" y2="25" stroke="rgba(255,255,255,.4)" stroke-width="1" stroke-linecap="round"/>
-          <!-- Scatter dots -->
           <circle cx="9" cy="5" r=".7" fill="rgba(255,255,255,.35)"/>
           <circle cx="20" cy="5" r=".55" fill="rgba(255,255,255,.28)"/>
           <circle cx="5" cy="20" r=".6" fill="rgba(255,255,255,.28)"/>
@@ -1590,7 +1144,6 @@ body.th-dusk .bub.us{background:rgba(255,60,100,.06)!important;border-color:rgba
           <circle cx="18" cy="24" r=".45" fill="rgba(255,255,255,.2)"/>
           <circle cx="4" cy="11" r=".4" fill="rgba(255,255,255,.18)"/>
           <circle cx="24" cy="17" r=".4" fill="rgba(255,255,255,.18)"/>
-          <!-- Glow -->
           <circle cx="14" cy="14" r="5" fill="url(#tlg)" filter="url(#tsf2)" class="s-core"/>
           <circle cx="14" cy="14" r="2.5" fill="rgba(255,255,255,.9)" filter="url(#tsf2)"/>
           <circle cx="14" cy="14" r="1.3" fill="white"/>
@@ -1625,7 +1178,7 @@ body.th-dusk .bub.us{background:rgba(255,60,100,.06)!important;border-color:rgba
             <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           </button>
           <textarea id="mi" rows="1" placeholder="Ask Riya anything…"></textarea>
-          <button class="ib-act" id="vbtn" title="Voice settings" onclick="openVoiceSetup()">
+          <button class="ib-act" id="vbtn" title="Voice settings" onclick="openVP()">
             <svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
           </button>
           <button class="ib-act" id="mcb" title="Voice input">
@@ -1849,25 +1402,6 @@ document.getElementById('glb').addEventListener('click',function(){
   });
 });
 auth.getRedirectResult().catch(function(){});
-function ldUD(){return db.collection('users').doc(user.uid).get().then(function(doc){if(doc.exists){var d=doc.data();plan=d.plan||'free';prof.name=d.displayName||user.displayName||'';prof.photo=d.photoURL||user.photoURL||'';userMemory=d.memory||'';if(d.elevenKey)userElevenKey=d.elevenKey;if(d.voiceId)userVoiceId=d.voiceId;}else{plan='free';prof.name=user.displayName||'';prof.photo=user.photoURL||'';}}).catch(function(){plan='free';});}
-
-function ldChs(){return chRef().orderBy('updatedAt','desc').get().then(function(snap){chats=snap.docs.map(function(d){return Object.assign({id:d.id},d.data(),{msgs:[]});});if(chats.length>0){aid=chats[0].id;return mRef(aid).orderBy('ts','asc').get().then(function(ms){chats[0].msgs=ms.docs.map(function(d){return d.data();});});}}).catch(function(){try{var s=JSON.parse(localStorage.getItem('rc_'+user.uid)||'null');if(s&&s.length){chats=s;aid=chats[0].id;}}catch(e){}}).then(function(){if(!chats.length)return nwCh();});}
-
-function svUD(){if(!user)return;db.collection('users').doc(user.uid).set({plan:plan,displayName:prof.name,photoURL:prof.photo,memory:userMemory,updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true}).catch(function(){});}
-
-function svMem(mem){if(!user)return;userMemory=mem;db.collection('users').doc(user.uid).set({memory:mem},{merge:true}).catch(function(){});}
-
-function svCh(ch){if(!user)return;chRef().doc(String(ch.id)).set({title:ch.title,project:ch.project||'personal',updatedAt:firebase.firestore.FieldValue.serverTimestamp(),msgCount:ch.msgs.length},{merge:true}).catch(function(){});try{localStorage.setItem('rc_'+user.uid,JSON.stringify(chats.map(function(c){return {id:c.id,title:c.title,project:c.project||'personal',msgs:[]};})));}catch(e){}}
-
-// Stub - real updProfUI defined below
-if(typeof updProfUI === 'undefined'){
-  window.updProfUI = function(){ 
-    setTimeout(function(){
-      if(typeof updProfUI === 'function' && updProfUI !== window.updProfUI) updProfUI();
-    }, 100);
-  };
-}
-
 auth.onAuthStateChanged(function(u){
   var al=document.getElementById('authLoad');if(al)al.classList.add('hide');
   if(u){
@@ -1884,7 +1418,7 @@ auth.onAuthStateChanged(function(u){
         if(t!=='dark')document.body.classList.add('theme-'+t);
       }
     }catch(e){}
-      if(typeof buildThemeGrid==='function')buildThemeGrid();if(typeof buildArtifacts==='function')buildArtifacts();if(typeof updProfUI==='function')updProfUI();rndCL();
+      buildThemeGrid();buildArtifacts();updProfUI();rndCL();
       var firstTime=!localStorage.getItem('riya_ob_'+u.uid);
       if(firstTime&&!prof.name){localStorage.setItem('riya_ob_'+u.uid,'1');document.getElementById('ob').classList.add('show');}
       else{document.getElementById('app').style.display='flex';rndMs();}
@@ -1911,7 +1445,51 @@ document.getElementById('obsk').addEventListener('click',function(){
 });
 
 // Profile
-// updProfUI replaced
+function updProfUI(){
+  if(!user)return;
+  var n=prof.name||user.displayName||'User',e=user.email||'',ph=prof.photo||user.photoURL||'';
+  document.getElementById('spn').textContent=n;
+  var pfN=document.getElementById('pfName');if(pfN)pfN.value=n;var pfND=document.getElementById('pfNameDisp');if(pfND)pfND.textContent=n;var pfND=document.getElementById('pfNameDisp');if(pfND)pfND.textContent=n;
+  var pfE=document.getElementById('pfEmail');if(pfE)pfE.textContent=e;
+  var t=plan==='premium'?'Pro':plan==='basic'?'Basic':'Free';
+  var b=document.getElementById('plb');if(b)b.textContent=t;
+  var chip=document.getElementById('pfPlanChip');if(chip)chip.textContent=t;
+  if(plan==='premium'){
+    var pl=document.getElementById('pfPlanLabel');if(pl)pl.textContent='Pro Plan Active';
+    var ps=document.getElementById('pfPlanSub');if(ps)ps.textContent='All features unlocked';
+  }
+  var tot=chats.reduce(function(a,c){return a+(c.msgs?c.msgs.length:0);},0);
+  var pc=document.getElementById('pfChats');if(pc)pc.textContent=chats.length;
+  var pm=document.getElementById('pfMsgs');if(pm)pm.textContent=tot;
+  var ms=document.getElementById('pfMemStat'),ds=document.getElementById('pfDaysStat');
+  if(ms)ms.classList.toggle('locked',plan==='free');
+  if(ds)ds.classList.toggle('locked',plan==='free');
+  var joined=localStorage.getItem('riya_joined_'+(user?user.uid:''));
+  if(!joined){joined=Date.now();try{localStorage.setItem('riya_joined_'+(user?user.uid:''),joined);}catch(e){}}
+  var days=Math.max(1,Math.floor((Date.now()-parseInt(joined))/86400000));
+  var pd=document.getElementById('pfDays');if(pd)pd.textContent=days;
+  var sel=VOICES.find(function(v){return v.id===userVoiceId;});
+  var sub=document.getElementById('pfVoiceSub');if(sub)sub.textContent=sel?sel.name+' - '+(userElevenKey?'Key set ':'No key'):'Not configured';
+  ['spp','pfAv'].forEach(function(id){
+    var el=document.getElementById(id);if(!el)return;
+    if(ph){el.innerHTML='<img src="'+ph+'" onerror="this.parentElement.textContent=\'R\'">'+(id==='pfAv'?'<div class="pf-av-ed"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>':'');}
+    else{el.textContent=(n&&n[0])||'R';}
+  });
+}
+window.svPrf=function(){var ni=document.getElementById('pfName');if(ni&&ni.value.trim())prof.name=ni.value.trim();svUD();updProfUI();clsPf();};
+document.getElementById('pfSignout').addEventListener('click',function(){auth.signOut().then(function(){chats=[];aid=null;clsPf();load=false;});});
+document.getElementById('ai-file').addEventListener('change',function(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(ev){prof.photo=ev.target.result;svUD();updProfUI();};r.readAsDataURL(f);e.target.value='';});
+
+// Firebase
+function chRef(){return db.collection('users').doc(user.uid).collection('chats');}
+function mRef(id){return db.collection('users').doc(user.uid).collection('chats').doc(id).collection('messages');}
+function svCh(ch){if(!user)return;chRef().doc(String(ch.id)).set({title:ch.title,project:ch.project||'personal',updatedAt:firebase.firestore.FieldValue.serverTimestamp(),msgCount:ch.msgs.length},{merge:true}).catch(function(){});try{localStorage.setItem('rc_'+user.uid,JSON.stringify(chats.map(function(c){return {id:c.id,title:c.title,project:c.project||'personal',msgs:[]};})));}catch(e){}}
+function svMsg(cid,msg,idx){if(!user)return;mRef(cid).doc(String(idx)).set({role:msg.role||'user',text:msg.text||'',type:msg.type||'text',url:msg.url||'',src:msg.src||null,ts:firebase.firestore.FieldValue.serverTimestamp()},{merge:true}).catch(function(){});}
+function ldUD(){return db.collection('users').doc(user.uid).get().then(function(doc){if(doc.exists){var d=doc.data();plan=d.plan||'free';prof.name=d.displayName||user.displayName||'';prof.photo=d.photoURL||user.photoURL||'';userMemory=d.memory||'';if(d.elevenKey)userElevenKey=d.elevenKey;if(d.voiceId)userVoiceId=d.voiceId;}else{plan='free';prof.name=user.displayName||'';prof.photo=user.photoURL||'';}}).catch(function(){plan='free';});}
+function svUD(){if(!user)return;db.collection('users').doc(user.uid).set({plan:plan,displayName:prof.name,photoURL:prof.photo,memory:userMemory,updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true}).catch(function(){});}
+function svMem(mem){if(!user)return;userMemory=mem;db.collection('users').doc(user.uid).set({memory:mem},{merge:true}).catch(function(){});}
+function ldChs(){return chRef().orderBy('updatedAt','desc').get().then(function(snap){chats=snap.docs.map(function(d){return Object.assign({id:d.id},d.data(),{msgs:[]});});if(chats.length>0){aid=chats[0].id;return mRef(aid).orderBy('ts','asc').get().then(function(ms){chats[0].msgs=ms.docs.map(function(d){return d.data();});});}}).catch(function(){try{var s=JSON.parse(localStorage.getItem('rc_'+user.uid)||'null');if(s&&s.length){chats=s;aid=chats[0].id;}}catch(e){}}).then(function(){if(!chats.length)return nwCh();});}
+function nwCh(){var id=Date.now().toString();var wm={role:'ai',text:'Hi \n\nMain hoon **Riya** -- tumhari dost!\n\nTell me, kaun si city mein ho? Toh main tumhare liye sahi answers de sakti hoon '};var ch={id:id,title:'New Chat',project:activeProject==='all'?'personal':activeProject,msgs:[wm]};chats.unshift(ch);aid=id;svCh(ch);svMsg(id,wm,0);return Promise.resolve();}
 
 function ga(){return chats.find(function(c){return c.id===aid;})||chats[0];}
 function rndCL(){
@@ -2320,8 +1898,8 @@ document.getElementById('sb2').addEventListener('click',function(){send();});
 function updSnd(){var v=(document.getElementById('mi').value||'').trim();var b=document.getElementById('sb2');b.disabled=!v||load;b.innerHTML=load?'<div style="width:12px;height:12px;border-radius:50%;border:1.5px solid rgba(255,255,255,.15);border-top-color:rgba(255,255,255,.5);animation:spin .7s linear infinite;"></div>':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22,2 15,22 11,13 2,9"/></svg>';}
 
 // Modals
-// opPf handled in new profile JS
-// clsPf handled in new profile JS
+function opPf(){buildThemeGrid();buildArtifacts();updProfUI();showMemory();document.getElementById('profilePage').classList.add('show');clsSB();}
+function clsPf(){document.getElementById('profilePage').classList.remove('show');}
 document.getElementById('pfBack').addEventListener('click',clsPf);
 document.getElementById('sbpb').addEventListener('click',opPf);
 document.getElementById('topLogo').addEventListener('click',opPf);
@@ -2776,214 +2354,6 @@ function sendWs(){
 }
 
 
-
-// ================================================================
-// PREMIUM PROFILE JS
-// ================================================================
-var selectedLogoIdx = -1;
-
-function opPf(){
-  updProfUI();
-  showMemory();
-  buildArtifacts();
-  document.getElementById('profilePage').classList.add('show');
-  clsSB();
-}
-function clsPf(){
-  document.getElementById('profilePage').classList.remove('show');
-}
-document.getElementById('pfBack') && document.getElementById('pfBack').addEventListener('click', clsPf);
-document.getElementById('sbpb') && document.getElementById('sbpb').addEventListener('click', opPf);
-document.getElementById('topLogo') && document.getElementById('topLogo').addEventListener('click', opPf);
-
-function updProfUI(){
-  if(!user) return;
-  var n = prof.name || user.displayName || 'User';
-  var e = user.email || '';
-  var ph = prof.photo || user.photoURL || '';
-  var t = plan === 'premium' ? 'Pro' : plan === 'basic' ? 'Basic' : 'Free';
-
-  var spn = document.getElementById('spn'); if(spn) spn.textContent = n;
-  var pfN = document.getElementById('pfName'); if(pfN) pfN.value = n;
-  var pfUN = document.getElementById('pfUserName'); if(pfUN) pfUN.textContent = n;
-  var pfE = document.getElementById('pfEmail'); if(pfE) pfE.textContent = e;
-  var pfPT = document.getElementById('pfPlanText'); if(pfPT) pfPT.textContent = t;
-  var plb = document.getElementById('plb'); if(plb) plb.textContent = t;
-  var chip = document.getElementById('pfPlanChip'); if(chip) chip.textContent = t;
-
-  if(plan === 'premium'){
-    var pl = document.getElementById('pfPlanLabel'); if(pl) pl.textContent = 'Pro Plan Active';
-    var ps2 = document.getElementById('pfPlanSub'); if(ps2) ps2.textContent = 'All features unlocked';
-  }
-
-  var tot = chats.reduce(function(a,ch){ return a + (ch.msgs ? ch.msgs.length : 0); }, 0);
-  var pc = document.getElementById('pfChats'); if(pc) pc.textContent = chats.length;
-  var pm = document.getElementById('pfMsgs'); if(pm) pm.textContent = tot;
-  var ms = document.getElementById('pfMemStat'), ds = document.getElementById('pfDaysStat');
-  if(ms) ms.classList.toggle('locked', plan === 'free');
-  if(ds) ds.classList.toggle('locked', plan === 'free');
-
-  var joined = localStorage.getItem('riya_joined_' + (user ? user.uid : ''));
-  if(!joined){ joined = Date.now(); try{ localStorage.setItem('riya_joined_' + user.uid, joined); }catch(e){} }
-  var days = Math.max(1, Math.floor((Date.now() - parseInt(joined)) / 86400000));
-  var pd = document.getElementById('pfDays'); if(pd) pd.textContent = days;
-
-  // Avatar display
-  updateAvatarDisplay(prof.photo || user.photoURL, prof.avatar, prof.logoIdx);
-
-  // Voice status
-  var vs = document.getElementById('pfVoiceStatus');
-  if(vs) vs.textContent = userElevenKey ? 'Key set - Voice ready!' : 'Tap to configure';
-}
-
-function updateAvatarDisplay(photo, emoji, logoIdx){
-  var inner = document.getElementById('pfAvInner');
-  var spp = document.getElementById('spp');
-  if(!inner) return;
-
-  if(photo){
-    inner.innerHTML = '<img src="' + photo + '" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentElement.textContent=String.fromCharCode(82)">';
-    if(spp) spp.innerHTML = '<img src="' + photo + '" style="width:100%;height:100%;object-fit:cover;border-radius:8px;" onerror="this.parentElement.textContent=String.fromCharCode(82)">';
-  } else if(logoIdx !== undefined && logoIdx >= 0){
-    var LOGO_SVGS_SMALL = ['<svg width="60" height="60" viewBox="0 0 60 60"><defs><radialGradient id="sl1h" cx="50%" cy="35%" r="40%"><stop offset="0%" stop-color="#5BE7FF" stop-opacity=".9"/><stop offset="100%" stop-color="#5BE7FF" stop-opacity="0"/></radialGradient></defs><circle cx="30" cy="30" r="27" fill="none" stroke="rgba(91,231,255,.2)" stroke-width="1"/><path d="M30 42 Q24 38 23 33 Q22 27 26 22 Q28 18 30 17 Q32 18 34 22 Q38 27 37 33 Q36 38 30 42Z" fill="rgba(91,231,255,.08)"/><circle cx="30" cy="17" r="5" fill="url(#sl1h)"/><circle cx="30" cy="17" r="2.5" fill="#5BE7FF" opacity=".9"/><circle cx="30" cy="17" r="1.2" fill="white"/></svg>', '<svg width="60" height="60" viewBox="0 0 60 60"><defs><radialGradient id="sl2h" cx="50%" cy="35%" r="40%"><stop offset="0%" stop-color="white" stop-opacity="1"/><stop offset="100%" stop-color="white" stop-opacity="0"/></radialGradient></defs><ellipse cx="30" cy="30" rx="26" ry="10" fill="none" stroke="rgba(91,231,255,.25)" stroke-width="1.2"/><path d="M30 44 Q23 40 22 34 Q21 27 25 21 Q28 16 30 15 Q32 16 35 21 Q39 27 38 34 Q37 40 30 44Z" fill="rgba(255,255,255,.06)"/><circle cx="30" cy="15" r="5" fill="url(#sl2h)"/><circle cx="30" cy="15" r="2" fill="white"/></svg>', '<svg width="60" height="60" viewBox="0 0 60 60"><defs><radialGradient id="sl3h"><stop offset="0%" stop-color="white" stop-opacity="1"/><stop offset="100%" stop-color="#5BE7FF" stop-opacity="0"/></radialGradient></defs><ellipse cx="30" cy="30" rx="24" ry="8" fill="none" stroke="rgba(91,231,255,.3)" stroke-width="1.5" transform="rotate(-20 30 30)"/><line x1="30" y1="8" x2="30" y2="52" stroke="rgba(255,255,255,.2)" stroke-width=".8"/><line x1="8" y1="30" x2="52" y2="30" stroke="rgba(255,255,255,.2)" stroke-width=".8"/><circle cx="30" cy="30" r="6" fill="url(#sl3h)"/><circle cx="30" cy="30" r="3" fill="white" opacity=".9"/></svg>'];
-    if(LOGO_SVGS_SMALL[logoIdx]){
-      inner.innerHTML = LOGO_SVGS_SMALL[logoIdx];
-      if(spp) spp.innerHTML = LOGO_SVGS_SMALL[logoIdx < LOGO_SVGS_SMALL.length ? logoIdx : 0];
-    }
-  } else {
-    var n = prof.name || (user && user.displayName) || 'R';
-    inner.textContent = n[0].toUpperCase();
-    if(spp) spp.textContent = n[0].toUpperCase();
-  }
-}
-
-// AVATAR PICKER
-window.openAvatarPicker = function(){
-  document.getElementById('avatarPickerPage').classList.add('show');
-};
-window.closeAvatarPicker = function(){
-  document.getElementById('avatarPickerPage').classList.remove('show');
-};
-window.selectLogo = function(idx){
-  selectedLogoIdx = idx;
-  document.querySelectorAll('.avp-logo-opt').forEach(function(el){
-    el.classList.toggle('selected', parseInt(el.getAttribute('data-logo')) === idx);
-  });
-};
-window.saveAvatar = function(){
-  if(selectedLogoIdx >= 0){
-    prof.logoIdx = selectedLogoIdx;
-    prof.photo = '';
-    prof.avatar = '';
-    updateAvatarDisplay('', '', selectedLogoIdx);
-    svUD();
-  }
-  closeAvatarPicker();
-};
-
-// Photo upload
-document.getElementById('ai-file') && document.getElementById('ai-file').addEventListener('change', function(e){
-  var f = e.target.files[0]; if(!f) return;
-  var r = new FileReader();
-  r.onload = function(ev){
-    prof.photo = ev.target.result;
-    prof.avatar = '';
-    prof.logoIdx = -1;
-    svUD();
-    updProfUI();
-    closeAvatarPicker();
-  };
-  r.readAsDataURL(f);
-  e.target.value = '';
-});
-
-// VOICE SETUP
-var VOICES_LIST = [
-  {id:'QTKSa2Iyv0yoxvXY2V8a',name:'Neha',desc:'Warm Indian Female',color:'#5BE7FF'},
-  {id:'9BWtsMINqrJLrRacOk9x',name:'Aria',desc:'Professional Indian',color:'#7B61FF'},
-  {id:'EXAVITQu4vr4xnSDxMaL',name:'Sarah',desc:'Clear English',color:'#a5d6a7'},
-  {id:'oWAxZDx7w5VEj9dCyTzz',name:'Grace',desc:'Indian Accent',color:'#ce93d8'},
-  {id:'FGY2WhTYpPnrIDTdsKH5',name:'Laura',desc:'Soft and Gentle',color:'#80cbc4'},
-  {id:'XB0fDUnXU5powFXDhCwa',name:'Charlotte',desc:'Storytelling',color:'#ffcc80'},
-  {id:'pFZP5JQG7iQjIQuC4Bku',name:'Lily',desc:'Young and Energetic',color:'#f8bbd0'},
-];
-
-window.openVoiceSetup = function(){
-  buildVoiceList();
-  var ki = document.getElementById('vspKey');
-  if(ki) ki.value = userElevenKey || '';
-  document.getElementById('voiceSetupPage').classList.add('show');
-};
-window.closeVoiceSetup = function(){
-  document.getElementById('voiceSetupPage').classList.remove('show');
-};
-
-function buildVoiceList(){
-  var list = document.getElementById('vspVoiceList');
-  if(!list) return;
-  list.innerHTML = '';
-  VOICES_LIST.forEach(function(v){
-    var div = document.createElement('div');
-    div.className = 'vsp-voice-item' + (userVoiceId === v.id ? ' selected' : '');
-    div.innerHTML = '<div class="vsp-voice-dot" style="background:' + v.color + '"></div>' +
-      '<div class="vsp-voice-info">' +
-        '<div class="vsp-voice-name">' + v.name + '</div>' +
-        '<div class="vsp-voice-desc">' + v.desc + '</div>' +
-        '<div class="vsp-voice-id">' + v.id + '</div>' +
-      '</div>' +
-      '<button class="vsp-play-btn"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></button>';
-    div.querySelector('.vsp-voice-info').addEventListener('click', function(){
-      userVoiceId = v.id;
-      buildVoiceList();
-    });
-    div.querySelector('.vsp-play-btn').addEventListener('click', function(){
-      previewVoice(v.id);
-    });
-    list.appendChild(div);
-  });
-}
-
-window.saveVoiceSettings = function(){
-  var ki = document.getElementById('vspKey');
-  if(ki && ki.value.trim()) userElevenKey = ki.value.trim();
-  if(user){
-    db.collection('users').doc(user.uid).set({
-      elevenKey: userElevenKey,
-      voiceId: userVoiceId
-    }, {merge:true}).catch(function(){});
-  }
-  try{
-    localStorage.setItem('riya_vk_' + user.uid, userElevenKey);
-    localStorage.setItem('riya_vid_' + user.uid, userVoiceId);
-  }catch(e){}
-  var vs = document.getElementById('pfVoiceStatus');
-  if(vs) vs.textContent = userElevenKey ? 'Key set - Voice ready!' : 'Tap to configure';
-  closeVoiceSetup();
-};
-
-function previewVoice(vid){
-  if(!bkUrl) return;
-  fetch(bkUrl + '/api/voice-preview', {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({voiceId:vid})
-  }).then(function(r){ if(!r.ok) throw new Error(); return r.blob(); })
-  .then(function(blob){
-    var audio = new Audio(URL.createObjectURL(blob));
-    audio.play();
-  }).catch(function(){});
-}
-
-window.svPrf = function(){
-  var ni = document.getElementById('pfName');
-  if(ni && ni.value.trim()) prof.name = ni.value.trim();
-  svUD(); updProfUI(); clsPf();
-};
-document.getElementById('pfSignout') && document.getElementById('pfSignout').addEventListener('click', function(){
-  auth.signOut().then(function(){ chats = []; aid = null; clsPf(); load = false; });
-});
-
-
 // REVIEW SYSTEM
 var reviewRating = 0;
 var reviewShown = false;
@@ -3096,36 +2466,57 @@ function eH(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').r
 function srcI(url){try{var h=new URL(url).hostname.replace('www.','');var m={'google.com':'G','youtube.com':'YT','wikipedia.org':'W','reddit.com':'R','twitter.com':'X','github.com':'GH','stackoverflow.com':'SO'};return m[h]||h.slice(0,2).toUpperCase();}catch(e){return '?';}}
 if(window.speechSynthesis){window.speechSynthesis.getVoices();window.speechSynthesis.onvoiceschanged=function(){window.speechSynthesis.getVoices();};}
 
-// PWA Install prompt
+// PWA
 var deferredPrompt = null;
-
 window.addEventListener('beforeinstallprompt', function(e){
-  e.preventDefault();
-  deferredPrompt = e;
-  // Show install button in sidebar immediately
+  e.preventDefault(); deferredPrompt = e;
   var btn = document.getElementById('pwaBtn');
   if(btn) btn.style.display = 'block';
 });
-
 window.triggerPWA = function(){
-  if(!deferredPrompt){
-    alert('To install: tap browser menu  Add to Home Screen');
-    return;
-  }
+  if(!deferredPrompt){ alert('Tap browser menu then Add to Home Screen'); return; }
   deferredPrompt.prompt();
-  deferredPrompt.userChoice.then(function(r){
+  deferredPrompt.userChoice.then(function(){
     deferredPrompt = null;
     var btn = document.getElementById('pwaBtn');
     if(btn) btn.style.display = 'none';
   });
 };
-
-// Also check if already installed
 window.addEventListener('appinstalled', function(){
   var btn = document.getElementById('pwaBtn');
   if(btn) btn.style.display = 'none';
-  deferredPrompt = null;
 });
+// PWA Install prompt - OLD REMOVED
+var _deferredOld = null;
+window.addEventListener('beforeinstallprompt', function(e){
+  e.preventDefault();
+  deferredPrompt = e;
+  // Show install button after 30 seconds
+  setTimeout(function(){
+    if(deferredPrompt) showInstallBanner();
+  }, 30000);
+});
+
+function showInstallBanner(){
+  if(document.getElementById('installBanner')) return;
+  var b = document.createElement('div');
+  b.id = 'installBanner';
+  b.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(6,6,18,.95);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:12px 16px;display:flex;align-items:center;gap:10px;z-index:999;backdrop-filter:blur(20px);max-width:300px;width:90%;';
+  b.innerHTML = "<div style=\"flex:1;\"><div style=\"font-size:12px;color:rgba(255,255,255,.6);font-weight:500;\">Add Riya to Home Screen</div><div style=\"font-size:10px;color:rgba(255,255,255,.2);margin-top:2px;font-family:JetBrains Mono,monospace;\">Like a real app</div></div><button onclick=\"installPWA()\" style=\"padding:7px 14px;border:1px solid rgba(255,255,255,.2);background:transparent;color:rgba(255,255,255,.55);font-size:10px;cursor:pointer;border-radius:8px;\">Add</button><button onclick=\"var el=document.getElementById('installBanner');if(el)el.remove();\" style=\"background:none;border:none;color:rgba(255,255,255,.2);cursor:pointer;font-size:18px;padding:0 4px;\">x</button>";
+  document.body.appendChild(b);
+}
+
+window.installPWA = function(){
+  if(!deferredPrompt) return;
+  deferredPrompt.prompt();
+  deferredPrompt.userChoice.then(function(r){
+    if(r.outcome === 'accepted'){
+      var b = document.getElementById('installBanner');
+      if(b) b.remove();
+    }
+    deferredPrompt = null;
+  });
+};
 
 // Register service worker
 if('serviceWorker' in navigator){
