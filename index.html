@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
+<meta name="google-site-verification" content="NwwcpfdzdgLCV_mUr7-vLLNFYzNK8Hm8Ta1hSaeG4NM" />
 <meta name="description" content="Riya AI — The most intelligent, caring AI friend. Deep memory, voice mode, code compiler, image generation, personal space. Available for everyone worldwide."/>
 <meta name="keywords" content="Riya AI, AI assistant, AI friend, smart AI, voice AI, code AI, free AI, intelligent AI, AI chat"/>
 <meta name="author" content="Ajay Kumar AJ"/>
@@ -82,11 +83,9 @@ nav{
   font-size:clamp(80px,18vw,180px);
   font-weight:300;font-style:italic;
   line-height:.85;
-  background:linear-gradient(135deg,#ffffff 0%,rgba(220,228,255,.9) 50%,rgba(200,215,255,.8) 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  background-clip:text;
+  color:rgba(255,255,255,.92);
   letter-spacing:-4px;margin-bottom:12px;
-  filter:drop-shadow(0 0 40px rgba(91,231,255,.2));
+  text-shadow:0 0 80px rgba(255,255,255,.15),0 0 160px rgba(255,255,255,.08);
 }
 .hero-tagline{
   font-family:'Cormorant Garamond',serif;font-size:clamp(16px,3vw,28px);
@@ -373,17 +372,25 @@ footer{
   <a href="#" class="nav-logo">
     <svg width="28" height="28" viewBox="0 0 28 28" style="overflow:visible">
       <defs>
-        <radialGradient id="nlg" cx="50%" cy="35%" r="40%">
-          <stop offset="0%" stop-color="#5BE7FF" stop-opacity=".9"/>
-          <stop offset="100%" stop-color="#5BE7FF" stop-opacity="0"/>
+        <radialGradient id="slg" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="rgba(255,255,255,1)"/>
+          <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
         </radialGradient>
-        <filter id="ng"><feGaussianBlur stdDeviation="1.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <filter id="sg"><feGaussianBlur stdDeviation="1.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
       </defs>
-      <circle cx="14" cy="14" r="12" fill="none" stroke="rgba(91,231,255,.2)" stroke-width="1" style="transform-origin:14px 14px;animation:nr 8s linear infinite;"/>
-      <path d="M14 18 Q11 16 10 14 Q9 11 11 9 Q12 7 14 7 Q16 7 17 9 Q19 11 18 14 Q17 16 14 18Z" fill="rgba(91,231,255,.08)"/>
-      <circle cx="14" cy="7" r="4" fill="url(#nlg)" filter="url(#ng)"/>
-      <circle cx="14" cy="7" r="2" fill="#5BE7FF" opacity=".9" filter="url(#ng)"/>
-      <circle cx="14" cy="7" r="1" fill="white"/>
+      <!-- Starburst rays -->
+      <line x1="14" y1="2" x2="14" y2="26" stroke="rgba(255,255,255,.18)" stroke-width=".8"/>
+      <line x1="2" y1="14" x2="26" y2="14" stroke="rgba(255,255,255,.18)" stroke-width=".8"/>
+      <line x1="5" y1="5" x2="23" y2="23" stroke="rgba(255,255,255,.12)" stroke-width=".7"/>
+      <line x1="23" y1="5" x2="5" y2="23" stroke="rgba(255,255,255,.12)" stroke-width=".7"/>
+      <line x1="14" y1="1" x2="14" y2="5" stroke="rgba(255,255,255,.4)" stroke-width="1"/>
+      <line x1="14" y1="23" x2="14" y2="27" stroke="rgba(255,255,255,.4)" stroke-width="1"/>
+      <line x1="1" y1="14" x2="5" y2="14" stroke="rgba(255,255,255,.4)" stroke-width="1"/>
+      <line x1="23" y1="14" x2="27" y2="14" stroke="rgba(255,255,255,.4)" stroke-width="1"/>
+      <!-- Glow -->
+      <circle cx="14" cy="14" r="5" fill="url(#slg)" filter="url(#sg)"/>
+      <circle cx="14" cy="14" r="2.5" fill="white" opacity=".9" filter="url(#sg)"/>
+      <circle cx="14" cy="14" r="1.2" fill="white" style="animation:score 2s ease-in-out infinite;"/>
     </svg>
     <span class="nav-brand">Riya</span>
   </a>
@@ -392,7 +399,7 @@ footer{
     <li><a href="#story">About</a></li>
     <li><a href="#pricing">Pricing</a></li>
   </ul>
-  <a href="chat.html" class="nav-cta">Talk to Riya</a>
+  <a href="chat.html" class="nav-cta" onclick="window.location.href='chat.html';return false;">Talk to Riya</a>
 </nav>
 
 <!-- HERO -->
@@ -402,7 +409,7 @@ footer{
   <div class="hero-tagline rv">Intelligence that cares.</div>
   <p class="hero-sub rv">She remembers your name. Your dreams. Your struggles. She speaks your language. She is always here. Not a chatbot — a friend who happens to know everything.</p>
   <div class="hero-btns rv">
-    <a href="chat.html" class="btn-p">Talk to Riya</a>
+    <a href="chat.html" class="btn-p" onclick="window.location.href='chat.html';return false;">Talk to Riya</a>
     <a href="#features" class="btn-s">Discover More</a>
   </div>
   <div class="scroll-ind">
@@ -605,6 +612,7 @@ footer{
 
 <style>
 @keyframes nr{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+@keyframes score{0%,100%{opacity:.7;filter:drop-shadow(0 0 2px rgba(255,255,255,.8));}50%{opacity:1;filter:drop-shadow(0 0 6px rgba(255,255,255,1));}}
 </style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -624,7 +632,7 @@ footer{
   });
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.setClearColor(0x030307, 1);
+  renderer.setClearColor(0x020208, 1);
 
   window.addEventListener('resize', function(){
     camera.aspect = window.innerWidth/window.innerHeight;
@@ -647,110 +655,83 @@ footer{
   starGeo.setAttribute('size', new THREE.BufferAttribute(starSizes, 1));
 
   var starMat = new THREE.PointsMaterial({
-    color: 0xE8EEFF,
-    size: 0.18,
+    color: 0xF0ECFF,
+    size: 0.22,
     transparent: true,
-    opacity: 0.7,
+    opacity: 0.85,
     sizeAttenuation: true,
   });
   var stars = new THREE.Points(starGeo, starMat);
   scene.add(stars);
 
-  // ── RIYA PARTICLE FIGURE ──
-  var figureGeo = new THREE.BufferGeometry();
-  var figCount = 1200;
-  var figPos = new Float32Array(figCount * 3);
-  var figCol = new Float32Array(figCount * 3);
-
-  // Generate figure silhouette points
-  function getFigurePoint(idx, total){
-    var t = idx / total;
-    var x, y, z = (Math.random() - 0.5) * 0.3;
-    var jitter = 0.4;
-
-    if(t < 0.08){ // Head
-      var angle = Math.random() * Math.PI * 2;
-      var r = Math.random() * 1.2;
-      x = Math.cos(angle) * r * 0.7;
-      y = 7 + Math.sin(angle) * r * 0.8;
-    } else if(t < 0.15){ // Neck
-      x = (Math.random() - 0.5) * 0.8;
-      y = 5.5 + Math.random() * 1.2;
-    } else if(t < 0.35){ // Shoulders + torso
-      var side = Math.random() < 0.5 ? 1 : -1;
-      var progress = (t - 0.15) / 0.2;
-      x = side * (2.5 - progress * 0.8) + (Math.random()-0.5) * jitter;
-      y = 5 - progress * 3 + (Math.random()-0.5) * 0.4;
-    } else if(t < 0.55){ // Waist + hips
-      var side2 = Math.random() < 0.5 ? 1 : -1;
-      var p2 = (t - 0.35) / 0.2;
-      x = side2 * (1.7 + p2 * 0.5) + (Math.random()-0.5) * jitter;
-      y = 2 - p2 * 2 + (Math.random()-0.5) * 0.4;
-    } else { // Energy streams
-      var ang2 = Math.random() * Math.PI * 2;
-      var dist2 = Math.random() * 5 + 1;
-      x = Math.cos(ang2) * dist2 * (0.5 + Math.random() * 0.5);
-      y = Math.sin(ang2) * dist2 * 0.4 + (Math.random() - 0.5) * 6;
-    }
-
-    return [x, y, z + (Math.random()-0.5)*0.5];
+  // ── CENTER SILVER BURST (Riya's presence) ──
+  var burstGeo = new THREE.BufferGeometry();
+  var burstCount = 600;
+  var burstPos = new Float32Array(burstCount * 3);
+  var burstCol = new Float32Array(burstCount * 3);
+  for(var i = 0; i < burstCount; i++){
+    var angle = Math.random() * Math.PI * 2;
+    var angle2 = Math.random() * Math.PI * 2;
+    var radius = Math.pow(Math.random(), 0.4) * 18;
+    burstPos[i*3]   = Math.cos(angle) * Math.cos(angle2) * radius;
+    burstPos[i*3+1] = Math.sin(angle2) * radius * 0.5;
+    burstPos[i*3+2] = Math.cos(angle) * Math.sin(angle2) * radius * 0.3 - 5;
+    // Silver to white gradient
+    var brightness = 0.7 + Math.random() * 0.3;
+    burstCol[i*3]   = brightness;
+    burstCol[i*3+1] = brightness * (0.92 + Math.random() * 0.08);
+    burstCol[i*3+2] = brightness * (0.95 + Math.random() * 0.05);
   }
+  burstGeo.setAttribute('position', new THREE.BufferAttribute(burstPos, 3));
+  burstGeo.setAttribute('color', new THREE.BufferAttribute(burstCol, 3));
+  var burstMat = new THREE.PointsMaterial({
+    vertexColors: true, size: 0.15,
+    transparent: true, opacity: 0.65,
+    sizeAttenuation: true
+  });
+  var burst = new THREE.Points(burstGeo, burstMat);
+  scene.add(burst);
 
-  for(var i = 0; i < figCount; i++){
-    var pt = getFigurePoint(i, figCount);
-    figPos[i*3] = pt[0];
-    figPos[i*3+1] = pt[1];
-    figPos[i*3+2] = pt[2];
+  // Central bright core glow
+  var coreGeo2 = new THREE.SphereGeometry(0.4, 16, 16);
+  var coreMat2 = new THREE.MeshBasicMaterial({color:0xFFFFFF, transparent:true, opacity:0.9});
+  var core2 = new THREE.Mesh(coreGeo2, coreMat2);
+  core2.position.set(0, 0, -5);
+  scene.add(core2);
 
-    // Color based on position
-    var normY = (pt[1] + 8) / 16;
-    if(normY > 0.8){ // Head - bright blue/white
-      figCol[i*3]   = 0.5 + Math.random() * 0.5;
-      figCol[i*3+1] = 0.8 + Math.random() * 0.2;
-      figCol[i*3+2] = 1.0;
-    } else if(normY > 0.5){ // Body - cyan
-      figCol[i*3]   = 0.2 + Math.random() * 0.3;
-      figCol[i*3+1] = 0.7 + Math.random() * 0.3;
-      figCol[i*3+2] = 0.9 + Math.random() * 0.1;
-    } else { // Streams - purple/violet
-      figCol[i*3]   = 0.4 + Math.random() * 0.3;
-      figCol[i*3+1] = 0.2 + Math.random() * 0.3;
-      figCol[i*3+2] = 0.8 + Math.random() * 0.2;
-    }
+  var outerGlowGeo = new THREE.SphereGeometry(2, 16, 16);
+  var outerGlowMat = new THREE.MeshBasicMaterial({color:0xDDEEFF, transparent:true, opacity:0.08});
+  var outerGlow2 = new THREE.Mesh(outerGlowGeo, outerGlowMat);
+  outerGlow2.position.set(0, 0, -5);
+  scene.add(outerGlow2);
+
+  // Silver dust particles
+  var dustGeo = new THREE.BufferGeometry();
+  var dustCount = 800;
+  var dustPos = new Float32Array(dustCount * 3);
+  for(var i = 0; i < dustCount; i++){
+    dustPos[i*3]   = (Math.random() - 0.5) * 200;
+    dustPos[i*3+1] = (Math.random() - 0.5) * 200;
+    dustPos[i*3+2] = (Math.random() - 0.5) * 100;
   }
+  dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPos, 3));
+  var dustMat = new THREE.PointsMaterial({color:0xC8D8FF,size:0.08,transparent:true,opacity:0.5,sizeAttenuation:true});
+  scene.add(new THREE.Points(dustGeo, dustMat));
 
-  figureGeo.setAttribute('position', new THREE.BufferAttribute(figPos, 3));
-  figureGeo.setAttribute('color', new THREE.BufferAttribute(figCol, 3));
+  // Subtle blue nebula dots
+  var blueGeo = new THREE.BufferGeometry();
+  var blueCount = 400;
+  var bluePos = new Float32Array(blueCount * 3);
+  for(var i = 0; i < blueCount; i++){
+    bluePos[i*3]   = (Math.random() - 0.5) * 150;
+    bluePos[i*3+1] = (Math.random() - 0.5) * 150;
+    bluePos[i*3+2] = (Math.random() - 0.5) * 80 - 20;
+  }
+  blueGeo.setAttribute('position', new THREE.BufferAttribute(bluePos, 3));
+  var blueMat = new THREE.PointsMaterial({color:0x4466AA,size:0.35,transparent:true,opacity:0.25,sizeAttenuation:true});
+  scene.add(new THREE.Points(blueGeo, blueMat));
 
-  var figMat = new THREE.PointsMaterial({
-    vertexColors: true,
-    size: 0.12,
-    transparent: true,
-    opacity: 0.75,
-    sizeAttenuation: true,
-  });
-  var figure = new THREE.Points(figureGeo, figMat);
-  figure.position.x = 8;
-  figure.position.z = -5;
-  scene.add(figure);
-
-  // ── HEAD GLOW (point light effect using sphere) ──
-  var glowGeo = new THREE.SphereGeometry(0.8, 16, 16);
-  var glowMat = new THREE.MeshBasicMaterial({
-    color: 0x5BE7FF,
-    transparent: true,
-    opacity: 0.15,
-  });
-  var headGlow = new THREE.Mesh(glowGeo, glowMat);
-  headGlow.position.set(8, 7, -5);
-  scene.add(headGlow);
-
-  // Bright core
-  var coreGeo = new THREE.SphereGeometry(0.25, 16, 16);
-  var coreMat = new THREE.MeshBasicMaterial({color: 0xFFFFFF, transparent: true, opacity: 0.9});
-  var core = new THREE.Mesh(coreGeo, coreMat);
-  core.position.set(8, 7, -5);
-  scene.add(core);
+  // Figure removed
 
   // ── NEBULA CLOUDS (colored fog volumes) ──
   var nebulae = [];
@@ -858,16 +839,14 @@ footer{
     stars.rotation.y = t * 0.008;
     stars.rotation.x = t * 0.003;
 
-    // Figure float + breathe
-    figure.position.y = Math.sin(t * 0.4) * 0.4;
-    figure.rotation.y = Math.sin(t * 0.15) * 0.08 + mouseX * 0.05;
-    figure.material.opacity = 0.6 + Math.sin(t * 0.5) * 0.15;
+    // Silver burst slow rotation + pulse
+    burst.rotation.y = t * 0.005;
+    burst.rotation.z = t * 0.003;
+    burstMat.opacity = 0.5 + Math.sin(t * 0.6) * 0.15;
+    core2.scale.setScalar(0.7 + Math.sin(t * 1.8) * 0.4);
+    outerGlow2.scale.setScalar(0.8 + Math.sin(t * 0.9) * 0.3);
 
-    // Head glow pulse
-    var glowPulse = 0.8 + Math.sin(t * 1.5) * 0.4;
-    headGlow.scale.setScalar(glowPulse);
-    headGlow.material.opacity = 0.1 + Math.sin(t * 1.5) * 0.05;
-    core.scale.setScalar(0.8 + Math.sin(t * 2) * 0.3);
+    // Figure animation removed
 
     // Nebula fade in on scroll
     nebulae.forEach(function(neb, i){
@@ -877,28 +856,9 @@ footer{
       neb.position.x += Math.sin(t * 0.1 + i) * 0.005;
     });
 
-    // Rays animate
-    rays.forEach(function(ray, i){
-      ray.userData.phase += 0.025;
-      ray.material.opacity = (0.1 + Math.sin(ray.userData.phase) * 0.15);
-    });
 
-    // Flow particles
-    var fp = flowGeo.attributes.position.array;
-    for(var f = 0; f < flowCount; f++){
-      fp[f*3]   += flowVel[f*3];
-      fp[f*3+1] += flowVel[f*3+1];
-      fp[f*3+2] += flowVel[f*3+2];
-      flowLife[f] -= 0.008;
-      if(flowLife[f] <= 0 || fp[f*3+1] > 9){
-        fp[f*3]   = 8 + (Math.random()-0.5) * 6;
-        fp[f*3+1] = -8 + Math.random() * 3;
-        fp[f*3+2] = -5 + (Math.random()-0.5) * 2;
-        flowLife[f] = 1;
-      }
-    }
-    flowGeo.attributes.position.needsUpdate = true;
-    flowMat.opacity = 0.4 + Math.sin(t * 0.8) * 0.2;
+
+
 
     renderer.render(scene, camera);
   }
