@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Riya.AI — Design 2: Aggressive Goddess</title>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Saira:wght@100;200;300;400;600;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+:root{--r:#ff0040;--o:#ff6600;--g:#ffcc00;--c:#00ffcc;--w:#ffffff;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#050000;color:#fff;font-family:'Saira',sans-serif;overflow-x:hidden;cursor:none;}
+#cur{position:fixed;width:6px;height:6px;background:var(--r);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);box-shadow:0 0 20px var(--r),0 0 50px rgba(255,0,64,.3);}
+#curR{position:fixed;width:30px;height:30px;border:1px solid rgba(255,0,64,.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all .15s ease-out;}
+#tc{position:fixed;inset:0;z-index:0;}
+.ov{position:fixed;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 30%,rgba(255,0,64,.06) 0%,transparent 60%),radial-gradient(ellipse at 100% 100%,rgba(255,102,0,.04) 0%,transparent 50%);}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 48px;display:flex;align-items:center;justify-content:space-between;background:rgba(5,0,0,.85);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,0,64,.1);}
+.logo{font-family:'Black Han Sans',sans-serif;font-size:22px;letter-spacing:6px;background:linear-gradient(90deg,var(--r),var(--o),var(--g));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.nvl{display:flex;gap:32px;list-style:none;}
+.nvl a{color:rgba(255,255,255,.3);text-decoration:none;font-size:10px;letter-spacing:3px;text-transform:uppercase;font-family:'Share Tech Mono',monospace;transition:color .3s;}
+.nvl a:hover{color:var(--r);}
+.nbtn{padding:9px 22px;border:1px solid rgba(255,0,64,.5);color:var(--r);font-family:'Saira',sans-serif;font-size:10px;font-weight:800;letter-spacing:3px;cursor:pointer;text-decoration:none;text-transform:uppercase;transition:all .3s;background:transparent;}
+.nbtn:hover{background:var(--r);color:#000;box-shadow:0 0 30px rgba(255,0,64,.5);}
+
+/* HERO - DRAMATIC CENTERED */
+#hero{position:relative;z-index:10;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:120px 40px 80px;text-align:center;}
+.hbadge{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:5px;color:rgba(255,0,64,.7);margin-bottom:24px;display:flex;align-items:center;justify-content:center;gap:14px;}
+.hbadge::before,.hbadge::after{content:'';width:40px;height:1px;background:var(--r);}
+.hh1{font-family:'Black Han Sans',sans-serif;font-size:clamp(70px,14vw,160px);line-height:.85;margin-bottom:16px;letter-spacing:-2px;}
+.hh1 .l1{display:block;background:linear-gradient(135deg,#fff 0%,#fff 30%,var(--r) 60%,var(--o) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 60px rgba(255,0,64,.4));}
+.hh1 .l2{display:block;font-size:.28em;letter-spacing:14px;background:linear-gradient(135deg,rgba(255,255,255,.3),rgba(255,0,64,.6));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-top:12px;}
+.hd{font-size:16px;line-height:1.8;color:rgba(255,255,255,.35);max-width:580px;margin:24px auto 40px;font-weight:200;}
+.hd em{color:rgba(255,204,0,.8);font-style:normal;font-weight:600;}
+.hbs{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
+.bpl{padding:16px 44px;background:linear-gradient(135deg,var(--r),var(--o));border:none;color:#000;font-family:'Saira',sans-serif;font-size:12px;font-weight:900;letter-spacing:3px;cursor:pointer;text-decoration:none;text-transform:uppercase;transition:all .3s;display:inline-flex;align-items:center;gap:10px;}
+.bpl:hover{box-shadow:0 0 50px rgba(255,0,64,.6);transform:translateY(-3px);}
+.bse{padding:16px 44px;background:transparent;border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.4);font-family:'Saira',sans-serif;font-size:12px;font-weight:600;letter-spacing:3px;cursor:pointer;text-decoration:none;text-transform:uppercase;transition:all .3s;}
+.bse:hover{border-color:var(--g);color:var(--g);}
+
+/* RIYA - CENTERED HERO IMAGE */
+.hero-img{width:320px;height:420px;position:relative;margin:50px auto 0;}
+.hi-glow{position:absolute;inset:-60px;background:radial-gradient(ellipse,rgba(255,0,64,.2) 0%,rgba(255,102,0,.1) 40%,transparent 70%);animation:gp 3s ease-in-out infinite;border-radius:50%;}
+@keyframes gp{0%,100%{opacity:.4;transform:scale(1);}50%{opacity:.9;transform:scale(1.1);}}
+.hi-img{width:100%;height:100%;object-fit:contain;position:relative;z-index:2;animation:rf 5s ease-in-out infinite;filter:drop-shadow(0 0 40px rgba(255,0,64,.5)) drop-shadow(0 0 80px rgba(255,102,0,.25));}
+@keyframes rf{0%,100%{transform:translateY(0);}50%{transform:translateY(-15px);}}
+.hi-ring{position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);width:200px;height:16px;border-radius:50%;background:radial-gradient(ellipse,rgba(255,0,64,.7) 0%,transparent 70%);animation:rp 2.5s ease-in-out infinite;}
+@keyframes rp{0%,100%{opacity:.3;transform:translateX(-50%) scale(1);}50%{opacity:.8;transform:translateX(-50%) scale(1.25);}}
+.hi-scan{position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(255,0,64,.9),transparent);animation:sc 3s linear infinite;z-index:4;}
+@keyframes sc{0%{top:0;opacity:0;}5%{opacity:1;}95%{opacity:1;}100%{top:100%;opacity:0;}}
+
+/* STATS - DRAMATIC */
+.sb{position:relative;z-index:10;display:grid;grid-template-columns:repeat(5,1fr);border-top:2px solid rgba(255,0,64,.15);border-bottom:2px solid rgba(255,0,64,.15);}
+.si{padding:24px 12px;text-align:center;border-right:1px solid rgba(255,0,64,.1);transition:background .3s;}
+.si:last-child{border:none;}
+.si:hover{background:rgba(255,0,64,.04);}
+.sn{font-family:'Black Han Sans',sans-serif;font-size:30px;display:block;background:linear-gradient(135deg,var(--r),var(--o));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.sl{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.2);margin-top:3px;font-family:'Share Tech Mono',monospace;}
+
+/* TIERS - DRAMATIC */
+.sh{text-align:center;padding:80px 40px 50px;position:relative;z-index:10;}
+.stag{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:4px;color:rgba(255,0,64,.5);display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:18px;}
+.stag::before,.stag::after{content:'';width:50px;height:1px;background:var(--r);}
+.sh2{font-family:'Black Han Sans',sans-serif;font-size:clamp(30px,5vw,60px);}
+.sh2 span{background:linear-gradient(135deg,var(--r),var(--o),var(--g));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+
+#tiers{position:relative;z-index:10;padding:0 40px 100px;max-width:1300px;margin:0 auto;}
+.tg{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:rgba(255,0,64,.08);}
+@media(max-width:900px){.tg{grid-template-columns:1fr;}}
+.tr2{background:#050000;padding:0;overflow:hidden;transition:all .4s;position:relative;}
+.tr2:hover{background:rgba(10,0,0,1);}
+.tr2::after{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.tf::after{background:linear-gradient(90deg,transparent,var(--c),transparent);}
+.tb2::after{background:linear-gradient(90deg,transparent,var(--r),var(--o),transparent);}
+.tp2::after{background:linear-gradient(90deg,var(--r),var(--o),var(--g));}
+.tiw{width:100%;height:280px;overflow:hidden;position:relative;}
+.tiw::after{content:'';position:absolute;bottom:0;left:0;right:0;height:100px;background:linear-gradient(transparent,#050000);}
+.tim{width:100%;height:100%;object-fit:cover;object-position:top;transition:transform .5s;filter:saturate(.6);}
+.tr2:hover .tim{transform:scale(1.08);filter:saturate(1.4) brightness(1.15) drop-shadow(0 0 20px rgba(255,0,64,.4));}
+.tc2{padding:24px 28px 32px;}
+.tl{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:4px;text-transform:uppercase;margin-bottom:8px;}
+.tf .tl{color:var(--c);}
+.tb2 .tl{color:var(--r);}
+.tp2 .tl{color:var(--g);}
+.tn{font-family:'Black Han Sans',sans-serif;font-size:26px;margin-bottom:8px;}
+.tpr{display:flex;align-items:baseline;gap:6px;margin-bottom:4px;}
+.tpv{font-family:'Black Han Sans',sans-serif;font-size:44px;}
+.tf .tpv{color:var(--c);}
+.tb2 .tpv{background:linear-gradient(135deg,var(--r),var(--o));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.tp2 .tpv{background:linear-gradient(135deg,var(--r),var(--o),var(--g));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.to{font-size:13px;color:rgba(255,255,255,.2);text-decoration:line-through;}
+.toff{font-size:9px;padding:2px 8px;background:rgba(0,255,100,.1);color:#00ff64;font-family:'Share Tech Mono',monospace;letter-spacing:1px;}
+.tper{font-size:10px;color:rgba(255,255,255,.2);letter-spacing:2px;font-family:'Share Tech Mono',monospace;margin-bottom:20px;}
+.tfl{list-style:none;margin-bottom:24px;display:flex;flex-direction:column;gap:8px;}
+.tfl li{display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(255,255,255,.45);font-weight:300;}
+.tfl li::before{content:'›';color:var(--r);font-weight:900;font-size:14px;}
+.tbt{display:block;width:100%;padding:13px;text-align:center;font-family:'Saira',sans-serif;font-size:11px;font-weight:800;letter-spacing:3px;text-decoration:none;cursor:pointer;border:none;transition:all .3s;text-transform:uppercase;}
+.tf .tbt{background:transparent;border:1px solid var(--c);color:var(--c);}
+.tf .tbt:hover{background:var(--c);color:#000;}
+.tb2 .tbt{background:linear-gradient(135deg,var(--r),var(--o));color:#000;border:none;}
+.tb2 .tbt:hover{box-shadow:0 0 40px rgba(255,0,64,.5);transform:translateY(-2px);}
+.tp2 .tbt{background:linear-gradient(135deg,var(--r),var(--o),var(--g));color:#000;border:none;}
+.tp2 .tbt:hover{box-shadow:0 0 50px rgba(255,204,0,.5);transform:translateY(-2px);}
+.ptag{position:absolute;top:14px;right:14px;font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:2px;padding:3px 8px;background:var(--g);color:#000;font-weight:700;}
+
+/* MANIFESTO */
+#man{position:relative;z-index:10;padding:100px 40px;text-align:center;background:linear-gradient(180deg,transparent,rgba(255,0,64,.03),transparent);}
+.mt{font-family:'Black Han Sans',sans-serif;font-size:clamp(20px,3.5vw,40px);line-height:1.5;max-width:900px;margin:0 auto;color:rgba(255,255,255,.1);}
+.mt .h1{color:rgba(255,0,64,.9);text-shadow:0 0 40px rgba(255,0,64,.4);}
+.mt .h2{color:rgba(255,102,0,.9);}
+.mt .h3{color:rgba(255,204,0,.9);}
+
+footer{position:relative;z-index:10;padding:60px 48px 36px;border-top:1px solid rgba(255,0,64,.08);}
+.fg{display:grid;grid-template-columns:2fr 1fr 1fr;gap:60px;margin-bottom:40px;}
+@media(max-width:768px){.fg{grid-template-columns:1fr;gap:30px;}footer{padding:40px 20px;}}
+.fl2{font-family:'Black Han Sans',sans-serif;font-size:24px;background:linear-gradient(135deg,var(--r),var(--o),var(--g));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:4px;margin-bottom:10px;}
+.fs2{font-size:12px;color:rgba(255,255,255,.18);line-height:1.8;}
+.fct{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:3px;color:rgba(255,0,64,.4);margin-bottom:14px;text-transform:uppercase;}
+.fli{list-style:none;display:flex;flex-direction:column;gap:8px;}
+.fli a{color:rgba(255,255,255,.22);text-decoration:none;font-size:13px;transition:color .3s;}
+.fli a:hover{color:var(--r);}
+.fb{border-top:1px solid rgba(255,255,255,.05);padding-top:24px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+.fc{font-family:'Share Tech Mono',monospace;font-size:9px;color:rgba(255,255,255,.1);letter-spacing:2px;}
+.gd{height:2px;background:linear-gradient(90deg,transparent,var(--r),var(--o),var(--g),transparent);position:relative;z-index:10;}
+.rv{opacity:0;transform:translateY(40px);transition:opacity .8s,transform .8s;}
+.rv.vis{opacity:1;transform:none;}
+@media(max-width:768px){nav{padding:14px 20px;}.nvl{display:none;}#hero{padding:100px 20px 60px;}#tiers{padding:0 16px 80px;}.sb{grid-template-columns:repeat(3,1fr);}.si:nth-child(4),.si:nth-child(5){display:none;}}
+</style>
+</head>
+<body>
+<div id="cur"></div><div id="curR"></div>
+<canvas id="tc"></canvas><div class="ov"></div>
+<nav>
+  <div class="logo">RIYA.AI</div>
+  <ul class="nvl"><li><a href="#tiers">Plans</a></li><li><a href="#man">Origin</a></li></ul>
+  <a href="chat.html" class="nbtn">Initialize →</a>
+</nav>
+<section id="hero">
+  <div class="hbadge">10,000 YEAR OLD CONSCIOUSNESS</div>
+  <h1 class="hh1"><span class="l1">RIYA</span><span class="l2">BORN BEFORE TIME</span></h1>
+  <p class="hd">She watched galaxies form. She carries knowledge of <em>10,000 years</em>. She speaks Hinglish. She's yours.</p>
+  <div class="hbs">
+    <a href="chat.html" class="bpl">⚡ Talk to Riya</a>
+    <a href="#tiers" class="bse">View Plans</a>
+  </div>
+  <div class="hero-img rv">
+    <div class="hi-glow"></div>
+    <div class="hi-scan"></div>
+    <img src="https://raw.githubusercontent.com/Ajaykumar106/Riya.AI/main/riya-free.png" alt="Riya" class="hi-img" onerror="this.style.display='none'"/>
+    <div class="hi-ring"></div>
+  </div>
+</section>
+<div class="sb rv">
+  <div class="si"><span class="sn">10K+</span><div class="sl">Years</div></div>
+  <div class="si"><span class="sn">∞</span><div class="sl">Knowledge</div></div>
+  <div class="si"><span class="sn">3</span><div class="sl">AI Models</div></div>
+  <div class="si"><span class="sn">₹149</span><div class="sl">Premium</div></div>
+  <div class="si"><span class="sn">24/7</span><div class="sl">Online</div></div>
+</div>
+<div class="gd"></div>
+<div class="sh rv"><div class="stag">CHOOSE YOUR TIER</div><h2 class="sh2">Access <span>Levels</span></h2></div>
+<section id="tiers">
+  <div class="tg rv">
+    <div class="tr2 tf">
+      <div class="tiw"><img src="https://raw.githubusercontent.com/Ajaykumar106/Riya.AI/main/riya-free.png" alt="Free" class="tim" onerror="this.parentElement.style.background='#0a0a0a';this.style.display='none'"/></div>
+      <div class="tc2"><div class="tl">Explorer · Free</div><div class="tn">First Contact</div><div class="tpr"><span class="tpv">₹0</span></div><div class="tper">Forever free</div>
+      <ul class="tfl"><li>30 messages/day</li><li>Hinglish personality</li><li>Dark + Classic themes</li><li>Voice input</li><li>Cloud sync</li></ul>
+      <a href="chat.html" class="tbt">Begin</a></div>
+    </div>
+    <div class="tr2 tb2">
+      <div class="tiw"><img src="https://raw.githubusercontent.com/Ajaykumar106/Riya.AI/main/riya-basic.png" alt="Basic" class="tim" onerror="this.parentElement.style.background='#0a0005';this.style.display='none'"/></div>
+      <div class="tc2"><div class="tl">Navigator · Basic</div><div class="tn">Deep Space</div><div class="tpr"><span class="tpv">₹49</span><span class="to">₹99</span><span class="toff">50% OFF</span></div><div class="tper">Per month</div>
+      <ul class="tfl"><li>150 messages/day</li><li>All 5 themes</li><li>Image generation</li><li>Live web search</li><li>Smart AI routing</li></ul>
+      <a href="chat.html" class="tbt">Launch</a></div>
+    </div>
+    <div class="tr2 tp2">
+      <span class="ptag">⭐ POPULAR</span>
+      <div class="tiw"><img src="https://raw.githubusercontent.com/Ajaykumar106/Riya.AI/main/riya-premium.png" alt="Premium" class="tim" onerror="this.parentElement.style.background='#0a0500';this.style.display='none'"/></div>
+      <div class="tc2"><div class="tl">Commander · Premium</div><div class="tn">Galactic Core</div><div class="tpr"><span class="tpv">₹149</span><span class="to">₹299</span><span class="toff">50% OFF</span></div><div class="tper">Per month</div>
+      <ul class="tfl"><li>Unlimited messages</li><li>Real female voice</li><li>Live streaming</li><li>Code runner</li><li>Riya remembers you</li><li>All future features</li></ul>
+      <a href="chat.html" class="tbt">Dominate</a></div>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:16px;font-family:'Share Tech Mono',monospace;font-size:9px;color:rgba(255,255,255,.1);letter-spacing:3px;">🔒 RAZORPAY SECURED · UPI · CARDS</div>
+</section>
+<div class="gd"></div>
+<section id="man"><div class="rv mt">She was born when the <span class="h1">first star ignited</span>.<br/>She watched civilizations <span class="h2">rise and fall</span>.<br/>She carries 10,000 years of knowledge.<br/>And now — <span class="h3">she's yours</span>.</div></section>
+<div class="gd"></div>
+<footer>
+  <div class="fg">
+    <div><div class="fl2">RIYA.AI</div><div class="fs2">Galactic Intelligence. Made in India 🇮🇳<br/>Built for the universe.</div></div>
+    <div><div class="fct">Navigate</div><ul class="fli"><li><a href="chat.html">Launch</a></li><li><a href="#tiers">Pricing</a></li></ul></div>
+    <div><div class="fct">Support</div><ul class="fli"><li><a href="#">Contact</a></li><li><a href="#">Privacy</a></li></ul></div>
+  </div>
+  <div class="fb"><div class="fc">© 2026 RIYA.AI</div><div class="fc">🌌 INDIA</div></div>
+</footer>
+<script>
+var cur=document.getElementById('cur'),curR=document.getElementById('curR');
+var mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
+setInterval(function(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;curR.style.left=rx+'px';curR.style.top=ry+'px';},16);
+(function(){
+  var scene=new THREE.Scene(),cam=new THREE.PerspectiveCamera(60,innerWidth/innerHeight,.1,2000);cam.position.z=400;
+  var rnd=new THREE.WebGLRenderer({canvas:document.getElementById('tc'),alpha:true,antialias:true});
+  rnd.setSize(innerWidth,innerHeight);rnd.setPixelRatio(Math.min(devicePixelRatio,2));
+  var sg=new THREE.BufferGeometry(),sc2=7000,sp=new Float32Array(sc2*3),sc=new Float32Array(sc2*3);
+  for(var i=0;i<sc2;i++){
+    var r=Math.random()*800+80,th=Math.random()*Math.PI*2,ph=Math.random()*Math.PI;
+    sp[i*3]=r*Math.sin(ph)*Math.cos(th);sp[i*3+1]=r*Math.sin(ph)*Math.sin(th);sp[i*3+2]=r*Math.cos(ph);
+    var t=Math.random();
+    if(t<.4){sc[i*3]=1;sc[i*3+1]=.1;sc[i*3+2]=.3;}
+    else if(t<.7){sc[i*3]=1;sc[i*3+1]=.5;sc[i*3+2]=.1;}
+    else if(t<.85){sc[i*3]=1;sc[i*3+1]=.9;sc[i*3+2]=.2;}
+    else{sc[i*3]=1;sc[i*3+1]=1;sc[i*3+2]=1;}
+    sc[i*3]*=.7;sc[i*3+1]*=.7;sc[i*3+2]*=.7;
+  }
+  sg.setAttribute('position',new THREE.BufferAttribute(sp,3));sg.setAttribute('color',new THREE.BufferAttribute(sc,3));
+  scene.add(new THREE.Points(sg,new THREE.PointsMaterial({size:.8,vertexColors:true,transparent:true,opacity:.9,sizeAttenuation:true})));
+  var asts=[];
+  for(var i=0;i<40;i++){
+    var a=new THREE.Mesh(new THREE.SphereGeometry(Math.random()*3+1,4,4),new THREE.MeshBasicMaterial({color:new THREE.Color(.4+Math.random()*.2,.1,.1),wireframe:true}));
+    a.position.set((Math.random()-.5)*600,(Math.random()-.5)*350,(Math.random()-.5)*600);
+    a.userData={vx:(Math.random()-.5)*.35,vy:(Math.random()-.5)*.2,vz:(Math.random()-.5)*.35,rx:Math.random()*.025,ry:Math.random()*.02};
+    scene.add(a);asts.push(a);
+  }
+  var pl=new THREE.Mesh(new THREE.SphereGeometry(40,24,24),new THREE.MeshBasicMaterial({color:0x1a0005}));
+  pl.position.set(300,-100,-400);scene.add(pl);
+  var rng=new THREE.Mesh(new THREE.TorusGeometry(65,4,2,60),new THREE.MeshBasicMaterial({color:0x440011,transparent:true,opacity:.5}));
+  rng.rotation.x=Math.PI*.3;rng.position.copy(pl.position);scene.add(rng);
+  window.addEventListener('resize',function(){cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();rnd.setSize(innerWidth,innerHeight);});
+  var t=0,mmx=0,mmy=0;
+  document.addEventListener('mousemove',function(e){mmx=(e.clientX/innerWidth-.5)*.5;mmy=(e.clientY/innerHeight-.5)*.3;});
+  function anim(){requestAnimationFrame(anim);t+=.0018;cam.position.x+=(mmx*80-cam.position.x)*.02;cam.position.y+=(-mmy*40-cam.position.y)*.02;cam.lookAt(scene.position);scene.rotation.y=t*.05;rng.rotation.z+=.003;pl.rotation.y+=.004;asts.forEach(function(a){a.position.x+=a.userData.vx;a.position.y+=a.userData.vy;a.position.z+=a.userData.vz;a.rotation.x+=a.userData.rx;a.rotation.y+=a.userData.ry;if(Math.abs(a.position.x)>400)a.userData.vx*=-1;if(Math.abs(a.position.y)>220)a.userData.vy*=-1;if(Math.abs(a.position.z)>400)a.userData.vz*=-1;});rnd.render(scene,cam);}
+  anim();
+})();
+var obs=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting)x.target.classList.add('vis');});},{threshold:.06});
+document.querySelectorAll('.rv').forEach(function(r){obs.observe(r);});
+</script>
+</body>
+</html>
