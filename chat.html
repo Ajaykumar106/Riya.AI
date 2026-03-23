@@ -1013,18 +1013,7 @@ body.th-dusk .bub.us{background:rgba(255,60,100,.06)!important;border-color:rgba
 
     <!-- ACCOUNT -->
     <div class="pf-sec">Account</div>
-    <div class="pf-card">
-      <div class="pf-row" onclick="openP()">
-        <div class="pf-row-ico">⭐</div>
-        <div style="flex:1;"><div class="pf-row-lbl" id="pfPlanLabel">Upgrade to Pro</div><div class="pf-row-sub" id="pfPlanSub">Unlock unlimited features</div></div>
-        <div class="pf-row-arr">›</div>
-      </div>
-      <div class="pf-row" onclick="opSt()">
-        <div class="pf-row-ico">⚙️</div>
-        <div style="flex:1;"><div class="pf-row-lbl">Backend Settings</div><div class="pf-row-sub">Server URL and config</div></div>
-        <div class="pf-row-arr">›</div>
-      </div>
-    </div>
+    >
 
     <!-- MEMORY -->
     <div class="pf-sec">What Riya Knows About You</div>
@@ -1249,6 +1238,22 @@ var editingEl=null,editingObj=null;
 var userElevenKey='',userVoiceId='QTKSa2Iyv0yoxvXY2V8a';
 var artifacts=[];
 var activeProject='all';
+
+// Handle browser back button - close modals
+window.addEventListener('popstate', function(e){
+  var modals = [
+    document.getElementById('pcbg'),
+    document.getElementById('stBg'),
+    document.getElementById('personalModal'),
+    document.getElementById('workspaceModal')
+  ];
+  modals.forEach(function(m){
+    if(m && (m.classList.contains('open') || m.style.display === 'flex')){
+      m.classList.remove('open','show');
+      m.style.display = 'none';
+    }
+  });
+});
 
 var WK=['today','latest','news','price','weather','now','2025','2026','score','trending','stock','update','recent','live','match'];
 
@@ -1706,8 +1711,11 @@ function startEdit(g,m){
   g.appendChild(tb);
   tb.querySelector('.edit-save').addEventListener('click',function(){
     var nt=bub.innerText.trim();if(!nt)return;
-    bub.setAttribute('contenteditable','false');m.text=nt;g.dataset.txt=nt;cancelEdit();
-    var ch=ga();if(!ch)return;var idx=ch.msgs.indexOf(m);if(idx>=0){ch.msgs=ch.msgs.slice(0,idx+1);svCh(ch);}rndMs();send(nt);
+    bub.setAttribute('contenteditable','false');m.text=nt;g.dataset.txt=nt;
+    var ch=ga();if(!ch)return;var idx=ch.msgs.indexOf(m);if(idx>=0){ch.msgs=ch.msgs.slice(0,idx+1);svCh(ch);}
+    cancelEdit();
+    var mi2=document.getElementById('mi');if(mi2){mi2.value='';mi2.style.height='auto';}
+    rndMs();send(nt);
   });
   tb.querySelector('.edit-cancel').addEventListener('click',function(){bub.setAttribute('contenteditable','false');cancelEdit();});
 }
@@ -1793,11 +1801,15 @@ function send(pre){
 document.getElementById('fi').addEventListener('change',function(e){handleFile(e.target.files[0],'image');e.target.value='';});
 document.getElementById('pdf-file').addEventListener('change',function(e){handleFile(e.target.files[0],'file');e.target.value='';});
 function handleFile(f,type){
-  if(!f)return;var r=new FileReader();
+  if(!f)return;
+  var userQ=window.prompt('File: '+f.name+'\n\nWhat do you want to ask Riya about this?\n(Press OK to just analyze, Cancel to abort)','');
+  if(userQ===null)return;
+  var fileQuestion=userQ.trim()||'Please analyze this '+(type==='file'?'file':'image')+' in detail.';
+  var r=new FileReader();
   r.onload=function(ev){
     var b64=ev.target.result.split(',')[1],mime=f.type||'application/octet-stream',url=ev.target.result;
     var ch=ga();if(!ch)return;
-    var uMsg={role:'user',type:'image',text:(type==='file'?' ':'  ')+f.name,url:url};
+    var uMsg={role:'user',type:'image',text:fileQuestion,url:url};
     ch.msgs.push(uMsg);svCh(ch);svMsg(ch.id,uMsg,ch.msgs.length-1);addM(uMsg,true);
     if(!bkUrl)return;
     var endpoint=mime==='application/pdf'||type==='file'?'/api/analyze-file':'/api/analyze-image';
@@ -2296,18 +2308,22 @@ window.deleteProject = function(e, id){
 };
 
 // Workspace Send
-var wsInputEl = document.getElementById('wsInput');
-var wsSendEl = document.getElementById('wsSend');
-if(wsInputEl){
-  wsInputEl.addEventListener('input', function(){
-    this.style.height = 'auto';
-    this.style.height = Math.min(this.scrollHeight, 100) + 'px';
-  });
-  wsInputEl.addEventListener('keydown', function(e){
-    if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); sendWs(); }
-  });
-}
-if(wsSendEl) wsSendEl.addEventListener('click', sendWs);
+// Workspace input - use event delegation since modal loads dynamically
+document.addEventListener('click', function(e){
+  if(e.target && e.target.id === 'wsSend') sendWs();
+});
+document.addEventListener('keydown', function(e){
+  var wi = document.getElementById('wsInput');
+  if(wi && document.activeElement === wi && e.key === 'Enter' && !e.shiftKey){
+    e.preventDefault(); sendWs();
+  }
+});
+document.addEventListener('input', function(e){
+  if(e.target && e.target.id === 'wsInput'){
+    e.target.style.height='auto';
+    e.target.style.height=Math.min(e.target.scrollHeight,100)+'px';
+  }
+});
 
 function sendWs(){
   var proj = wsProjects.find(function(p){ return p.id === wsActiveId; });
@@ -2353,6 +2369,24 @@ function sendWs(){
   }).catch(function(){ wsLoad = false; });
 }
 
+
+// Personal space - event delegation
+document.addEventListener('click', function(e){
+  if(e.target && (e.target.id === 'psSendBtn' || e.target.id === 'psSend' ||
+     (e.target.closest && e.target.closest('#psSendBtn')))) sendPS();
+});
+document.addEventListener('keydown', function(e){
+  var pi = document.getElementById('psInput');
+  if(pi && document.activeElement === pi && e.key === 'Enter' && !e.shiftKey){
+    e.preventDefault(); sendPS();
+  }
+});
+document.addEventListener('input', function(e){
+  if(e.target && e.target.id === 'psInput'){
+    e.target.style.height='auto';
+    e.target.style.height=Math.min(e.target.scrollHeight,100)+'px';
+  }
+});
 
 // REVIEW SYSTEM
 var reviewRating = 0;
