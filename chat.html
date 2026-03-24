@@ -461,41 +461,6 @@ body.theme-dusk #sb{background:#180e12!important;}
 body.theme-dusk #tb,body.theme-dusk #ia{background:rgba(15,8,10,.97)!important;}
 body.theme-dusk .bub.us{background:rgba(255,80,80,.06)!important;border-color:rgba(255,80,80,.12)!important;}
 
-/* GALACTIC THEME — default star theme */
-body.theme-galactic{background:#030410!important;}
-body.theme-galactic #sb{background:rgba(3,4,16,.97)!important;}
-body.theme-galactic #tb,body.theme-galactic #ia{background:rgba(3,4,16,.95)!important;}
-body.theme-galactic .bub.ai{background:rgba(20,22,55,.7)!important;border-color:rgba(108,99,255,.12)!important;}
-body.theme-galactic .bub.us{background:rgba(30,25,60,.7)!important;border-color:rgba(108,99,255,.18)!important;}
-body.theme-galactic #bgc{background:#030410!important;}
-
-/* WHITE THEME */
-body.theme-white{
-  background:#f5f6fa!important;
-  color:#1a1a2e!important;
-}
-body.theme-white #sb{background:#eef0f8!important;border-color:rgba(0,0,0,.08)!important;}
-body.theme-white #tb{background:rgba(238,240,248,.97)!important;border-color:rgba(0,0,0,.07)!important;box-shadow:0 1px 12px rgba(0,0,0,.06)!important;}
-body.theme-white #ia{background:rgba(238,240,248,.97)!important;border-color:rgba(0,0,0,.07)!important;}
-body.theme-white #bgc{background:#f5f6fa!important;}
-body.theme-white .bub.ai{background:#ffffff!important;border-color:rgba(0,0,0,.08)!important;color:#1a1a2e!important;box-shadow:0 2px 12px rgba(0,0,0,.06)!important;}
-body.theme-white .bub.us{background:rgba(108,99,255,.1)!important;border-color:rgba(108,99,255,.2)!important;color:#1a1a2e!important;}
-body.theme-white .tb-riya{color:#1a1a2e!important;}
-body.theme-white .tb-status,.theme-white .tb-dot{color:rgba(0,0,0,.35)!important;}
-body.theme-white .mood-chip{border-color:rgba(108,99,255,.2)!important;color:rgba(108,99,255,.8)!important;background:rgba(108,99,255,.06)!important;}
-body.theme-white #msg{background:#f5f6fa!important;}
-body.theme-white .ci{color:#1a1a2e!important;}
-body.theme-white .cit{color:rgba(26,26,46,.7)!important;}
-body.theme-white .sb-name-big{color:#1a1a2e!important;}
-body.theme-white .sb-plan-small,.theme-white .sb-sec{color:rgba(0,0,0,.3)!important;}
-body.theme-white .nwb{border-color:rgba(0,0,0,.1)!important;color:rgba(0,0,0,.4)!important;}
-body.theme-white .nwb:hover{border-color:rgba(0,0,0,.2)!important;}
-body.theme-white #mi{color:#1a1a2e!important;}
-body.theme-white .tbb{border-color:rgba(0,0,0,.1)!important;color:rgba(0,0,0,.35)!important;}
-body.theme-white .sbb{color:rgba(0,0,0,.35)!important;}
-body.theme-white .ibx{background:rgba(255,255,255,.9)!important;border-color:rgba(0,0,0,.1)!important;}
-body.theme-white .wlc-msg{color:rgba(26,26,46,.5)!important;}
-
 /* WORKING THEMES */
 body.th-slate{--bg:#0a0f1e;--sb:#0d1224;}
 body.th-slate #bgc{background:#0a0f1e!important;}
@@ -504,108 +469,6 @@ body.th-void #bgc{background:#000!important;}
 body.th-dusk{--bg:#0f0810;--sb:#180d14;}
 body.th-dusk #bgc{background:#0f0810!important;}
 body.th-dusk .bub.us{background:rgba(255,60,100,.06)!important;border-color:rgba(255,60,100,.12)!important;}
-body.th-galactic{--bg:#030410;--sb:#080b22;}
-body.th-galactic #bgc{background:#030410!important;}
-body.th-white{--bg:#f5f6fa;--sb:#eef0f8;}
-
-/* BETTER AI BUBBLES — darker, richer */
-.bub.ai{
-  background:rgba(12,14,32,.75)!important;
-  border:1px solid rgba(255,255,255,.08)!important;
-  padding:13px 16px!important;
-  border-radius:4px 16px 16px 16px!important;
-  line-height:1.85!important;
-  font-size:14px!important;
-  backdrop-filter:blur(8px);
-}
-
-/* ATTACHMENT SHEET — Claude-style */
-#attachSheet{
-  position:fixed;inset:0;z-index:88;display:none;
-  align-items:flex-end;justify-content:center;
-}
-#attachSheet.show{display:flex;}
-.attach-bg{position:absolute;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(4px);}
-.attach-card{
-  position:relative;z-index:1;
-  width:100%;max-width:520px;
-  background:rgba(10,12,28,.98);
-  border:1px solid rgba(255,255,255,.08);
-  border-bottom:none;
-  border-radius:22px 22px 0 0;
-  padding:8px 0 max(24px,env(safe-area-inset-bottom));
-  overflow:hidden;
-}
-.attach-handle{width:36px;height:3px;background:rgba(255,255,255,.1);margin:12px auto 16px;border-radius:2px;}
-.attach-header{padding:0 20px;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:3px;color:rgba(255,255,255,.2);text-transform:uppercase;margin-bottom:14px;}
-.attach-icons{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 16px;margin-bottom:18px;}
-.attach-icon-btn{
-  display:flex;flex-direction:column;align-items:center;gap:8px;
-  padding:16px 8px;border:1px solid rgba(255,255,255,.08);
-  background:rgba(255,255,255,.04);border-radius:14px;cursor:pointer;
-  transition:all .2s;font-size:11px;color:rgba(255,255,255,.45);font-family:'Inter',sans-serif;
-}
-.attach-icon-btn:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15);color:rgba(255,255,255,.7);}
-.attach-icon-btn svg{width:28px;height:28px;stroke:currentColor;fill:none;stroke-width:1.5;}
-.attach-divider{height:1px;background:rgba(255,255,255,.05);margin:0 16px 16px;}
-.attach-row{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:12px 20px;cursor:pointer;transition:background .15s;
-}
-.attach-row:hover{background:rgba(255,255,255,.03);}
-.attach-row-left{display:flex;align-items:center;gap:12px;}
-.attach-row-icon{width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;}
-.attach-row-icon svg{width:18px;height:18px;stroke:rgba(255,255,255,.4);fill:none;stroke-width:1.5;}
-.attach-row-name{font-size:14px;color:rgba(255,255,255,.7);font-weight:500;}
-.attach-row-sub{font-size:11px;color:rgba(255,255,255,.25);margin-top:1px;}
-.attach-toggle{width:42px;height:24px;border-radius:12px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.1);cursor:pointer;position:relative;transition:all .3s;flex-shrink:0;}
-.attach-toggle.on{background:rgba(56,189,248,.5);border-color:rgba(56,189,248,.4);}
-.attach-toggle::after{content:'';width:18px;height:18px;border-radius:50%;background:white;position:absolute;top:2px;left:2px;transition:transform .3s;box-shadow:0 1px 4px rgba(0,0,0,.3);}
-.attach-toggle.on::after{transform:translateX(18px);}
-
-/* FILE QUESTION SHEET */
-#fileQuestionSheet{
-  position:fixed;inset:0;z-index:89;display:none;
-  align-items:flex-end;justify-content:center;
-}
-#fileQuestionSheet.show{display:flex;}
-.fq-bg{position:absolute;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(4px);}
-.fq-card{
-  position:relative;z-index:1;
-  width:100%;max-width:520px;
-  background:rgba(10,12,28,.98);
-  border:1px solid rgba(255,255,255,.08);
-  border-bottom:none;
-  border-radius:22px 22px 0 0;
-  padding:8px 20px max(28px,env(safe-area-inset-bottom));
-}
-.fq-handle{width:36px;height:3px;background:rgba(255,255,255,.1);margin:12px auto 20px;border-radius:2px;}
-.fq-title{font-size:15px;font-weight:600;color:rgba(255,255,255,.75);margin-bottom:4px;}
-.fq-fname{font-size:11px;color:rgba(255,255,255,.25);font-family:'JetBrains Mono',monospace;margin-bottom:20px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.fq-options{display:flex;flex-direction:column;gap:8px;margin-bottom:16px;}
-.fq-opt{
-  padding:12px 16px;border:1px solid rgba(255,255,255,.07);
-  background:rgba(255,255,255,.03);border-radius:12px;
-  cursor:pointer;font-size:13px;color:rgba(255,255,255,.55);
-  transition:all .2s;text-align:left;font-family:'Inter',sans-serif;
-}
-.fq-opt:hover{background:rgba(255,255,255,.07);color:rgba(255,255,255,.8);border-color:rgba(255,255,255,.15);}
-.fq-or{text-align:center;font-size:11px;color:rgba(255,255,255,.2);font-family:'JetBrains Mono',monospace;letter-spacing:2px;margin-bottom:12px;}
-.fq-custom{display:flex;gap:8px;}
-.fq-input{
-  flex:1;padding:11px 14px;border:1px solid rgba(255,255,255,.1);
-  background:rgba(255,255,255,.04);color:rgba(255,255,255,.7);
-  font-size:13px;border-radius:12px;outline:none;
-  font-family:'Inter',sans-serif;transition:border-color .2s;
-}
-.fq-input:focus{border-color:rgba(255,255,255,.22);}
-.fq-send{
-  padding:11px 18px;border:1px solid rgba(255,255,255,.15);
-  background:rgba(255,255,255,.06);color:rgba(255,255,255,.5);
-  font-size:13px;cursor:pointer;border-radius:12px;
-  transition:all .2s;font-family:'Inter',sans-serif;
-}
-.fq-send:hover{background:rgba(255,255,255,.12);color:rgba(255,255,255,.8);}
 
 /* EMOTIONAL RESPONSE STYLES */
 .bub.ai.caring-mode{
@@ -1409,11 +1272,9 @@ var VOICES=[
 
 var THEMES=[
   {id:'dark',name:'Dark',preview:'linear-gradient(135deg,#030308,#060610)'},
-  {id:'galactic',name:'Galactic',preview:'linear-gradient(135deg,#030410,#080b22)'},
   {id:'slate',name:'Slate',preview:'linear-gradient(135deg,#0a0f1e,#0d1224)'},
   {id:'void',name:'Void',preview:'linear-gradient(135deg,#000,#050508)'},
-  {id:'dusk',name:'Dusk',preview:'linear-gradient(135deg,#0f080a,#180e12)'},
-  {id:'white',name:'White',preview:'linear-gradient(135deg,#f5f6fa,#eef0f8)'}
+  {id:'dusk',name:'Dusk',preview:'linear-gradient(135deg,#0f080a,#180e12)'}
 ];
 var currentTheme='dark';
 
@@ -1462,14 +1323,11 @@ function buildThemeGrid(){
   var g=document.getElementById('themeGrid');if(!g)return;g.innerHTML='';
   THEMES.forEach(function(t){
     var d=document.createElement('div');d.className='theme-opt'+(currentTheme===t.id?' on':'');
-    d.innerHTML='<div class="theme-preview" style="background:'+t.preview+';'+(t.id==='white'?'border:1px solid rgba(0,0,0,.1);':'')+'">&nbsp;</div>'+t.name;
+    d.innerHTML='<div class="theme-preview" style="background:'+t.preview+'"></div>'+t.name;
     d.addEventListener('click',function(){
       currentTheme=t.id;
-      document.body.className=document.body.className.replace(/\b(theme|th)-\S+/g,'').trim();
-      if(t.id!=='dark'){
-        document.body.classList.add('theme-'+t.id);
-        document.body.classList.add('th-'+t.id);
-      }
+      document.body.classList.remove('theme-slate','theme-void','theme-dusk','th-slate','th-void','th-dusk');
+      if(t.id!=='dark'){document.body.classList.add('theme-'+t.id);document.body.classList.add('th-'+t.id);}
       buildThemeGrid();
       try{localStorage.setItem('riya_theme_'+(user?user.uid:''),t.id);}catch(e){}
     });
@@ -1596,7 +1454,7 @@ function updProfUI(){
   if(!user)return;
   var n=prof.name||user.displayName||'User',e=user.email||'',ph=prof.photo||user.photoURL||'';
   document.getElementById('spn').textContent=n;
-  var pfN=document.getElementById('pfName');if(pfN)pfN.value=n;var pfND=document.getElementById('pfNameDisp');if(pfND)pfND.textContent=n;
+  var pfN=document.getElementById('pfName');if(pfN)pfN.value=n;var pfND=document.getElementById('pfNameDisp');if(pfND)pfND.textContent=n;var pfND=document.getElementById('pfNameDisp');if(pfND)pfND.textContent=n;
   var pfE=document.getElementById('pfEmail');if(pfE)pfE.textContent=e;
   var t=plan==='premium'?'Pro':plan==='basic'?'Basic':'Free';
   var b=document.getElementById('plb');if(b)b.textContent=t;
@@ -1722,7 +1580,6 @@ function fmtAI(t,container){
   // Extract code blocks -> make artifact blocks
   var codeBlocks=[];
   t=t.replace(/```(\w*)\n?([\s\S]*?)```/g,function(m,lang,code){
-    if(!code.trim()) return '';
     var placeholder='__CODE_'+codeBlocks.length+'__';
     codeBlocks.push({lang:lang||'code',code:code.trim()});
     return placeholder;
@@ -1735,7 +1592,7 @@ function fmtAI(t,container){
   t=t.replace(/^## (.*)/gm,'<div style="font-size:15px;font-weight:600;color:rgba(255,255,255,.6);margin:14px 0 5px;">$1</div>');
   t=t.replace(/^# (.*)/gm,'<div style="font-size:16px;font-weight:600;color:rgba(255,255,255,.65);margin:16px 0 6px;">$1</div>');
   t=t.replace(/^\- (.*)/gm,'<div style="display:flex;gap:7px;margin:3px 0;"><span style="flex-shrink:0;color:rgba(255,255,255,.25);">-</span><span>$1</span></div>');
-  t=t.replace(/^(\d+)\. (.*)/gm,'<div style="display:flex;gap:7px;margin:3px 0;"><span style="flex-shrink:0;color:rgba(255,255,255,.35);font-family:\'JetBrains Mono\',monospace;font-size:11px;min-width:18px;">$1.</span><span>$2</span></div>');
+  t=t.replace(/^\d+\. (.*)/gm,'<div style="display:flex;gap:7px;margin:3px 0;"><span style="flex-shrink:0;color:rgba(255,255,255,.25);">-</span><span>$1</span></div>');
   t=t.replace(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g,'<a href="$2" target="_blank" style="color:rgba(200,220,255,.6);text-decoration:underline;font-size:13px;">$1</a>');
   t=t.replace(/`([^`]+)`/g,'<code style="background:rgba(255,255,255,.06);padding:2px 5px;font-family:\'JetBrains Mono\',monospace;font-size:11px;color:rgba(255,255,255,.45);border-radius:4px;">$1</code>');
   t=t.replace(/\n/g,'<br>');
@@ -1855,7 +1712,7 @@ function startEdit(g,m){
   tb.querySelector('.edit-save').addEventListener('click',function(){
     var nt=bub.innerText.trim();if(!nt)return;
     bub.setAttribute('contenteditable','false');m.text=nt;g.dataset.txt=nt;
-    var ch=ga();if(!ch)return;var idx=ch.msgs.indexOf(m);if(idx>=0){ch.msgs=ch.msgs.slice(0,idx);svCh(ch);}
+    var ch=ga();if(!ch)return;var idx=ch.msgs.indexOf(m);if(idx>=0){ch.msgs=ch.msgs.slice(0,idx+1);svCh(ch);}
     cancelEdit();
     var mi2=document.getElementById('mi');if(mi2){mi2.value='';mi2.style.height='auto';}
     rndMs();send(nt);
@@ -1894,7 +1751,7 @@ function send(pre){
   if(ch.title==='New Chat')ch.title=txt.slice(0,42);
   var uMsg={role:'user',text:txt};ch.msgs.push(uMsg);svCh(ch);svMsg(ch.id,uMsg,ch.msgs.length-1);
   rndCL();addM(uMsg,true);setMood(detMood(txt));shTy('Thinking...');
-  var needsWeb=(webSearchEnabled!==false)&&WK.some(function(w){return txt.toLowerCase().indexOf(w)>=0;});
+  var needsWeb=WK.some(function(w){return txt.toLowerCase().indexOf(w)>=0;});
   var src=[],wctx='',p=Promise.resolve();
   if(needsWeb&&bkUrl){setSt('Searching...');shTy('Searching...');
     p=fetch(bkUrl+'/api/search',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query:txt})}).then(function(r){return r.json();}).then(function(d){if(d.results&&d.results.length){src=d.results.slice(0,5);wctx='\n\n[WEB SEARCH RESULTS]:\n'+src.map(function(r){return '* '+r.title+' ('+r.url+'): '+(r.content||'').slice(0,300);}).join('\n')+'\nUse these results and cite them with links.';setSt('Thinking...');}}).catch(function(){});}
@@ -1904,7 +1761,7 @@ function send(pre){
     var hist=ch.msgs.slice(-16).map(function(m){return {role:m.role==='ai'?'assistant':'user',content:m.text||''};});
     if(bkUrl){
       if(true){ // Streaming for all users
-        hdTy();var aiMsg={role:'ai',text:'',src:src.length?src:null};ch.msgs.push(aiMsg);var idx=ch.msgs.length-1;
+        hdTy();var ch2=ga();var aiMsg={role:'ai',text:'',src:src.length?src:null};ch2.msgs.push(aiMsg);var idx=ch2.msgs.length-1;
         var aiG=document.createElement('div');aiG.className='mg ai ma2';
         var aiRow=document.createElement('div');aiRow.className='mr';
         var aiAv=document.createElement('div');aiAv.className='av';aiAv.innerHTML=AV_SVG;aiRow.appendChild(aiAv);
@@ -1918,20 +1775,15 @@ function send(pre){
                 aiBub.classList.remove('streaming');
                 // Re-render with rich formatter
                 aiBub.innerHTML='';fmtAI(fullText,aiBub);
-                aiMsg.text=fullText;svCh(ch);svMsg(ch.id,aiMsg,idx);
-                autoSummarize(ch);setSt('Online - Ready');setLogoState('idle');load=false;updSnd();return;
+                aiMsg.text=fullText;svCh(ch2);svMsg(ch2.id,aiMsg,idx);
+                autoSummarize(ch2);setSt('Online - Ready');setLogoState('idle');load=false;updSnd();return;
               }
               dec.decode(chunk.value).split('\n').forEach(function(line){
                 if(line.startsWith('data: ')&&line!=='data: [DONE]'){
                   try{var data=JSON.parse(line.slice(6));if(data.token){fullText+=data.token;aiBub.innerHTML=fmtAI(fullText);aiBub.classList.add('streaming');scrBot();}}catch(e){}
                 }
               });return rd();});}return rd();})
-          .catch(function(){
-            setLogoState('idle');load=false;updSnd();setSt('Online - Ready');hdTy();
-            aiBub.classList.remove('streaming');
-            var errTxt='Yaar, connection thodi slow hai 😅 Ek second ruko aur phir try karo!';
-            aiBub.innerHTML=fmtAI(errTxt);aiMsg.text=errTxt;svCh(ch);
-          });
+          .catch(function(){setLogoState('idle');load=false;updSnd();setSt('Online - Ready');});
       }else{
         // Non-streaming -- Gemini primary
         fetch(bkUrl+'/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:hist,userName:fn,mood:mood,plan:plan,stream:false,wctx:wctx,memory:userMemory,city:userCity})})
@@ -1950,97 +1802,39 @@ document.getElementById('fi').addEventListener('change',function(e){handleFile(e
 document.getElementById('pdf-file').addEventListener('change',function(e){handleFile(e.target.files[0],'file');e.target.value='';});
 function handleFile(f,type){
   if(!f)return;
-  showFileQuestionSheet(f.name, type, function(fileQuestion){
-    var r=new FileReader();
-    r.onload=function(ev){
-      var b64=ev.target.result.split(',')[1],mime=f.type||'application/octet-stream',url=ev.target.result;
-      var ch=ga();if(!ch)return;
-      var uMsg={role:'user',type:'image',text:fileQuestion,url:url};
-      ch.msgs.push(uMsg);svCh(ch);svMsg(ch.id,uMsg,ch.msgs.length-1);addM(uMsg,true);
-      if(!bkUrl)return;
-      var endpoint=mime==='application/pdf'||type==='file'?'/api/analyze-file':'/api/analyze-image';
-      shTy(type==='file'?'Reading file...':'Analyzing...');setSt(type==='file'?'Reading...':'Analyzing...');
-      fetch(bkUrl+endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({imageBase64:b64,fileBase64:b64,mimeType:mime,fileName:f.name,userName:prof.name||user.displayName,question:fileQuestion})})
-        .then(function(r){return r.json();}).then(function(d){
-          hdTy();var am={role:'ai',text:d.reply||'Interesting!'};ch.msgs.push(am);svCh(ch);svMsg(ch.id,am,ch.msgs.length-1);addM(am,true);setSt('Online - Ready');
-        }).catch(function(){hdTy();setSt('Online - Ready');});
-    };r.readAsDataURL(f);
-  });
+  var userQ=window.prompt('File: '+f.name+'\n\nWhat do you want to ask Riya about this?\n(Press OK to just analyze, Cancel to abort)','');
+  if(userQ===null)return;
+  var fileQuestion=userQ.trim()||'Please analyze this '+(type==='file'?'file':'image')+' in detail.';
+  var r=new FileReader();
+  r.onload=function(ev){
+    var b64=ev.target.result.split(',')[1],mime=f.type||'application/octet-stream',url=ev.target.result;
+    var ch=ga();if(!ch)return;
+    var uMsg={role:'user',type:'image',text:fileQuestion,url:url};
+    ch.msgs.push(uMsg);svCh(ch);svMsg(ch.id,uMsg,ch.msgs.length-1);addM(uMsg,true);
+    if(!bkUrl)return;
+    var endpoint=mime==='application/pdf'||type==='file'?'/api/analyze-file':'/api/analyze-image';
+    shTy(type==='file'?'Reading file...':'Analyzing...');setSt(type==='file'?'Reading...':'Analyzing...');
+    fetch(bkUrl+endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({imageBase64:b64,fileBase64:b64,mimeType:mime,fileName:f.name,userName:prof.name||user.displayName})})
+      .then(function(r){return r.json();}).then(function(d){
+        hdTy();var am={role:'ai',text:d.reply||'Interesting!'};ch.msgs.push(am);svCh(ch);svMsg(ch.id,am,ch.msgs.length-1);addM(am,true);setSt('Online - Ready');
+      }).catch(function(){hdTy();setSt('Online - Ready');});
+  };r.readAsDataURL(f);
 }
 
-// ── ATTACHMENT SHEET ─────────────────────────────────────────────
-var webSearchEnabled = true;
-var pendingFile = null, pendingFileType = null;
-
+// Attachment button -- show file/image options
 document.getElementById('upb2').addEventListener('click',function(e){
   e.stopPropagation();
-  document.getElementById('attachSheet').classList.add('show');
+  // Simple menu
+  var menu=document.createElement('div');
+  menu.style.cssText='position:fixed;background:rgba(6,6,16,.98);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:6px;min-width:160px;z-index:99;box-shadow:0 8px 32px rgba(0,0,0,.8);';
+  var rect=this.getBoundingClientRect();
+  menu.style.left=rect.left+'px';menu.style.bottom=(window.innerHeight-rect.top+8)+'px';
+  menu.innerHTML='<div style="padding:9px 12px;cursor:pointer;font-size:12px;color:rgba(255,255,255,.45);border-radius:7px;" onmouseover="this.style.background=\'rgba(255,255,255,.05)\'" onmouseout="this.style.background=\'\'"> Image</div><div style="padding:9px 12px;cursor:pointer;font-size:12px;color:rgba(255,255,255,.45);border-radius:7px;" onmouseover="this.style.background=\'rgba(255,255,255,.05)\'" onmouseout="this.style.background=\'\'"> PDF / File</div>';
+  menu.children[0].addEventListener('click',function(){document.getElementById('fi').click();document.body.removeChild(menu);});
+  menu.children[1].addEventListener('click',function(){document.getElementById('pdf-file').click();document.body.removeChild(menu);});
+  document.body.appendChild(menu);
+  setTimeout(function(){document.addEventListener('click',function rm(){document.body.contains(menu)&&document.body.removeChild(menu);document.removeEventListener('click',rm);});},100);
 });
-
-window.closeAttach = function(){
-  document.getElementById('attachSheet').classList.remove('show');
-};
-
-window.toggleWebSearch = function(){
-  webSearchEnabled = !webSearchEnabled;
-  var t = document.getElementById('webSearchToggle');
-  if(t) t.classList.toggle('on', webSearchEnabled);
-};
-
-window.triggerCamera = function(){
-  closeAttach();
-  var fi = document.getElementById('fi');
-  fi.setAttribute('capture','environment');
-  fi.click();
-};
-window.triggerPhotos = function(){
-  closeAttach();
-  var fi = document.getElementById('fi');
-  fi.removeAttribute('capture');
-  fi.click();
-};
-window.triggerFiles = function(){
-  closeAttach();
-  document.getElementById('pdf-file').click();
-};
-window.openWorkspaceFromAttach = function(){
-  closeAttach();
-  openWorkspace();
-};
-
-// FILE QUESTION SHEET
-var fqCallback = null;
-
-function showFileQuestionSheet(fileName, fileType, callback){
-  fqCallback = callback;
-  document.getElementById('fqFileName').textContent = fileName;
-  document.getElementById('fqCustom').value = '';
-  var opts = document.getElementById('fqOptions');
-  var isImage = fileType === 'image';
-  var suggestions = isImage
-    ? ['Describe what you see in detail','Find any text in this image','What is the main subject?','Analyze colors and composition']
-    : ['Summarize the key points','Explain this document simply','What are the action items?','Find important data and numbers'];
-  opts.innerHTML = suggestions.map(function(s){
-    return '<button class="fq-opt" onclick="submitFileQWith(\''+s.replace(/'/g,"\\'")+'\')">'+ s +'</button>';
-  }).join('');
-  document.getElementById('fileQuestionSheet').classList.add('show');
-}
-window.cancelFileQ = function(){
-  document.getElementById('fileQuestionSheet').classList.remove('show');
-  fqCallback = null;
-};
-window.submitFileQ = function(){
-  var q = document.getElementById('fqCustom').value.trim();
-  if(!q) return;
-  document.getElementById('fileQuestionSheet').classList.remove('show');
-  if(fqCallback) fqCallback(q);
-  fqCallback = null;
-};
-window.submitFileQWith = function(q){
-  document.getElementById('fileQuestionSheet').classList.remove('show');
-  if(fqCallback) fqCallback(q);
-  fqCallback = null;
-};
 
 // Voice input
 document.getElementById('mcb').addEventListener('click',function(){
@@ -2921,70 +2715,6 @@ window.addEventListener('beforeunload', function(){
 
 </div>
 
-
-<!-- ATTACHMENT SHEET — Claude style -->
-<div id="attachSheet">
-  <div class="attach-bg" onclick="closeAttach()"></div>
-  <div class="attach-card">
-    <div class="attach-handle"></div>
-    <div class="attach-header">Add to chat</div>
-    <div class="attach-icons">
-      <div class="attach-icon-btn" onclick="triggerCamera()">
-        <svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-        Camera
-      </div>
-      <div class="attach-icon-btn" onclick="triggerPhotos()">
-        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg>
-        Photos
-      </div>
-      <div class="attach-icon-btn" onclick="triggerFiles()">
-        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/></svg>
-        Files
-      </div>
-    </div>
-    <div class="attach-divider"></div>
-    <div class="attach-row" onclick="toggleWebSearch()">
-      <div class="attach-row-left">
-        <div class="attach-row-icon">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-        </div>
-        <div>
-          <div class="attach-row-name">Web Search</div>
-          <div class="attach-row-sub">Tavily + Groq live results</div>
-        </div>
-      </div>
-      <div class="attach-toggle on" id="webSearchToggle"></div>
-    </div>
-    <div class="attach-row" onclick="openWorkspaceFromAttach()">
-      <div class="attach-row-left">
-        <div class="attach-row-icon">
-          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-        </div>
-        <div>
-          <div class="attach-row-name">Add to Project</div>
-          <div class="attach-row-sub" id="attachProjectSub">AI Workspace</div>
-        </div>
-      </div>
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="2"><polyline points="9,18 15,12 9,6"/></svg>
-    </div>
-  </div>
-</div>
-
-<!-- FILE QUESTION SHEET -->
-<div id="fileQuestionSheet">
-  <div class="fq-bg" onclick="cancelFileQ()"></div>
-  <div class="fq-card">
-    <div class="fq-handle"></div>
-    <div class="fq-title">What do you want Riya to do?</div>
-    <div class="fq-fname" id="fqFileName">file.pdf</div>
-    <div class="fq-options" id="fqOptions"></div>
-    <div class="fq-or">OR TYPE CUSTOM</div>
-    <div class="fq-custom">
-      <input class="fq-input" id="fqCustom" placeholder="Ask anything about this file..."/>
-      <button class="fq-send" onclick="submitFileQ()">Send →</button>
-    </div>
-  </div>
-</div>
 
 <!-- AI WORKSPACE MODAL -->
 <div id="workspaceModal">
