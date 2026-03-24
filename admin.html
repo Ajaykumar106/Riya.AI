@@ -3,325 +3,804 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Riya Admin</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<title>Riya Admin · Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <style>
+:root{
+  --bg:#07080f;--sb:#0d0f1c;--card:#0f1120;--brd:rgba(255,255,255,.07);
+  --w:rgba(255,255,255,.85);--w2:rgba(255,255,255,.45);--w3:rgba(255,255,255,.18);
+  --accent:#6C63FF;--green:#22c55e;--blue:#38bdf8;--orange:#f97316;--pink:#ec4899;
+}
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:#020208;color:rgba(255,255,255,.75);font-family:'Inter',sans-serif;min-height:100vh;position:relative;overflow-x:hidden;}
-#adminBg{position:fixed;inset:0;z-index:0;pointer-events:none;}
-#dashboard,#loginPage{position:relative;z-index:1;}
+html,body{height:100%;font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--w);overflow:hidden;}
+::-webkit-scrollbar{width:3px;}::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);}
 
-/* LOGIN */
-#loginPage{position:fixed;inset:0;background:#030308;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;z-index:100;}
-.login-box{border:1px solid rgba(255,255,255,.06);padding:40px 28px;width:100%;max-width:300px;border-radius:16px;text-align:center;background:rgba(2,2,12,.7);backdrop-filter:blur(20px);}
-.login-title{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:4px;color:rgba(255,255,255,.2);text-transform:uppercase;margin-bottom:20px;}
-.pin-input{width:100%;padding:12px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:rgba(255,255,255,.7);font-size:20px;text-align:center;letter-spacing:8px;font-family:'JetBrains Mono',monospace;outline:none;border-radius:8px;margin-bottom:12px;}
-.pin-input:focus{border-color:rgba(255,255,255,.2);}
-.pin-btn{width:100%;padding:11px;border:1px solid rgba(255,255,255,.12);background:transparent;color:rgba(255,255,255,.45);font-size:12px;cursor:pointer;font-family:'JetBrains Mono',monospace;letter-spacing:2px;text-transform:uppercase;border-radius:8px;transition:all .2s;}
-.pin-btn:hover{background:rgba(255,255,255,.05);color:rgba(255,255,255,.7);}
-.pin-err{font-size:11px;color:rgba(255,80,80,.5);font-family:'JetBrains Mono',monospace;display:none;}
+/* ── LOGIN ── */
+#loginPage{
+  position:fixed;inset:0;z-index:100;
+  background:radial-gradient(ellipse at 30% 20%,rgba(108,99,255,.12) 0%,transparent 60%),
+             radial-gradient(ellipse at 80% 80%,rgba(56,189,248,.08) 0%,transparent 50%),
+             var(--bg);
+  display:flex;align-items:center;justify-content:center;
+}
+.login-card{
+  width:340px;padding:48px 36px;
+  background:rgba(13,15,28,.9);
+  border:1px solid rgba(108,99,255,.2);
+  border-radius:24px;
+  backdrop-filter:blur(24px);
+  box-shadow:0 0 80px rgba(108,99,255,.1),0 32px 64px rgba(0,0,0,.6);
+  text-align:center;
+}
+.login-logo{margin-bottom:28px;display:flex;justify-content:center;}
+.login-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:4px 14px;border-radius:20px;
+  border:1px solid rgba(108,99,255,.3);
+  background:rgba(108,99,255,.08);
+  font-family:'JetBrains Mono',monospace;font-size:9px;
+  letter-spacing:3px;color:rgba(108,99,255,.8);text-transform:uppercase;
+  margin-bottom:24px;
+}
+.login-title{font-size:22px;font-weight:600;color:var(--w);margin-bottom:4px;}
+.login-sub{font-size:13px;color:var(--w3);margin-bottom:32px;}
+.pin-field{
+  width:100%;padding:14px;
+  border:1px solid var(--brd);
+  background:rgba(255,255,255,.04);
+  color:var(--w);font-size:24px;text-align:center;
+  letter-spacing:10px;font-family:'JetBrains Mono',monospace;
+  outline:none;border-radius:12px;margin-bottom:14px;
+  transition:border-color .2s;
+}
+.pin-field:focus{border-color:rgba(108,99,255,.4);}
+.pin-go{
+  width:100%;padding:13px;
+  background:linear-gradient(135deg,#6C63FF,#8b83ff);
+  border:none;color:white;font-size:13px;font-weight:600;
+  cursor:pointer;border-radius:12px;letter-spacing:.5px;
+  font-family:'Space Grotesk',sans-serif;transition:opacity .2s;
+}
+.pin-go:hover{opacity:.88;}
+.pin-err{font-size:11px;color:rgba(255,80,80,.6);font-family:'JetBrains Mono',monospace;margin-top:10px;display:none;}
 
-/* DASHBOARD */
-#dashboard{display:none;padding:20px;background:transparent;}
-.top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,.06);}
-.admin-title{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:4px;color:rgba(255,255,255,.25);text-transform:uppercase;}
-.refresh-btn{padding:6px 14px;border:1px solid rgba(255,255,255,.08);background:transparent;color:rgba(255,255,255,.25);font-size:10px;cursor:pointer;font-family:'JetBrains Mono',monospace;letter-spacing:1px;border-radius:20px;transition:all .2s;}
-.refresh-btn:hover{border-color:rgba(255,255,255,.18);color:rgba(255,255,255,.5);}
-.logout-btn{padding:6px 14px;border:1px solid rgba(255,80,80,.15);background:transparent;color:rgba(255,80,80,.3);font-size:10px;cursor:pointer;font-family:'JetBrains Mono',monospace;letter-spacing:1px;border-radius:20px;transition:all .2s;}
-.logout-btn:hover{background:rgba(255,80,80,.05);color:rgba(255,80,80,.6);}
+/* ── LAYOUT ── */
+#app{display:none;height:100vh;flex-direction:row;}
+#app.show{display:flex;}
 
-/* STAT CARDS */
-.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px;}
-@media(max-width:800px){.stats-grid{grid-template-columns:repeat(2,1fr);}}
-@media(max-width:400px){.stats-grid{grid-template-columns:1fr 1fr;}}
-.stat-card{border:1px solid rgba(255,255,255,.06);background:rgba(5,5,18,.6);backdrop-filter:blur(8px);padding:18px 16px;border-radius:12px;}
-.stat-val{font-size:28px;font-weight:300;color:rgba(255,255,255,.55);font-family:'JetBrains Mono',monospace;margin-bottom:4px;}
-.stat-label{font-size:8px;color:rgba(255,255,255,.2);text-transform:uppercase;letter-spacing:2px;font-family:'JetBrains Mono',monospace;}
-.stat-sub{font-size:9px;color:rgba(255,255,255,.15);margin-top:3px;font-family:'JetBrains Mono',monospace;}
+/* Sidebar */
+#sidebar{
+  width:220px;flex-shrink:0;
+  background:var(--sb);
+  border-right:1px solid var(--brd);
+  display:flex;flex-direction:column;
+  overflow:hidden;
+}
+.sb-brand{
+  padding:22px 20px 18px;
+  border-bottom:1px solid var(--brd);
+}
+.sb-brand-name{font-size:16px;font-weight:700;color:var(--w);letter-spacing:.3px;}
+.sb-brand-ver{font-family:'JetBrains Mono',monospace;font-size:8px;color:var(--w3);letter-spacing:2px;margin-top:2px;}
+.sb-nav{flex:1;padding:12px 10px;overflow-y:auto;}
+.sb-section{font-family:'JetBrains Mono',monospace;font-size:7px;letter-spacing:3px;color:rgba(255,255,255,.2);text-transform:uppercase;padding:0 10px;margin:14px 0 6px;}
+.sb-item{
+  display:flex;align-items:center;gap:9px;
+  padding:9px 10px;border-radius:10px;cursor:pointer;
+  color:var(--w3);font-size:13px;font-weight:500;
+  transition:all .15s;border:1px solid transparent;
+  margin-bottom:2px;
+}
+.sb-item:hover{background:rgba(255,255,255,.05);color:var(--w2);}
+.sb-item.active{background:rgba(108,99,255,.12);border-color:rgba(108,99,255,.2);color:rgba(108,99,255,.9);}
+.sb-icon{font-size:15px;flex-shrink:0;}
+.sb-foot{padding:14px 10px;border-top:1px solid var(--brd);}
 
-/* SECTIONS */
-.sec-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
-@media(max-width:700px){.sec-grid{grid-template-columns:1fr;}}
-.panel{border:1px solid rgba(255,255,255,.06);background:rgba(5,5,18,.6);backdrop-filter:blur(8px);border-radius:12px;overflow:hidden;}
-.panel-head{padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:center;justify-content:space-between;}
-.panel-title{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:3px;color:rgba(255,255,255,.2);text-transform:uppercase;}
-.panel-count{font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,.15);}
-.panel-body{padding:12px;max-height:320px;overflow-y:auto;}
+/* Main area */
+#main{flex:1;overflow-y:auto;display:flex;flex-direction:column;}
+.topbar{
+  padding:16px 24px;border-bottom:1px solid var(--brd);
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:10;
+  background:rgba(7,8,15,.92);backdrop-filter:blur(20px);
+  flex-shrink:0;
+}
+.topbar-title{font-size:16px;font-weight:600;color:var(--w);}
+.topbar-sub{font-size:11px;color:var(--w3);font-family:'JetBrains Mono',monospace;margin-top:1px;}
+.topbar-actions{display:flex;gap:8px;}
+.btn-sm{
+  padding:7px 14px;border-radius:8px;font-size:11px;font-weight:500;
+  cursor:pointer;font-family:'Space Grotesk',sans-serif;transition:all .2s;
+}
+.btn-refresh{background:rgba(56,189,248,.1);border:1px solid rgba(56,189,248,.2);color:rgba(56,189,248,.8);}
+.btn-refresh:hover{background:rgba(56,189,248,.18);}
+.btn-logout{background:rgba(255,80,80,.08);border:1px solid rgba(255,80,80,.15);color:rgba(255,80,80,.5);}
+.btn-logout:hover{background:rgba(255,80,80,.14);color:rgba(255,80,80,.8);}
+
+/* Pages */
+.page{display:none;padding:24px;}
+.page.active{display:block;}
+
+/* ── STAT CARDS ── */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px;}
+@media(max-width:1000px){.stats-row{grid-template-columns:repeat(2,1fr);}}
+.stat-card{
+  border-radius:16px;padding:20px 18px;
+  position:relative;overflow:hidden;
+  border:1px solid rgba(255,255,255,.06);
+}
+.stat-card::before{
+  content:'';position:absolute;inset:0;
+  opacity:.08;border-radius:16px;
+}
+.sc-purple{background:linear-gradient(135deg,rgba(108,99,255,.18),rgba(108,99,255,.06));}
+.sc-purple::before{background:var(--accent);}
+.sc-blue{background:linear-gradient(135deg,rgba(56,189,248,.15),rgba(56,189,248,.05));}
+.sc-blue::before{background:var(--blue);}
+.sc-green{background:linear-gradient(135deg,rgba(34,197,94,.15),rgba(34,197,94,.05));}
+.sc-green::before{background:var(--green);}
+.sc-orange{background:linear-gradient(135deg,rgba(249,115,22,.15),rgba(249,115,22,.05));}
+.sc-orange::before{background:var(--orange);}
+.sc-emoji{font-size:26px;margin-bottom:10px;display:block;filter:drop-shadow(0 0 8px currentColor);}
+.sc-val{font-size:36px;font-weight:700;color:var(--w);line-height:1;margin-bottom:4px;font-variant-numeric:tabular-nums;}
+.sc-label{font-size:11px;color:var(--w3);font-weight:500;letter-spacing:.3px;}
+.sc-sub{font-size:10px;color:var(--w3);margin-top:4px;font-family:'JetBrains Mono',monospace;opacity:.6;}
+.sc-trend{
+  position:absolute;top:16px;right:16px;
+  font-size:10px;padding:3px 8px;border-radius:20px;
+  font-family:'JetBrains Mono',monospace;font-weight:500;
+}
+.trend-up{background:rgba(34,197,94,.12);color:rgba(34,197,94,.8);border:1px solid rgba(34,197,94,.2);}
+.trend-neu{background:rgba(255,255,255,.05);color:var(--w3);border:1px solid var(--brd);}
+
+/* ── PANELS ── */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+@media(max-width:800px){.grid-2{grid-template-columns:1fr;}}
+.panel{
+  background:var(--card);border:1px solid var(--brd);
+  border-radius:16px;overflow:hidden;
+}
+.panel-head{
+  padding:14px 18px;border-bottom:1px solid var(--brd);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.ph-title{font-size:12px;font-weight:600;color:var(--w2);letter-spacing:.3px;}
+.ph-badge{
+  font-family:'JetBrains Mono',monospace;font-size:9px;
+  padding:3px 9px;border-radius:20px;
+  background:rgba(255,255,255,.05);border:1px solid var(--brd);
+  color:var(--w3);
+}
+.ph-badge.live{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.2);color:rgba(34,197,94,.7);}
+.panel-body{padding:14px;max-height:340px;overflow-y:auto;}
 .panel-body::-webkit-scrollbar{width:2px;}
-.panel-body::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);}
 
-/* USER LIST */
-.user-row{display:flex;align-items:center;gap:10px;padding:9px 10px;border-bottom:1px solid rgba(255,255,255,.03);transition:background .15s;border-radius:8px;}
+/* User rows */
+.user-row{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 10px;border-radius:10px;
+  transition:background .15s;cursor:default;
+}
 .user-row:hover{background:rgba(255,255,255,.03);}
-.user-row:last-child{border:none;}
-.u-av{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:12px;overflow:hidden;flex-shrink:0;}
-.u-av img{width:100%;height:100%;object-fit:cover;}
-.u-info{flex:1;min-width:0;}
-.u-name{font-size:12px;color:rgba(255,255,255,.5);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.u-email{font-size:9px;color:rgba(255,255,255,.18);font-family:'JetBrains Mono',monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.u-plan{font-family:'JetBrains Mono',monospace;font-size:7px;padding:2px 7px;border-radius:10px;letter-spacing:1px;text-transform:uppercase;flex-shrink:0;}
-.plan-free{border:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.2);}
-.plan-basic{border:1px solid rgba(100,200,100,.2);color:rgba(100,200,100,.4);}
-.plan-premium{border:1px solid rgba(255,200,50,.2);color:rgba(255,200,50,.4);}
-.u-msgs{font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,.15);flex-shrink:0;}
-.u-joined{font-family:'JetBrains Mono',monospace;font-size:8px;color:rgba(255,255,255,.12);flex-shrink:0;}
+.uav{
+  width:34px;height:34px;border-radius:10px;flex-shrink:0;
+  background:rgba(108,99,255,.15);border:1px solid rgba(108,99,255,.2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:600;color:rgba(108,99,255,.8);overflow:hidden;
+}
+.uav img{width:100%;height:100%;object-fit:cover;border-radius:9px;}
+.uinfo{flex:1;min-width:0;}
+.uname{font-size:12px;color:var(--w2);font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.utime{font-size:9px;color:var(--w3);font-family:'JetBrains Mono',monospace;margin-top:1px;}
+.plan-chip{
+  font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:1px;
+  padding:3px 8px;border-radius:20px;text-transform:uppercase;flex-shrink:0;
+}
+.pc-free{background:rgba(255,255,255,.05);border:1px solid var(--brd);color:var(--w3);}
+.pc-basic{background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:rgba(34,197,94,.7);}
+.pc-pro{background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.25);color:rgba(249,115,22,.85);}
+.umsg{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--w3);flex-shrink:0;min-width:48px;text-align:right;}
 
-/* REVIEWS */
-.review-row{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.03);border-radius:8px;}
-.review-row:last-child{border:none;}
-.review-top{display:flex;align-items:center;gap:8px;margin-bottom:5px;}
-.review-user{font-size:11px;color:rgba(255,255,255,.4);font-weight:500;}
-.review-time{font-family:'JetBrains Mono',monospace;font-size:8px;color:rgba(255,255,255,.15);}
-.review-stars{color:rgba(255,200,50,.6);font-size:11px;letter-spacing:1px;}
-.review-text{font-size:12px;color:rgba(255,255,255,.3);line-height:1.6;}
-.no-reviews{text-align:center;padding:24px;font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,.12);letter-spacing:2px;text-transform:uppercase;}
+/* Activity */
+.act-row{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;transition:background .15s;}
+.act-row:hover{background:rgba(255,255,255,.02);}
+.act-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.dot-msg{background:#38bdf8;box-shadow:0 0 6px rgba(56,189,248,.5);}
+.dot-join{background:#22c55e;box-shadow:0 0 6px rgba(34,197,94,.5);}
+.dot-pay{background:#f97316;box-shadow:0 0 6px rgba(249,115,22,.5);}
+.dot-img{background:#a855f7;box-shadow:0 0 6px rgba(168,85,247,.5);}
+.act-txt{font-size:12px;color:var(--w3);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.act-time{font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,.15);flex-shrink:0;}
 
-/* ACTIVITY FEED */
-.act-row{display:flex;align-items:center;gap:8px;padding:7px 10px;border-bottom:1px solid rgba(255,255,255,.03);}
-.act-row:last-child{border:none;}
-.act-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
-.act-dot.msg{background:rgba(100,180,255,.4);}
-.act-dot.join{background:rgba(100,220,100,.4);}
-.act-dot.img{background:rgba(200,100,255,.4);}
-.act-dot.voice{background:rgba(255,180,50,.4);}
-.act-txt{font-size:11px;color:rgba(255,255,255,.3);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.act-time{font-family:'JetBrains Mono',monospace;font-size:8px;color:rgba(255,255,255,.12);flex-shrink:0;}
+/* Reviews */
+.review-card{
+  padding:14px;border-radius:12px;border:1px solid var(--brd);
+  background:rgba(255,255,255,.02);margin-bottom:10px;
+  transition:background .15s;
+}
+.review-card:hover{background:rgba(255,255,255,.04);}
+.rv-top{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.rv-name{font-size:13px;color:var(--w2);font-weight:500;flex:1;}
+.rv-stars{color:#f97316;font-size:13px;letter-spacing:1px;}
+.rv-time{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--w3);}
+.rv-text{font-size:12px;color:var(--w3);line-height:1.7;margin-bottom:10px;}
+.rv-reply{
+  display:flex;gap:8px;
+}
+.rv-reply-input{
+  flex:1;padding:8px 12px;border:1px solid var(--brd);
+  background:rgba(255,255,255,.04);color:var(--w2);
+  font-size:12px;border-radius:8px;outline:none;
+  font-family:'Space Grotesk',sans-serif;
+  transition:border-color .2s;
+}
+.rv-reply-input:focus{border-color:rgba(108,99,255,.3);}
+.rv-reply-btn{
+  padding:8px 14px;background:rgba(108,99,255,.15);
+  border:1px solid rgba(108,99,255,.25);color:rgba(108,99,255,.8);
+  font-size:11px;cursor:pointer;border-radius:8px;font-weight:600;
+  font-family:'Space Grotesk',sans-serif;transition:all .2s;white-space:nowrap;
+}
+.rv-reply-btn:hover{background:rgba(108,99,255,.25);}
+.rv-admin-reply{
+  margin-top:10px;padding:10px 12px;border-radius:8px;
+  background:rgba(108,99,255,.08);border-left:2px solid rgba(108,99,255,.4);
+  font-size:12px;color:rgba(108,99,255,.7);
+}
+.rv-admin-reply-label{font-size:9px;font-family:'JetBrains Mono',monospace;color:rgba(108,99,255,.4);letter-spacing:2px;margin-bottom:4px;text-transform:uppercase;}
 
-/* CHART */
-.chart-wrap{padding:16px;}
-.chart-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
-.chart-label{font-family:'JetBrains Mono',monospace;font-size:8px;color:rgba(255,255,255,.2);width:28px;text-align:right;flex-shrink:0;}
-.chart-bar-bg{flex:1;height:6px;background:rgba(255,255,255,.04);border-radius:3px;overflow:hidden;}
-.chart-bar-fill{height:100%;border-radius:3px;background:rgba(255,255,255,.2);transition:width .8s ease;}
-.chart-val{font-family:'JetBrains Mono',monospace;font-size:8px;color:rgba(255,255,255,.2);width:28px;flex-shrink:0;}
+/* Charts */
+.chart-container{padding:16px 14px;}
+.chart-bar-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.chart-day{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--w3);width:26px;text-align:right;flex-shrink:0;}
+.chart-bg{flex:1;height:8px;background:rgba(255,255,255,.04);border-radius:4px;overflow:hidden;}
+.chart-fill{height:100%;border-radius:4px;transition:width 1s cubic-bezier(.4,0,.2,1);}
+.chart-count{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--w3);width:22px;text-align:right;flex-shrink:0;}
 
-/* FULL WIDTH PANEL */
-.full-panel{border:1px solid rgba(255,255,255,.06);background:rgba(5,5,18,.6);backdrop-filter:blur(8px);border-radius:12px;overflow:hidden;margin-bottom:14px;}
+/* Plan donut */
+.plan-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.04);}
+.plan-cell{background:var(--card);padding:22px 14px;text-align:center;}
+.plan-num{font-size:38px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1;}
+.plan-lbl{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:2px;margin-top:6px;text-transform:uppercase;opacity:.6;}
 
-/* LOADING */
-.loading{text-align:center;padding:24px;font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,.15);letter-spacing:2px;animation:pulse 1.5s infinite;}
+/* Config */
+.cfg-section{margin-bottom:16px;}
+.cfg-row{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.cfg-label{font-size:11px;color:var(--w3);width:120px;flex-shrink:0;font-family:'JetBrains Mono',monospace;letter-spacing:1px;text-transform:uppercase;}
+.cfg-input{
+  flex:1;padding:10px 14px;border:1px solid var(--brd);
+  background:rgba(255,255,255,.04);color:var(--w2);
+  font-size:13px;border-radius:10px;outline:none;
+  font-family:'JetBrains Mono',monospace;
+  transition:border-color .2s;
+}
+.cfg-input:focus{border-color:rgba(108,99,255,.35);}
+.cfg-actions{display:flex;gap:8px;margin-top:4px;}
+.btn-save{
+  padding:10px 20px;background:linear-gradient(135deg,rgba(108,99,255,.3),rgba(108,99,255,.15));
+  border:1px solid rgba(108,99,255,.3);color:rgba(108,99,255,.9);
+  font-size:12px;font-weight:600;cursor:pointer;border-radius:10px;
+  font-family:'Space Grotesk',sans-serif;transition:all .2s;
+}
+.btn-save:hover{background:linear-gradient(135deg,rgba(108,99,255,.45),rgba(108,99,255,.25));}
+.btn-test{
+  padding:10px 20px;background:rgba(56,189,248,.08);
+  border:1px solid rgba(56,189,248,.2);color:rgba(56,189,248,.7);
+  font-size:12px;font-weight:600;cursor:pointer;border-radius:10px;
+  font-family:'Space Grotesk',sans-serif;transition:all .2s;
+}
+.btn-test:hover{background:rgba(56,189,248,.15);}
+.cfg-status{font-size:11px;color:rgba(34,197,94,.6);font-family:'JetBrains Mono',monospace;display:none;margin-top:8px;}
+
+/* Founder card */
+.founder-card{
+  background:linear-gradient(135deg,rgba(108,99,255,.12),rgba(56,189,248,.06));
+  border:1px solid rgba(108,99,255,.18);border-radius:16px;padding:24px;
+  display:flex;align-items:center;gap:20px;margin-bottom:16px;
+}
+.founder-av{
+  width:68px;height:68px;border-radius:16px;flex-shrink:0;
+  background:linear-gradient(135deg,rgba(108,99,255,.3),rgba(56,189,248,.2));
+  border:2px solid rgba(108,99,255,.3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:28px;font-weight:700;color:rgba(108,99,255,.9);
+}
+.founder-info{}
+.founder-name{font-size:20px;font-weight:700;color:var(--w);margin-bottom:2px;}
+.founder-role{font-size:12px;color:rgba(108,99,255,.7);font-family:'JetBrains Mono',monospace;letter-spacing:1px;margin-bottom:8px;}
+.founder-tags{display:flex;flex-wrap:wrap;gap:6px;}
+.ftag{
+  font-size:10px;padding:3px 10px;border-radius:20px;
+  background:rgba(255,255,255,.05);border:1px solid var(--brd);color:var(--w3);
+  font-family:'JetBrains Mono',monospace;letter-spacing:.5px;
+}
+
+/* Revenue */
+.rev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px;}
+.rev-card{
+  background:var(--card);border:1px solid var(--brd);border-radius:14px;padding:18px;
+  text-align:center;
+}
+.rev-val{font-size:24px;font-weight:700;margin-bottom:4px;}
+.rev-lbl{font-size:10px;color:var(--w3);font-family:'JetBrains Mono',monospace;letter-spacing:1px;text-transform:uppercase;}
+
+/* Toggle */
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--brd);}
+.toggle-row:last-child{border:none;}
+.toggle-info .t-name{font-size:13px;color:var(--w2);font-weight:500;}
+.toggle-info .t-sub{font-size:11px;color:var(--w3);margin-top:2px;}
+.toggle{
+  width:40px;height:22px;border-radius:11px;background:rgba(255,255,255,.1);
+  border:1px solid var(--brd);cursor:pointer;position:relative;transition:all .3s;flex-shrink:0;
+}
+.toggle.on{background:rgba(108,99,255,.5);border-color:rgba(108,99,255,.4);}
+.toggle::after{
+  content:'';width:16px;height:16px;border-radius:50%;
+  background:white;position:absolute;top:2px;left:2px;
+  transition:transform .3s;
+}
+.toggle.on::after{transform:translateX(18px);}
+
+/* Broadcast */
+.broadcast-box{padding:14px;}
+.bc-textarea{
+  width:100%;padding:12px;border:1px solid var(--brd);
+  background:rgba(255,255,255,.04);color:var(--w2);
+  font-size:13px;border-radius:10px;outline:none;resize:none;
+  min-height:80px;font-family:'Space Grotesk',sans-serif;
+  transition:border-color .2s;margin-bottom:10px;
+}
+.bc-textarea:focus{border-color:rgba(108,99,255,.3);}
+.bc-type{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
+.bc-chip{
+  padding:6px 14px;border-radius:20px;font-size:11px;cursor:pointer;
+  border:1px solid var(--brd);color:var(--w3);background:transparent;
+  font-family:'Space Grotesk',sans-serif;transition:all .2s;
+}
+.bc-chip.sel{background:rgba(108,99,255,.15);border-color:rgba(108,99,255,.3);color:rgba(108,99,255,.8);}
+
+.empty-state{text-align:center;padding:32px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--w3);letter-spacing:2px;text-transform:uppercase;opacity:.6;}
+.loading-state{text-align:center;padding:32px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--w3);animation:pulse 1.5s infinite;}
 @keyframes pulse{0%,100%{opacity:.3}50%{opacity:.8}}
 
-/* EMPTY */
-.empty{text-align:center;padding:20px;font-family:'JetBrains Mono',monospace;font-size:9px;color:rgba(255,255,255,.1);letter-spacing:2px;text-transform:uppercase;}
-
-.config-card{border:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.02);border-radius:12px;overflow:hidden;margin-bottom:14px;}
-.config-head{padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.05);display:flex;align-items:center;justify-content:space-between;}
-.config-title{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:3px;color:rgba(255,255,255,.2);text-transform:uppercase;}
-.config-body{padding:16px;}
-.config-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
-.config-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;color:rgba(255,255,255,.3);text-transform:uppercase;width:100px;flex-shrink:0;}
-.config-input{flex:1;padding:9px 12px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);color:rgba(255,255,255,.6);font-size:12px;outline:none;border-radius:8px;font-family:'JetBrains Mono',monospace;transition:border-color .2s;}
-.config-input:focus{border-color:rgba(255,255,255,.18);}
-.config-save{padding:8px 18px;border:1px solid rgba(255,255,255,.12);background:transparent;color:rgba(255,255,255,.4);font-size:10px;cursor:pointer;font-family:'JetBrains Mono',monospace;letter-spacing:1px;border-radius:8px;transition:all .2s;}
-.config-save:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.7);}
-.config-status{font-size:10px;color:rgba(100,220,100,.5);font-family:'JetBrains Mono',monospace;display:none;}
+/* Separators */
+.section-title{font-size:11px;font-weight:600;color:var(--w3);letter-spacing:1px;text-transform:uppercase;margin-bottom:14px;margin-top:4px;font-family:'JetBrains Mono',monospace;}
 </style>
 </head>
 <body>
 
-<!-- LOGIN PAGE -->
-<canvas id="adminBg"></canvas>
+<!-- ── LOGIN ── -->
 <div id="loginPage">
-  <div class="login-box">
-    <div style="margin-bottom:16px;display:flex;justify-content:center;">
-      <svg width="56" height="56" viewBox="0 0 56 56" style="overflow:visible">
+  <div class="login-card">
+    <div class="login-logo">
+      <svg width="52" height="52" viewBox="0 0 52 52" style="overflow:visible">
         <defs>
-          <radialGradient id="adh" cx="50%" cy="32%" r="40%">
-            <stop offset="0%" stop-color="#fff" stop-opacity="1"/>
-            <stop offset="60%" stop-color="#aabbee" stop-opacity="0.4"/>
-            <stop offset="100%" stop-color="#334477" stop-opacity="0"/>
+          <radialGradient id="lg1" cx="50%" cy="32%" r="40%">
+            <stop offset="0%" stop-color="#6C63FF"/>
+            <stop offset="100%" stop-color="#6C63FF" stop-opacity="0"/>
           </radialGradient>
-          <filter id="adg"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <filter id="gf"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
         </defs>
-        <circle cx="8" cy="9" r="0.9" fill="white" opacity="0.5"/>
-        <circle cx="46" cy="7" r="0.7" fill="white" opacity="0.4"/>
-        <circle cx="4" cy="34" r="0.8" fill="white" opacity="0.35"/>
-        <circle cx="50" cy="32" r="0.9" fill="white" opacity="0.4"/>
-        <path d="M28 44 Q20 40 18 33 Q16 26 20 20 Q24 14 28 13 Q32 14 36 20 Q40 26 38 33 Q36 40 28 44Z" fill="rgba(140,160,220,0.15)"/>
-        <path d="M28 44 Q22 49 16 54" stroke="rgba(180,200,255,0.18)" stroke-width="0.9" fill="none"/>
-        <path d="M28 44 Q34 49 40 54" stroke="rgba(180,200,255,0.18)" stroke-width="0.9" fill="none"/>
-        <path d="M20 30 Q10 27 4 30" stroke="rgba(180,200,255,0.15)" stroke-width="0.7" fill="none"/>
-        <path d="M36 30 Q46 27 52 30" stroke="rgba(180,200,255,0.15)" stroke-width="0.7" fill="none"/>
-        <circle cx="28" cy="14" r="10" fill="url(#adh)" filter="url(#adg)"/>
-        <circle cx="28" cy="14" r="5" fill="white" opacity="0.88" filter="url(#adg)"/>
-        <circle cx="28" cy="14" r="2.5" fill="white" opacity="1"/>
-        <line x1="28" y1="2" x2="28" y2="0" stroke="white" stroke-width="0.9" opacity="0.6"/>
-        <line x1="36" y1="6" x2="39" y2="3" stroke="white" stroke-width="0.8" opacity="0.5"/>
-        <line x1="20" y1="6" x2="17" y2="3" stroke="white" stroke-width="0.8" opacity="0.5"/>
-        <line x1="40" y1="14" x2="44" y2="14" stroke="white" stroke-width="0.7" opacity="0.4"/>
-        <line x1="16" y1="14" x2="12" y2="14" stroke="white" stroke-width="0.7" opacity="0.4"/>
+        <path d="M26 40 Q18 36 16 29 Q14 22 18 16 Q22 10 26 9 Q30 10 34 16 Q38 22 36 29 Q34 36 26 40Z" fill="rgba(108,99,255,.12)"/>
+        <circle cx="26" cy="10" r="9" fill="url(#lg1)" filter="url(#gf)"/>
+        <circle cx="26" cy="10" r="4" fill="rgba(108,99,255,.9)" filter="url(#gf)"/>
+        <circle cx="26" cy="10" r="2" fill="white"/>
+        <line x1="26" y1="0" x2="26" y2="-2" stroke="rgba(108,99,255,.6)" stroke-width="1"/>
+        <line x1="34" y1="4" x2="37" y2="1" stroke="rgba(108,99,255,.4)" stroke-width=".8"/>
+        <line x1="18" y1="4" x2="15" y2="1" stroke="rgba(108,99,255,.4)" stroke-width=".8"/>
       </svg>
     </div>
-    <div class="login-title">Riya Admin</div>
-    <input class="pin-input" id="pinInput" type="password" maxlength="6" placeholder="••••••" autocomplete="off"/>
-    <button class="pin-btn" id="pinBtn">Access Dashboard</button>
+    <div class="login-badge">⚡ Admin Portal</div>
+    <div class="login-title">Riya.AI</div>
+    <div class="login-sub">Enter your admin PIN to continue</div>
+    <input class="pin-field" id="pinInput" type="password" maxlength="6" placeholder="••••••" autocomplete="off"/>
+    <button class="pin-go" id="pinBtn">Access Dashboard</button>
     <div class="pin-err" id="pinErr">Wrong PIN. Try again.</div>
   </div>
 </div>
 
-<!-- DASHBOARD -->
-<div id="dashboard">
-  <div class="top-bar">
-    <div class="admin-title">Riya.AI · Admin</div>
-    <div style="display:flex;gap:8px;">
-      <button class="refresh-btn" id="refreshBtn">Refresh</button>
-      <button class="logout-btn" id="logoutBtn">Logout</button>
+<!-- ── APP ── -->
+<div id="app">
+
+  <!-- Sidebar -->
+  <div id="sidebar">
+    <div class="sb-brand">
+      <div class="sb-brand-name">Riya.AI</div>
+      <div class="sb-brand-ver">ADMIN PANEL · V5</div>
+    </div>
+    <div class="sb-nav">
+      <div class="sb-section">Main</div>
+      <div class="sb-item active" data-page="overview" onclick="showPage('overview',this)"><span class="sb-icon">📊</span>Overview</div>
+      <div class="sb-item" data-page="users" onclick="showPage('users',this)"><span class="sb-icon">👥</span>Users</div>
+      <div class="sb-item" data-page="reviews" onclick="showPage('reviews',this)"><span class="sb-icon">⭐</span>Reviews</div>
+      <div class="sb-section">Settings</div>
+      <div class="sb-item" data-page="config" onclick="showPage('config',this)"><span class="sb-icon">⚙️</span>Config</div>
+      <div class="sb-item" data-page="broadcast" onclick="showPage('broadcast',this)"><span class="sb-icon">📢</span>Broadcast</div>
+      <div class="sb-item" data-page="founder" onclick="showPage('founder',this)"><span class="sb-icon">🧑‍💻</span>Founder</div>
+    </div>
+    <div class="sb-foot">
+      <div class="sb-item" onclick="logout()" style="color:rgba(255,80,80,.4);"><span class="sb-icon">🚪</span>Logout</div>
     </div>
   </div>
 
-  <!-- STATS ROW -->
-  <div class="stats-grid">
-    <div class="stat-card">
-      <div class="stat-val" id="statUsers">-</div>
-      <div class="stat-label">Total Users</div>
-      <div class="stat-sub" id="statUsersNew">Loading...</div>
+  <!-- Main -->
+  <div id="main">
+    <div class="topbar">
+      <div>
+        <div class="topbar-title" id="pageTitle">Overview</div>
+        <div class="topbar-sub" id="pageTime">Loading...</div>
+      </div>
+      <div class="topbar-actions">
+        <button class="btn-sm btn-refresh" onclick="loadDashboard()">↻ Refresh</button>
+      </div>
     </div>
-    <div class="stat-card">
-      <div class="stat-val" id="statMsgs">-</div>
-      <div class="stat-label">Total Messages</div>
-      <div class="stat-sub" id="statMsgsToday">Loading...</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-val" id="statPro">-</div>
-      <div class="stat-label">Pro Users</div>
-      <div class="stat-sub" id="statBasic">Loading...</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-val" id="statActive">-</div>
-      <div class="stat-label">Active Today</div>
-      <div class="stat-sub" id="statRating">Loading...</div>
-    </div>
-  </div>
 
-  <!-- USERS + ACTIVITY -->
-  <div class="sec-grid">
-    <div class="panel">
-      <div class="panel-head">
-        <div class="panel-title">All Users</div>
-        <div class="panel-count" id="userCount">0 users</div>
-      </div>
-      <div class="panel-body" id="userList">
-        <div class="loading">Loading users...</div>
-      </div>
-    </div>
-    <div class="panel">
-      <div class="panel-head">
-        <div class="panel-title">Recent Activity</div>
-        <div class="panel-count" id="actCount">Live</div>
-      </div>
-      <div class="panel-body" id="actFeed">
-        <div class="loading">Loading activity...</div>
-      </div>
-    </div>
-  </div>
+    <!-- ── OVERVIEW PAGE ── -->
+    <div class="page active" id="page-overview">
+      <div style="padding-bottom:4px;"></div>
 
-  <!-- REVIEWS + PLAN BREAKDOWN -->
-  <div class="sec-grid">
-    <div class="panel">
-      <div class="panel-head">
-        <div class="panel-title">User Reviews</div>
-        <div class="panel-count" id="reviewAvg">No reviews yet</div>
+      <!-- Stat cards -->
+      <div class="stats-row">
+        <div class="stat-card sc-purple">
+          <span class="sc-emoji">👥</span>
+          <div class="sc-val" id="stUsers">—</div>
+          <div class="sc-label">Total Users</div>
+          <div class="sc-sub" id="stUsersNew">Loading...</div>
+          <div class="sc-trend trend-up" id="stUsersW">—</div>
+        </div>
+        <div class="stat-card sc-blue">
+          <span class="sc-emoji">💬</span>
+          <div class="sc-val" id="stMsgs">—</div>
+          <div class="sc-label">Total Messages</div>
+          <div class="sc-sub">across all users</div>
+          <div class="sc-trend trend-neu">All time</div>
+        </div>
+        <div class="stat-card sc-orange">
+          <span class="sc-emoji">⚡</span>
+          <div class="sc-val" id="stPro">—</div>
+          <div class="sc-label">Paid Users</div>
+          <div class="sc-sub" id="stBasic">Loading...</div>
+          <div class="sc-trend trend-up" id="stRev">₹—</div>
+        </div>
+        <div class="stat-card sc-green">
+          <span class="sc-emoji">🟢</span>
+          <div class="sc-val" id="stActive">—</div>
+          <div class="sc-label">Active Today</div>
+          <div class="sc-sub" id="stRating">Loading...</div>
+          <div class="sc-trend trend-neu" id="stAvg">—</div>
+        </div>
       </div>
-      <div class="panel-body" id="reviewList">
-        <div class="no-reviews">No reviews yet</div>
-      </div>
-    </div>
-    <div class="panel">
-      <div class="panel-head">
-        <div class="panel-title">Usage by Day</div>
-        <div class="panel-count">Last 7 days</div>
-      </div>
-      <div class="chart-wrap" id="dayChart">
-        <div class="loading">Loading chart...</div>
-      </div>
-    </div>
-  </div>
 
-  <!-- BACKEND CONFIG -->
-  <div class="config-card">
-    <div class="config-head">
-      <div class="config-title">Backend Configuration</div>
-      <span class="config-status" id="cfgStatus">Saved!</span>
-    </div>
-    <div class="config-body">
-      <div class="config-row">
-        <div class="config-label">Backend URL</div>
-        <input class="config-input" id="cfgUrl" placeholder="https://riya-backend-ujz7.onrender.com" type="text"/>
+      <!-- Revenue row -->
+      <div class="rev-grid">
+        <div class="rev-card">
+          <div class="rev-val" style="color:rgba(108,99,255,.9);" id="revMRR">₹—</div>
+          <div class="rev-lbl">Est. MRR</div>
+        </div>
+        <div class="rev-card">
+          <div class="rev-val" style="color:rgba(34,197,94,.9);" id="revProfit">₹—</div>
+          <div class="rev-lbl">Est. Profit</div>
+        </div>
+        <div class="rev-card">
+          <div class="rev-val" style="color:rgba(56,189,248,.9);" id="revAPIcost">₹—</div>
+          <div class="rev-lbl">API Costs</div>
+        </div>
       </div>
-      <div class="config-row">
-        <div class="config-label">App Version</div>
-        <input class="config-input" id="cfgVersion" placeholder="5.0" type="text"/>
-      </div>
-      <div class="config-row">
-        <div class="config-label">Maintenance</div>
-        <select class="config-input" id="cfgMaint" style="cursor:pointer;">
-          <option value="off">Off — App is live</option>
-          <option value="on">On — Show maintenance page</option>
-        </select>
-      </div>
-      <div style="display:flex;gap:8px;margin-top:4px;">
-        <button class="config-save" onclick="saveConfig()">Save Config</button>
-        <button class="config-save" onclick="testBackend()" style="border-color:rgba(91,231,255,.15);color:rgba(91,231,255,.4);">Test Connection</button>
-      </div>
-    </div>
-  </div>
 
-  <!-- PLAN BREAKDOWN -->
-  <div class="full-panel">
-    <div class="panel-head">
-      <div class="panel-title">Plan Breakdown</div>
-    </div>
-    <div class="panel-body" style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.04);max-height:none;">
-      <div style="background:#020210;padding:20px;text-align:center;">
-        <div style="font-size:32px;font-weight:300;color:rgba(255,255,255,.4);font-family:'JetBrains Mono',monospace;" id="planFreeCount">-</div>
-        <div style="font-size:8px;color:rgba(255,255,255,.15);letter-spacing:2px;font-family:'JetBrains Mono',monospace;text-transform:uppercase;margin-top:4px;">Free</div>
+      <!-- Users + Chart -->
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel-head">
+            <div class="ph-title">Recent Users</div>
+            <div class="ph-badge live">● Live</div>
+          </div>
+          <div class="panel-body" id="recentUsers"><div class="loading-state">Loading...</div></div>
+        </div>
+        <div class="panel">
+          <div class="panel-head">
+            <div class="ph-title">Daily Activity</div>
+            <div class="ph-badge">Last 7 days</div>
+          </div>
+          <div class="chart-container" id="dayChart"><div class="loading-state">Loading...</div></div>
+        </div>
       </div>
-      <div style="background:#020210;padding:20px;text-align:center;">
-        <div style="font-size:32px;font-weight:300;color:rgba(100,200,100,.4);font-family:'JetBrains Mono',monospace;" id="planBasicCount">-</div>
-        <div style="font-size:8px;color:rgba(100,200,100,.2);letter-spacing:2px;font-family:'JetBrains Mono',monospace;text-transform:uppercase;margin-top:4px;">Basic</div>
-      </div>
-      <div style="background:#020210;padding:20px;text-align:center;">
-        <div style="font-size:32px;font-weight:300;color:rgba(255,200,50,.4);font-family:'JetBrains Mono',monospace;" id="planProCount">-</div>
-        <div style="font-size:8px;color:rgba(255,200,50,.2);letter-spacing:2px;font-family:'JetBrains Mono',monospace;text-transform:uppercase;margin-top:4px;">Pro</div>
-      </div>
-    </div>
-  </div>
 
-</div>
+      <!-- Plan breakdown -->
+      <div class="panel" style="margin-bottom:16px;">
+        <div class="panel-head">
+          <div class="ph-title">Plan Distribution</div>
+          <div class="ph-badge" id="planTotal">0 users</div>
+        </div>
+        <div class="plan-row">
+          <div class="plan-cell">
+            <div class="plan-num" style="color:rgba(255,255,255,.35);" id="planFree">—</div>
+            <div class="plan-lbl" style="color:rgba(255,255,255,.2);">Free</div>
+          </div>
+          <div class="plan-cell">
+            <div class="plan-num" style="color:rgba(34,197,94,.6);" id="planBasic">—</div>
+            <div class="plan-lbl" style="color:rgba(34,197,94,.3);">Basic ₹49</div>
+          </div>
+          <div class="plan-cell">
+            <div class="plan-num" style="color:rgba(249,115,22,.7);" id="planPro">—</div>
+            <div class="plan-lbl" style="color:rgba(249,115,22,.35);">Pro ₹149</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Activity feed -->
+      <div class="panel">
+        <div class="panel-head">
+          <div class="ph-title">Recent Activity</div>
+          <div class="ph-badge live">● Live</div>
+        </div>
+        <div class="panel-body" id="actFeed"><div class="loading-state">Loading...</div></div>
+      </div>
+    </div>
+
+    <!-- ── USERS PAGE ── -->
+    <div class="page" id="page-users">
+      <div class="panel">
+        <div class="panel-head">
+          <div class="ph-title">All Users</div>
+          <div class="ph-badge" id="allUserCount">0 users</div>
+        </div>
+        <div class="panel-body" style="max-height:none;" id="allUsers"><div class="loading-state">Loading...</div></div>
+      </div>
+    </div>
+
+    <!-- ── REVIEWS PAGE ── -->
+    <div class="page" id="page-reviews">
+      <div class="panel" style="margin-bottom:16px;">
+        <div class="panel-head">
+          <div class="ph-title">User Reviews</div>
+          <div class="ph-badge" id="reviewSummary">Loading...</div>
+        </div>
+        <div class="panel-body" style="max-height:none;" id="reviewList">
+          <div class="loading-state">Loading reviews...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── CONFIG PAGE ── -->
+    <div class="page" id="page-config">
+      <div class="panel" style="margin-bottom:16px;">
+        <div class="panel-head"><div class="ph-title">Backend Configuration</div></div>
+        <div class="panel-body" style="max-height:none;">
+          <div class="cfg-section">
+            <div class="cfg-row">
+              <div class="cfg-label">Backend URL</div>
+              <input class="cfg-input" id="cfgUrl" placeholder="https://riya-backend-ujz7.onrender.com"/>
+            </div>
+            <div class="cfg-row">
+              <div class="cfg-label">App Version</div>
+              <input class="cfg-input" id="cfgVersion" placeholder="5.1"/>
+            </div>
+            <div class="cfg-row">
+              <div class="cfg-label">Maintenance</div>
+              <select class="cfg-input" id="cfgMaint" style="cursor:pointer;appearance:none;">
+                <option value="off">Off — App is live ✅</option>
+                <option value="on">On — Maintenance mode 🔧</option>
+              </select>
+            </div>
+            <div class="cfg-actions">
+              <button class="btn-save" onclick="saveConfig()">💾 Save Config</button>
+              <button class="btn-test" onclick="testBackend()">🔗 Test Connection</button>
+            </div>
+            <div class="cfg-status" id="cfgStatus">✓ Saved successfully!</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- App settings toggles -->
+      <div class="panel">
+        <div class="panel-head"><div class="ph-title">Feature Flags</div></div>
+        <div class="panel-body" style="max-height:none;">
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="t-name">Web Search</div>
+              <div class="t-sub">Tavily + Groq live search</div>
+            </div>
+            <div class="toggle on" id="togSearch" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="t-name">Image Generation</div>
+              <div class="t-sub">Gemini Imagen 3</div>
+            </div>
+            <div class="toggle on" id="togImagen" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="t-name">Voice Mode</div>
+              <div class="t-sub">ElevenLabs TTS</div>
+            </div>
+            <div class="toggle on" id="togVoice" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="t-name">Code Compiler</div>
+              <div class="t-sub">Gemini code execution</div>
+            </div>
+            <div class="toggle on" id="togCode" onclick="this.classList.toggle('on')"></div>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-info">
+              <div class="t-name">New User Registration</div>
+              <div class="t-sub">Allow Google sign-in</div>
+            </div>
+            <div class="toggle on" id="togReg" onclick="this.classList.toggle('on')"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── BROADCAST PAGE ── -->
+    <div class="page" id="page-broadcast">
+      <div class="panel">
+        <div class="panel-head"><div class="ph-title">Broadcast Message</div></div>
+        <div class="broadcast-box">
+          <div class="section-title">Target audience</div>
+          <div class="bc-type">
+            <button class="bc-chip sel" onclick="toggleChip(this,'all')">All Users</button>
+            <button class="bc-chip" onclick="toggleChip(this,'free')">Free Only</button>
+            <button class="bc-chip" onclick="toggleChip(this,'basic')">Basic Only</button>
+            <button class="bc-chip" onclick="toggleChip(this,'pro')">Pro Only</button>
+          </div>
+          <div class="section-title">Message</div>
+          <textarea class="bc-textarea" id="bcText" placeholder="Write your broadcast message here... This will appear as a Riya message in the user's chat."></textarea>
+          <div style="display:flex;gap:8px;">
+            <button class="btn-save" onclick="sendBroadcast()">📢 Send Broadcast</button>
+            <button class="btn-test" onclick="previewBroadcast()">👁️ Preview</button>
+          </div>
+          <div style="margin-top:16px;">
+            <div class="section-title">Broadcast History</div>
+            <div id="bcHistory"><div class="empty-state">No broadcasts yet</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── FOUNDER PAGE ── -->
+    <div class="page" id="page-founder">
+      <div class="founder-card">
+        <div class="founder-av">AJ</div>
+        <div class="founder-info">
+          <div class="founder-name">Ajay Kumar AJ</div>
+          <div class="founder-role">Founder · Builder · India 🇮🇳</div>
+          <div class="founder-tags">
+            <span class="ftag">20 years old</span>
+            <span class="ftag">Solo builder</span>
+            <span class="ftag">India</span>
+            <span class="ftag">Full stack</span>
+            <span class="ftag">AI/ML</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel-head"><div class="ph-title">About Riya.AI</div></div>
+          <div class="panel-body" style="max-height:none;">
+            <div style="font-size:13px;color:var(--w3);line-height:1.9;padding:4px 0;">
+              <p style="margin-bottom:10px;">Riya.AI is India's first truly personal AI friend — built by a 20-year-old solo developer from scratch.</p>
+              <p style="margin-bottom:10px;">Not a chatbot. Not an assistant. A friend who understands Indian culture, speaks Hinglish naturally, and genuinely remembers you.</p>
+              <p>Built with: Firebase + Gemini 2.0 Flash + Groq + ElevenLabs + Vercel + Render</p>
+            </div>
+          </div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><div class="ph-title">What's Built</div></div>
+          <div class="panel-body" style="max-height:none;">
+            <div style="display:flex;flex-direction:column;gap:8px;padding:4px 0;">
+              <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--w3);">
+                <span style="color:#22c55e;">✓</span> Google auth + user profiles
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--w3);">
+                <span style="color:#22c55e;">✓</span> Hinglish AI chat (Gemini + Groq)
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--w3);">
+                <span style="color:#22c55e;">✓</span> Voice mode (ElevenLabs)
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--w3);">
+                <span style="color:#22c55e;">✓</span> Image generation (Imagen 3)
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--w3);">
+                <span style="color:#22c55e;">✓</span> Code compiler + artifacts
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--w3);">
+                <span style="color:#22c55e;">✓</span> Personal Space (PIN protected)
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--w3);">
+                <span style="color:#22c55e;">✓</span> AI Workspace + projects
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--w3);">
+                <span style="color:#22c55e;">✓</span> Admin dashboard
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--w3);">
+                <span style="color:#22c55e;">✓</span> Deep memory system
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--w3);">
+                <span style="color:#22c55e;">✓</span> Razorpay payments ready
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--w3);">
+                <span style="color:#6C63FF;">◎</span> Live search (Tavily + Groq)
+              </div>
+              <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--w3);">
+                <span style="color:#6C63FF;">◎</span> PDF analysis
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><div class="ph-title">Launch Roadmap</div></div>
+        <div class="panel-body" style="max-height:none;display:grid;grid-template-columns:repeat(2,1fr);gap:12px;">
+          <div style="padding:16px;background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.15);border-radius:12px;">
+            <div style="font-size:11px;color:rgba(34,197,94,.7);font-family:'JetBrains Mono',monospace;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">V1 — Now</div>
+            <div style="font-size:12px;color:var(--w3);line-height:1.8;">MVP · Launch · First users · Payments · Bug fixes</div>
+          </div>
+          <div style="padding:16px;background:rgba(56,189,248,.06);border:1px solid rgba(56,189,248,.15);border-radius:12px;">
+            <div style="font-size:11px;color:rgba(56,189,248,.7);font-family:'JetBrains Mono',monospace;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">V2 — Jun 2026</div>
+            <div style="font-size:12px;color:var(--w3);line-height:1.8;">Daily coach · Streaks · Progress · Proactive messages</div>
+          </div>
+          <div style="padding:16px;background:rgba(108,99,255,.06);border:1px solid rgba(108,99,255,.15);border-radius:12px;">
+            <div style="font-size:11px;color:rgba(108,99,255,.7);font-family:'JetBrains Mono',monospace;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">V3 — Sep 2026</div>
+            <div style="font-size:12px;color:var(--w3);line-height:1.8;">Action AI · Resume · Jobs · Career tools</div>
+          </div>
+          <div style="padding:16px;background:rgba(249,115,22,.06);border:1px solid rgba(249,115,22,.15);border-radius:12px;">
+            <div style="font-size:11px;color:rgba(249,115,22,.7);font-family:'JetBrains Mono',monospace;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">V4+ — 2027</div>
+            <div style="font-size:12px;color:var(--w3);line-height:1.8;">Deep AI brain · Multi-agent · Life OS</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+</div><!-- /app -->
 
 <script>
 var ADMIN_PIN = '060606';
+var db;
+var currentBcTarget = 'all';
 
 function initAdmin(){
-  if(typeof firebase === 'undefined'){
-    setTimeout(initAdmin, 200);
-    return;
-  }
-
-  try{ firebase.app(); } catch(e){
+  if(typeof firebase === 'undefined'){ setTimeout(initAdmin,200); return; }
+  try{ firebase.app(); }catch(e){
     firebase.initializeApp({
-  apiKey:"AIzaSyBl1xDUshkJEOrGTbmCGpbNcIi1pHEtDYA",
-  authDomain:"riya-ai-2c24e.firebaseapp.com",
+      apiKey:"AIzaSyBl1xDUshkJEOrGTbmCGpbNcIi1pHEtDYA",
+      authDomain:"riya-ai-2c24e.firebaseapp.com",
       projectId:"riya-ai-2c24e"
     });
   }
-  var db = firebase.firestore();
+  db = firebase.firestore();
 
-// PIN LOGIN
-document.getElementById('pinBtn').addEventListener('click', checkPin);
-document.getElementById('pinInput').addEventListener('keydown', function(e){
-  if(e.key === 'Enter') checkPin();
-});
+  document.getElementById('pinBtn').addEventListener('click', checkPin);
+  document.getElementById('pinInput').addEventListener('keydown', function(e){ if(e.key==='Enter') checkPin(); });
+
+  // Update time
+  setInterval(function(){
+    document.getElementById('pageTime').textContent = new Date().toLocaleString('en-IN',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+  }, 1000);
+  document.getElementById('pageTime').textContent = new Date().toLocaleString('en-IN',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+
+  // Load config
+  var savedUrl = localStorage.getItem('riya_admin_bk') || 'https://riya-backend-ujz7.onrender.com';
+  var savedVer = localStorage.getItem('riya_admin_ver') || '5.1';
+  var el = document.getElementById('cfgUrl'); if(el) el.value = savedUrl;
+  var el2 = document.getElementById('cfgVersion'); if(el2) el2.value = savedVer;
+
+  setInterval(loadDashboard, 60000);
+}
 
 function checkPin(){
   var pin = document.getElementById('pinInput').value.trim();
   if(pin === ADMIN_PIN){
     document.getElementById('loginPage').style.display = 'none';
-    document.getElementById('dashboard').style.display = 'block';
+    document.getElementById('app').classList.add('show');
     loadDashboard();
   } else {
     var err = document.getElementById('pinErr');
@@ -331,342 +810,319 @@ function checkPin(){
   }
 }
 
-document.getElementById('logoutBtn').addEventListener('click', function(){
-  document.getElementById('dashboard').style.display = 'none';
+function logout(){
+  document.getElementById('app').classList.remove('show');
   document.getElementById('loginPage').style.display = 'flex';
   document.getElementById('pinInput').value = '';
-});
+}
 
-document.getElementById('refreshBtn').addEventListener('click', loadDashboard);
+function showPage(name, el){
+  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.sb-item').forEach(function(i){ i.classList.remove('active'); });
+  document.getElementById('page-'+name).classList.add('active');
+  if(el) el.classList.add('active');
+  var titles = {overview:'Overview',users:'All Users',reviews:'Reviews',config:'Configuration',broadcast:'Broadcast',founder:'Founder'};
+  document.getElementById('pageTitle').textContent = titles[name] || name;
+}
 
-// LOAD ALL DATA
 function loadDashboard(){
   loadUsers();
-  loadActivity();
   loadReviews();
 }
 
-// LOAD USERS
 function loadUsers(){
+  if(!db) return;
   db.collection('users').get().then(function(snap){
     var users = [];
-    var totalMsgs = 0;
-    var proCount = 0, basicCount = 0, freeCount = 0;
+    var pro=0, basic=0, free=0, activeToday=0, newWeek=0;
     var today = new Date().toDateString();
-    var activeToday = 0;
-    var newThisWeek = 0;
-    var weekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+    var weekAgo = Date.now() - 7*24*60*60*1000;
 
     snap.docs.forEach(function(doc){
-      var d = doc.data();
-      d.uid = doc.id;
+      var d = doc.data(); d.uid = doc.id;
       users.push(d);
-
-      // Plan counts
-      if(d.plan === 'premium') proCount++;
-      else if(d.plan === 'basic') basicCount++;
-      else freeCount++;
-
-      // Active today
+      if(d.plan==='premium') pro++;
+      else if(d.plan==='basic') basic++;
+      else free++;
       if(d.updatedAt){
         var upd = d.updatedAt.toDate ? d.updatedAt.toDate() : new Date(d.updatedAt);
-        if(upd.toDateString() === today) activeToday++;
-        if(upd.getTime() > weekAgo) newThisWeek++;
+        if(upd.toDateString()===today) activeToday++;
+        if(upd.getTime()>weekAgo) newWeek++;
       }
     });
 
-    // Update stats
-    document.getElementById('statUsers').textContent = snap.size;
-    document.getElementById('statUsersNew').textContent = newThisWeek + ' new this week';
-    document.getElementById('statPro').textContent = proCount;
-    document.getElementById('statBasic').textContent = basicCount + ' basic users';
-    document.getElementById('statActive').textContent = activeToday;
-    document.getElementById('planFreeCount').textContent = freeCount;
-    document.getElementById('planBasicCount').textContent = basicCount;
-    document.getElementById('planProCount').textContent = proCount;
-    document.getElementById('userCount').textContent = snap.size + ' users';
+    // Stats
+    document.getElementById('stUsers').textContent = snap.size;
+    document.getElementById('stUsersNew').textContent = newWeek + ' active this week';
+    document.getElementById('stUsersW').textContent = '+'+newWeek+' week';
+    document.getElementById('stPro').textContent = pro+basic;
+    document.getElementById('stBasic').textContent = pro+' pro · '+basic+' basic';
+    document.getElementById('stActive').textContent = activeToday;
+    document.getElementById('planFree').textContent = free;
+    document.getElementById('planBasic').textContent = basic;
+    document.getElementById('planPro').textContent = pro;
+    document.getElementById('planTotal').textContent = snap.size + ' users';
+    document.getElementById('allUserCount').textContent = snap.size + ' users';
 
-    // Get message counts
-    var msgPromises = users.slice(0, 20).map(function(u){
+    // Revenue estimate
+    var mrr = (pro * 149) + (basic * 49);
+    var apiCost = (pro * 50) + (basic * 12);
+    var profit = mrr - apiCost;
+    document.getElementById('revMRR').textContent = '₹' + mrr.toLocaleString('en-IN');
+    document.getElementById('revProfit').textContent = '₹' + profit.toLocaleString('en-IN');
+    document.getElementById('revAPIcost').textContent = '₹' + apiCost.toLocaleString('en-IN');
+    document.getElementById('stRev').textContent = '₹'+mrr+'/mo';
+
+    // Get msg counts for top 20
+    var sorted = users.slice().sort(function(a,b){
+      var at = a.updatedAt?(a.updatedAt.toDate?a.updatedAt.toDate().getTime():0):0;
+      var bt = b.updatedAt?(b.updatedAt.toDate?b.updatedAt.toDate().getTime():0):0;
+      return bt-at;
+    });
+
+    var msgPromises = sorted.slice(0,20).map(function(u){
       return db.collection('users').doc(u.uid).collection('chats').get()
         .then(function(cs){
-          var total = 0;
-          cs.docs.forEach(function(c){ total += c.data().msgCount || 0; });
-          u.totalMsgs = total;
-          totalMsgs += total;
-          return u;
-        }).catch(function(){ u.totalMsgs = 0; return u; });
+          var total=0; cs.docs.forEach(function(c){ total+=c.data().msgCount||0; }); u.totalMsgs=total; return u;
+        }).catch(function(){ u.totalMsgs=0; return u; });
     });
 
-    Promise.all(msgPromises).then(function(enrichedUsers){
-      document.getElementById('statMsgs').textContent = totalMsgs;
-      document.getElementById('statMsgsToday').textContent = 'across all users';
-      renderUsers(enrichedUsers);
-      buildDayChart(enrichedUsers);
+    Promise.all(msgPromises).then(function(eu){
+      var totalMsgs = eu.reduce(function(a,u){ return a+(u.totalMsgs||0); },0);
+      document.getElementById('stMsgs').textContent = totalMsgs.toLocaleString('en-IN');
+      renderRecentUsers(eu.slice(0,8));
+      renderAllUsers(eu);
+      buildDayChart(eu);
+      buildActivityFeed(eu);
     });
-
-  }).catch(function(e){
-    document.getElementById('userList').innerHTML = '<div class="empty">Error loading users</div>';
-    console.log(e);
+  }).catch(function(){
+    document.getElementById('recentUsers').innerHTML = '<div class="empty-state">Error loading users</div>';
   });
 }
 
-function renderUsers(users){
-  var ul = document.getElementById('userList');
-  if(!users.length){ ul.innerHTML = '<div class="empty">No users yet</div>'; return; }
-
-  // Sort by updated
-  users.sort(function(a, b){
-    var at = a.updatedAt ? (a.updatedAt.toDate ? a.updatedAt.toDate().getTime() : 0) : 0;
-    var bt = b.updatedAt ? (b.updatedAt.toDate ? b.updatedAt.toDate().getTime() : 0) : 0;
-    return bt - at;
-  });
-
-  ul.innerHTML = users.map(function(u){
-    var name = u.displayName || 'User';
-    var email = '';
-    var photo = u.photoURL || '';
-    var plan = u.plan || 'free';
-    var msgs = u.totalMsgs || 0;
-    var joined = '';
-    if(u.updatedAt){
-      var d = u.updatedAt.toDate ? u.updatedAt.toDate() : new Date(u.updatedAt);
-      joined = d.toLocaleDateString('en-IN', {day:'numeric',month:'short'});
-    }
-    var planClass = plan === 'premium' ? 'plan-premium' : plan === 'basic' ? 'plan-basic' : 'plan-free';
-    var planLabel = plan === 'premium' ? 'Pro' : plan === 'basic' ? 'Basic' : 'Free';
-    var av = photo
-      ? '<img src="' + photo + '" onerror="this.parentElement.textContent=\'' + (name[0]||'U') + '\'">'
-      : (name[0] || 'U');
+function renderRecentUsers(users){
+  var el = document.getElementById('recentUsers');
+  if(!users.length){ el.innerHTML = '<div class="empty-state">No users yet</div>'; return; }
+  el.innerHTML = users.map(function(u){
+    var name = u.displayName||'User';
+    var plan = u.plan||'free';
+    var planLbl = plan==='premium'?'Pro':plan==='basic'?'Basic':'Free';
+    var planCls = plan==='premium'?'pc-pro':plan==='basic'?'pc-basic':'pc-free';
+    var t = u.updatedAt?(u.updatedAt.toDate?u.updatedAt.toDate():new Date(u.updatedAt)):null;
+    var timeStr = t?timeAgo(t):'';
+    var av = u.photoURL?'<img src="'+u.photoURL+'" onerror="this.parentElement.textContent=\''+(name[0]||'U')+'\'">':name[0]||'U';
     return '<div class="user-row">' +
-      '<div class="u-av">' + av + '</div>' +
-      '<div class="u-info">' +
-        '<div class="u-name">' + esc(name) + '</div>' +
-      '</div>' +
-      '<span class="u-plan ' + planClass + '">' + planLabel + '</span>' +
-      '<div class="u-msgs">' + msgs + ' msgs</div>' +
-      '<div class="u-joined">' + joined + '</div>' +
+      '<div class="uav">'+av+'</div>' +
+      '<div class="uinfo"><div class="uname">'+esc(name)+'</div><div class="utime">'+timeStr+'</div></div>' +
+      '<span class="plan-chip '+planCls+'">'+planLbl+'</span>' +
+      '<div class="umsg">'+(u.totalMsgs||0)+' msgs</div>' +
     '</div>';
   }).join('');
 }
 
-// ACTIVITY FEED — from recent chat updates
-function loadActivity(){
-  db.collection('users')
-    .orderBy('updatedAt', 'desc')
-    .limit(20)
-    .get().then(function(snap){
-      var acts = [];
-      snap.docs.forEach(function(doc){
-        var d = doc.data();
-        var name = d.displayName || 'Someone';
-        var t = d.updatedAt ? (d.updatedAt.toDate ? d.updatedAt.toDate() : new Date(d.updatedAt)) : null;
-        var timeStr = t ? timeAgo(t) : '';
-        acts.push({
-          type: 'msg',
-          txt: name + ' sent a message',
-          time: timeStr,
-          dot: 'msg'
-        });
-        if(d.plan && d.plan !== 'free'){
-          acts.push({
-            type: 'plan',
-            txt: name + ' upgraded to ' + d.plan,
-            time: timeStr,
-            dot: 'join'
-          });
-        }
-      });
-      renderActivity(acts.slice(0, 20));
-    }).catch(function(){
-      document.getElementById('actFeed').innerHTML = '<div class="empty">No activity yet</div>';
-    });
-}
-
-function renderActivity(acts){
-  var feed = document.getElementById('actFeed');
-  if(!acts.length){ feed.innerHTML = '<div class="empty">No activity yet</div>'; return; }
-  feed.innerHTML = acts.map(function(a){
-    return '<div class="act-row">' +
-      '<div class="act-dot ' + a.dot + '"></div>' +
-      '<div class="act-txt">' + esc(a.txt) + '</div>' +
-      '<div class="act-time">' + a.time + '</div>' +
+function renderAllUsers(users){
+  var el = document.getElementById('allUsers');
+  if(!users.length){ el.innerHTML = '<div class="empty-state">No users yet</div>'; return; }
+  el.innerHTML = users.map(function(u){
+    var name = u.displayName||'User';
+    var plan = u.plan||'free';
+    var planLbl = plan==='premium'?'Pro':plan==='basic'?'Basic':'Free';
+    var planCls = plan==='premium'?'pc-pro':plan==='basic'?'pc-basic':'pc-free';
+    var t = u.updatedAt?(u.updatedAt.toDate?u.updatedAt.toDate():new Date(u.updatedAt)):null;
+    var timeStr = t?t.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}):'';
+    var av = u.photoURL?'<img src="'+u.photoURL+'" onerror="this.parentElement.textContent=\''+(name[0]||'U')+'\'">':name[0]||'U';
+    return '<div class="user-row">' +
+      '<div class="uav">'+av+'</div>' +
+      '<div class="uinfo"><div class="uname">'+esc(name)+'</div><div class="utime">Joined '+timeStr+'</div></div>' +
+      '<span class="plan-chip '+planCls+'">'+planLbl+'</span>' +
+      '<div class="umsg">'+(u.totalMsgs||0)+' msgs</div>' +
     '</div>';
   }).join('');
 }
 
-// REVIEWS
-function loadReviews(){
-  db.collection('reviews')
-    .orderBy('createdAt', 'desc')
-    .limit(20)
-    .get().then(function(snap){
-      if(snap.empty){
-        document.getElementById('reviewList').innerHTML = '<div class="no-reviews">No reviews yet</div>';
-        document.getElementById('reviewAvg').textContent = 'No reviews';
-        return;
-      }
-      var total = 0, count = 0;
-      var reviews = snap.docs.map(function(doc){
-        var d = doc.data();
-        total += d.rating || 5;
-        count++;
-        return d;
-      });
-      var avg = count > 0 ? (total/count).toFixed(1) : '5.0';
-      document.getElementById('reviewAvg').textContent = avg + ' avg · ' + count + ' reviews';
-      renderReviews(reviews);
-    }).catch(function(){
-      document.getElementById('reviewList').innerHTML = '<div class="no-reviews">No reviews collection yet</div>';
-    });
-}
-
-function renderReviews(reviews){
-  var rl = document.getElementById('reviewList');
-  rl.innerHTML = reviews.map(function(r){
-    var stars = '';
-    for(var i = 0; i < (r.rating || 5); i++) stars += '★';
-    for(var i = (r.rating || 5); i < 5; i++) stars += '☆';
-    var t = r.createdAt ? (r.createdAt.toDate ? r.createdAt.toDate() : new Date(r.createdAt)) : null;
-    return '<div class="review-row">' +
-      '<div class="review-top">' +
-        '<div class="review-user">' + esc(r.userName || 'User') + '</div>' +
-        '<div class="review-stars">' + stars + '</div>' +
-        '<div class="review-time">' + (t ? timeAgo(t) : '') + '</div>' +
-      '</div>' +
-      '<div class="review-text">' + esc(r.text || '') + '</div>' +
-    '</div>';
+function buildActivityFeed(users){
+  var acts = [];
+  users.slice(0,15).forEach(function(u){
+    var name = u.displayName||'Someone';
+    var t = u.updatedAt?(u.updatedAt.toDate?u.updatedAt.toDate():new Date(u.updatedAt)):null;
+    var timeStr = t?timeAgo(t):'';
+    acts.push({dot:'dot-msg',txt:name+' chatted with Riya',time:timeStr});
+    if(u.plan&&u.plan!=='free') acts.push({dot:'dot-pay',txt:name+' is on '+u.plan+' plan',time:timeStr});
+  });
+  var el = document.getElementById('actFeed');
+  if(!acts.length){ el.innerHTML = '<div class="empty-state">No activity yet</div>'; return; }
+  el.innerHTML = acts.slice(0,20).map(function(a){
+    return '<div class="act-row"><div class="act-dot '+a.dot+'"></div><div class="act-txt">'+esc(a.txt)+'</div><div class="act-time">'+a.time+'</div></div>';
   }).join('');
 }
 
-// DAY CHART
+var CHART_COLORS = ['#6C63FF','#38bdf8','#22c55e','#f97316','#ec4899','#a855f7','#14b8a6'];
+
 function buildDayChart(users){
   var days = {};
   var now = new Date();
-  for(var i = 6; i >= 0; i--){
-    var d = new Date(now);
-    d.setDate(d.getDate() - i);
-    var key = d.toLocaleDateString('en-IN', {weekday:'short'});
-    days[key] = 0;
+  var dayNames = [];
+  for(var i=6;i>=0;i--){
+    var d = new Date(now); d.setDate(d.getDate()-i);
+    var key = d.toLocaleDateString('en-IN',{weekday:'short'});
+    days[key]=0; dayNames.push(key);
   }
-
   users.forEach(function(u){
     if(u.updatedAt){
-      var d = u.updatedAt.toDate ? u.updatedAt.toDate() : new Date(u.updatedAt);
-      var key = d.toLocaleDateString('en-IN', {weekday:'short'});
-      if(days[key] !== undefined) days[key]++;
+      var d=u.updatedAt.toDate?u.updatedAt.toDate():new Date(u.updatedAt);
+      var key=d.toLocaleDateString('en-IN',{weekday:'short'});
+      if(days[key]!==undefined) days[key]++;
     }
   });
-
   var max = Math.max(1, Math.max.apply(null, Object.values(days)));
-  var html = Object.entries(days).map(function(entry){
-    var pct = Math.round((entry[1] / max) * 100);
+  var el = document.getElementById('dayChart');
+  el.innerHTML = dayNames.map(function(k, i){
+    var pct = Math.round((days[k]/max)*100);
+    var color = CHART_COLORS[i % CHART_COLORS.length];
     return '<div class="chart-bar-row">' +
-      '<div class="chart-label">' + entry[0] + '</div>' +
-      '<div class="chart-bar-bg"><div class="chart-bar-fill" style="width:' + pct + '%"></div></div>' +
-      '<div class="chart-val">' + entry[1] + '</div>' +
+      '<div class="chart-day">'+k+'</div>' +
+      '<div class="chart-bg"><div class="chart-fill" style="width:'+pct+'%;background:'+color+';box-shadow:0 0 8px '+color+'55;"></div></div>' +
+      '<div class="chart-count">'+days[k]+'</div>' +
     '</div>';
   }).join('');
-
-  document.getElementById('dayChart').innerHTML = html;
 }
 
-function timeAgo(date){
-  var diff = Date.now() - date.getTime();
-  var m = Math.floor(diff / 60000);
-  var h = Math.floor(diff / 3600000);
-  var d = Math.floor(diff / 86400000);
-  if(d > 0) return d + 'd ago';
-  if(h > 0) return h + 'h ago';
-  if(m > 0) return m + 'm ago';
-  return 'just now';
+function loadReviews(){
+  if(!db) return;
+  db.collection('reviews').orderBy('createdAt','desc').limit(30).get().then(function(snap){
+    if(snap.empty){
+      document.getElementById('reviewList').innerHTML = '<div class="empty-state">No reviews yet</div>';
+      document.getElementById('reviewSummary').textContent = 'No reviews yet';
+      document.getElementById('stRating').textContent = 'No reviews yet';
+      document.getElementById('stAvg').textContent = '—';
+      return;
+    }
+    var total=0, count=0;
+    var reviews = snap.docs.map(function(doc){
+      var d = doc.data(); d.docId = doc.id; total+=d.rating||5; count++;
+      return d;
+    });
+    var avg = count>0?(total/count).toFixed(1):'5.0';
+    document.getElementById('reviewSummary').textContent = '⭐ '+avg+' avg · '+count+' reviews';
+    document.getElementById('stRating').textContent = count+' reviews';
+    document.getElementById('stAvg').textContent = '⭐ '+avg;
+    renderReviews(reviews);
+  }).catch(function(){
+    document.getElementById('reviewList').innerHTML = '<div class="empty-state">No reviews collection yet</div>';
+  });
 }
 
-function esc(s){
-  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+function renderReviews(reviews){
+  var el = document.getElementById('reviewList');
+  el.innerHTML = reviews.map(function(r, idx){
+    var stars = '';
+    for(var i=0;i<(r.rating||5);i++) stars+='★';
+    for(var i=(r.rating||5);i<5;i++) stars+='☆';
+    var t = r.createdAt?(r.createdAt.toDate?r.createdAt.toDate():new Date(r.createdAt)):null;
+    var adminReplyHtml = r.adminReply
+      ? '<div class="rv-admin-reply"><div class="rv-admin-reply-label">Admin Reply</div>'+esc(r.adminReply)+'</div>'
+      : '';
+    return '<div class="review-card" id="rc-'+idx+'">' +
+      '<div class="rv-top"><div class="rv-name">'+esc(r.userName||'User')+'</div><div class="rv-stars">'+stars+'</div><div class="rv-time">'+(t?timeAgo(t):'')+'</div></div>' +
+      '<div class="rv-text">'+esc(r.text||'')+'</div>' +
+      adminReplyHtml +
+      '<div class="rv-reply">' +
+        '<input class="rv-reply-input" id="ri-'+idx+'" placeholder="Reply as Riya admin..." />' +
+        '<button class="rv-reply-btn" onclick="replyToReview(\''+esc(r.docId||'')+'\','+idx+')">Reply →</button>' +
+      '</div>' +
+    '</div>';
+  }).join('');
 }
 
-// Auto refresh every 60 seconds
-  setInterval(loadDashboard, 60000);
-
-  // Load saved config
-  var savedUrl = localStorage.getItem('riya_admin_backend_url') || 'https://riya-backend-ujz7.onrender.com';
-  var savedVersion = localStorage.getItem('riya_admin_version') || '5.0';
-  var cfgUrl = document.getElementById('cfgUrl');
-  var cfgVer = document.getElementById('cfgVersion');
-  if(cfgUrl) cfgUrl.value = savedUrl;
-  if(cfgVer) cfgVer.value = savedVersion;
+function replyToReview(docId, idx){
+  var input = document.getElementById('ri-'+idx);
+  if(!input || !input.value.trim()) return;
+  var reply = input.value.trim();
+  if(!docId||!db){ alert('Cannot save — no doc ID'); return; }
+  db.collection('reviews').doc(docId).update({ adminReply: reply })
+    .then(function(){
+      var card = document.getElementById('rc-'+idx);
+      if(card){
+        var existing = card.querySelector('.rv-admin-reply');
+        if(existing) existing.remove();
+        var replyDiv = document.createElement('div');
+        replyDiv.className = 'rv-admin-reply';
+        replyDiv.innerHTML = '<div class="rv-admin-reply-label">Admin Reply</div>'+esc(reply);
+        card.insertBefore(replyDiv, card.querySelector('.rv-reply'));
+        input.value = '';
+      }
+    }).catch(function(e){ alert('Error saving reply: '+e.message); });
 }
 
 function saveConfig(){
   var url = document.getElementById('cfgUrl').value.trim();
   var ver = document.getElementById('cfgVersion').value.trim();
   var maint = document.getElementById('cfgMaint').value;
-  if(url) localStorage.setItem('riya_admin_backend_url', url);
-  if(ver) localStorage.setItem('riya_admin_version', ver);
+  if(url) localStorage.setItem('riya_admin_bk', url);
+  if(ver) localStorage.setItem('riya_admin_ver', ver);
   localStorage.setItem('riya_admin_maint', maint);
   var st = document.getElementById('cfgStatus');
-  if(st){ st.style.display = 'block'; setTimeout(function(){ st.style.display = 'none'; }, 2000); }
+  if(st){ st.style.display='block'; setTimeout(function(){ st.style.display='none'; },2500); }
 }
 
 function testBackend(){
-  var url = document.getElementById('cfgUrl').value.trim() || 'https://riya-backend-ujz7.onrender.com';
-  fetch(url + '/api/health')
-    .then(function(r){ alert('Backend OK! Status: ' + r.status); })
-    .catch(function(){ alert('Cannot reach backend. Check URL or Render status.'); });
+  var url = (document.getElementById('cfgUrl').value.trim())||'https://riya-backend-ujz7.onrender.com';
+  fetch(url+'/ping').then(function(r){ alert('✅ Backend OK! Status: '+r.status+'\n\nRender server is running.'); })
+    .catch(function(){ alert('❌ Cannot reach backend.\n\nCheck URL or Render service status.'); });
 }
 
-window.addEventListener("load", initAdmin);
+function toggleChip(el, target){
+  document.querySelectorAll('.bc-chip').forEach(function(c){ c.classList.remove('sel'); });
+  el.classList.add('sel');
+  currentBcTarget = target;
+}
 
-// AI SPIRIT BACKGROUND
-(function(){
-  function startBg(){
-    var canvas = document.getElementById('adminBg');
-    if(!canvas) return;
-    var ctx = canvas.getContext('2d');
-    var W, H, stars = [], flow = [];
-
-    function resize(){
-      W = canvas.width = window.innerWidth;
-      H = canvas.height = window.innerHeight;
-    }
-    resize();
-    window.addEventListener('resize', resize);
-
-    for(var i = 0; i < 200; i++) stars.push({
-      x: Math.random()*W, y: Math.random()*H,
-      r: Math.random()*.8+.1, o: Math.random()*.15+.02,
-      tw: Math.random()*Math.PI*2, s: Math.random()*.003+.001
-    });
-    for(var i = 0; i < 60; i++) flow.push({
-      x: Math.random()*W, y: Math.random()*H,
-      vx: (Math.random()-.5)*.18, vy: -(Math.random()*.15+.04),
-      o: Math.random()*.1+.02, r: Math.random()*.5+.1, life: Math.random()
-    });
-
-    (function draw(){
-      ctx.clearRect(0,0,W,H);
-      ctx.fillStyle='#020208'; ctx.fillRect(0,0,W,H);
-      stars.forEach(function(s){
-        s.tw+=s.s;
-        var op=s.o*(0.4+Math.sin(s.tw)*.6);
-        ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
-        ctx.fillStyle='rgba(225,220,215,'+op+')';ctx.fill();
-      });
-      flow.forEach(function(f){
-        f.x+=f.vx; f.y+=f.vy; f.life-=.004;
-        if(f.life<=0||f.y<-10){
-          f.x=Math.random()*W; f.y=H+10; f.life=1;
-          f.vx=(Math.random()-.5)*.18; f.vy=-(Math.random()*.15+.04);
-        }
-        ctx.beginPath();ctx.arc(f.x,f.y,f.r,0,Math.PI*2);
-        ctx.fillStyle='rgba(240,235,230,'+f.o*f.life+')';ctx.fill();
-      });
-      requestAnimationFrame(draw);
-    })();
+function sendBroadcast(){
+  var txt = document.getElementById('bcText').value.trim();
+  if(!txt){ alert('Write a message first!'); return; }
+  if(!confirm('Send to: '+currentBcTarget+'\n\nMessage: '+txt+'\n\nSend broadcast?')) return;
+  // Save to Firestore broadcasts collection
+  if(db){
+    db.collection('broadcasts').add({
+      message: txt, target: currentBcTarget,
+      sentAt: firebase.firestore.FieldValue.serverTimestamp(), sentBy: 'admin'
+    }).then(function(){
+      document.getElementById('bcText').value = '';
+      alert('✅ Broadcast saved! Users will see it next time they chat.');
+      loadBroadcastHistory();
+    }).catch(function(e){ alert('Error: '+e.message); });
   }
-  window.addEventListener('load', startBg);
-})();
+}
+
+function previewBroadcast(){
+  var txt = document.getElementById('bcText').value.trim();
+  if(!txt){ alert('Write a message first!'); return; }
+  alert('Preview:\n\n[Riya says]: '+txt);
+}
+
+function loadBroadcastHistory(){
+  if(!db) return;
+  db.collection('broadcasts').orderBy('sentAt','desc').limit(5).get().then(function(snap){
+    var el = document.getElementById('bcHistory');
+    if(snap.empty){ el.innerHTML='<div class="empty-state">No broadcasts yet</div>'; return; }
+    el.innerHTML = snap.docs.map(function(doc){
+      var d=doc.data();
+      var t=d.sentAt?(d.sentAt.toDate?d.sentAt.toDate():new Date(d.sentAt)):null;
+      return '<div style="padding:10px 12px;border:1px solid var(--brd);border-radius:10px;margin-bottom:8px;font-size:12px;color:var(--w3);">'+
+        '<span style="color:rgba(108,99,255,.6);font-family:JetBrains Mono,monospace;font-size:9px;margin-right:8px;">['+d.target+']</span>'+esc(d.message)+
+        '<div style="font-size:9px;color:rgba(255,255,255,.15);margin-top:4px;font-family:JetBrains Mono,monospace;">'+(t?timeAgo(t):'')+'</div>'+
+      '</div>';
+    }).join('');
+  }).catch(function(){});
+}
+
+function timeAgo(date){
+  var diff=Date.now()-date.getTime(), m=Math.floor(diff/60000), h=Math.floor(diff/3600000), d=Math.floor(diff/86400000);
+  if(d>0) return d+'d ago'; if(h>0) return h+'h ago'; if(m>0) return m+'m ago'; return 'just now';
+}
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+window.addEventListener('load', function(){ initAdmin(); loadBroadcastHistory && loadBroadcastHistory(); });
 </script>
 </body>
 </html>
