@@ -16,7 +16,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <style>
-:root{--bg:#030308;--sb:#060610;--brd:rgba(255,255,255,.07);--w:rgba(255,255,255,.82);--w2:rgba(255,255,255,.38);--w3:rgba(255,255,255,.12);--w4:rgba(255,255,255,.04);}
+:root{--bg:#030308;--sb:#060610;--brd:rgba(255,255,255,.07);--w:rgba(255,255,255,.95);--w2:rgba(255,255,255,.65);--w3:rgba(255,255,255,.20);--w4:rgba(255,255,255,.04);}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;font-family:'Inter',system-ui,sans-serif;}
 body{height:100dvh;overflow:hidden;background:var(--bg);color:var(--w);display:flex;flex-direction:column;}
@@ -889,6 +889,13 @@ body.th-dusk .bub.us{background:rgba(255,60,100,.06)!important;border-color:rgba
   padding:10px 14px;border-radius:14px 3px 14px 14px;
 }
 </style>
+
+<script>
+// Wake Render backend immediately on load
+setTimeout(function(){
+  fetch('https://riya-backend-ujz7.onrender.com/ping').catch(function(){});
+}, 500);
+</script>
 </head>
 <body>
 <canvas id="bgc"></canvas>
@@ -1411,7 +1418,7 @@ auth.onAuthStateChanged(function(u){
   var al=document.getElementById('authLoad');if(al)al.classList.add('hide');
   if(u){
     user=u;load=false;
-    try{var s=JSON.parse(localStorage.getItem('rs_'+u.uid)||'{}');bkUrl=s.bkUrl||'https://riya-backend-ujz7.onrender.com';rzKey=s.rzKey||'';}catch(e){}
+    try{var s=JSON.parse(localStorage.getItem('rs_'+u.uid)||'{}');bkUrl='https://riya-backend-ujz7.onrender.com';rzKey=s.rzKey||'';}catch(e){}
     try{userElevenKey=localStorage.getItem('riya_vk_'+u.uid)||'';userVoiceId=localStorage.getItem('riya_vid_'+u.uid)||'QTKSa2Iyv0yoxvXY2V8a';}catch(e){}
     try{artifacts=JSON.parse(localStorage.getItem('riya_arts_'+u.uid)||'[]');}catch(e){artifacts=[];}
     ldUD().then(function(){return ldChs();}).then(function(){
@@ -2787,140 +2794,6 @@ window.addEventListener('beforeunload', function(){
     </div>
   </div>
 </div>
-
-
-<script>
-// ════════════════════════════════════════════════
-// RIYA FIX — Personal Space + Workspace + Chat
-// ════════════════════════════════════════════════
-
-const BACKEND = 'https://riya-backend-ujz7.onrender.com';
-
-// ── Helper: get current user name ──
-function getRiyaUser() {
-  try { return firebase.auth().currentUser?.displayName || 'yaar'; } catch { return 'yaar'; }
-}
-
-// ── Helper: add message bubble ──
-function addBubble(containerId, text, isUser) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-  const div = document.createElement('div');
-  div.style.cssText = isUser
-    ? 'padding:10px 14px;margin:6px 12px 6px auto;background:rgba(255,255,255,.07);border-radius:14px 14px 3px 14px;font-size:14px;max-width:80%;width:fit-content;color:rgba(255,255,255,.85);line-height:1.5;'
-    : 'padding:10px 14px;margin:6px auto 6px 12px;background:rgba(91,231,255,.06);border:1px solid rgba(91,231,255,.1);border-radius:14px 14px 14px 3px;font-size:14px;max-width:80%;width:fit-content;color:rgba(255,255,255,.82);line-height:1.5;';
-  div.innerText = text;
-  container.appendChild(div);
-  container.scrollTop = container.scrollHeight;
-}
-
-// ── Helper: typing indicator ──
-function showTyping(containerId) {
-  const container = document.getElementById(containerId);
-  if (!container) return null;
-  const div = document.createElement('div');
-  div.id = 'typing_' + containerId;
-  div.style.cssText = 'padding:10px 14px;margin:6px auto 6px 12px;background:rgba(91,231,255,.04);border:1px solid rgba(91,231,255,.08);border-radius:14px;font-size:13px;color:rgba(255,255,255,.3);font-style:italic;';
-  div.innerText = 'Riya soch rahi hai...';
-  container.appendChild(div);
-  container.scrollTop = container.scrollHeight;
-  return div;
-}
-
-// ── Helper: call Riya backend ──
-async function callRiya(msg, mood = 'normal') {
-  const res = await fetch(BACKEND + '/api/chat', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      messages: [{ role: 'user', content: msg }],
-      userName: getRiyaUser(),
-      mood
-    })
-  });
-  const data = await res.json();
-  return data.reply || data.text || 'Kuch problem ho gayi yaar 😢';
-}
-
-// ════════════════════════════════════
-// FIX 1 — PERSONAL SPACE SEND
-// ════════════════════════════════════
-window.addEventListener('load', function() {
-
-  const psSend = document.getElementById('psSendBtn');
-  const psInput = document.getElementById('psInput');
-
-  if (psSend && psInput) {
-    async function sendPS() {
-      const msg = psInput.value.trim();
-      if (!msg) return;
-
-      // Remove empty state
-      const empty = document.querySelector('#psMsgs .ps-empty');
-      if (empty) empty.remove();
-
-      addBubble('psMsgs', msg, true);
-      psInput.value = '';
-      psInput.style.height = 'auto';
-
-      const typing = showTyping('psMsgs');
-      try {
-        const reply = await callRiya('[Personal Space - be extra caring and private] ' + msg, 'care');
-        if (typing) typing.remove();
-        addBubble('psMsgs', reply, false);
-      } catch(e) {
-        if (typing) typing.remove();
-        addBubble('psMsgs', 'Connection issue yaar, dobara try karo 😢', false);
-      }
-    }
-
-    psSend.onclick = sendPS;
-    psInput.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendPS(); }
-    });
-  }
-
-  // ════════════════════════════════════
-  // FIX 2 — AI WORKSPACE SEND
-  // ════════════════════════════════════
-  const wsSendBtn = document.getElementById('wsSend');
-  const wsInputEl = document.getElementById('wsInput');
-
-  if (wsSendBtn && wsInputEl) {
-    async function sendWS() {
-      const msg = wsInputEl.value.trim();
-      if (!msg) return;
-
-      addBubble('wsChatTab', msg, true);
-      wsInputEl.value = '';
-      wsInputEl.style.height = 'auto';
-
-      const typing = showTyping('wsChatTab');
-      try {
-        const reply = await callRiya(msg, 'focus');
-        if (typing) typing.remove();
-        addBubble('wsChatTab', reply, false);
-      } catch(e) {
-        if (typing) typing.remove();
-        addBubble('wsChatTab', 'Error aa gayi yaar 😢', false);
-      }
-    }
-
-    wsSendBtn.onclick = sendWS;
-    wsInputEl.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendWS(); }
-    });
-  }
-
-  // ════════════════════════════════════
-  // FIX 3 — MAIN CHAT (Backend wake-up)
-  // Wake up Render on page load so it's
-  // ready before user sends first message
-  // ════════════════════════════════════
-  fetch(BACKEND + '/ping').catch(() => {});
-
-});
-</script>
 
 </body>
 </html>
