@@ -2795,5 +2795,106 @@ window.addEventListener('beforeunload', function(){
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+<script>
+(function(){
+
+// ===== FIND YOUR REAL ELEMENTS (based on your UI) =====
+const textarea =
+  document.querySelector("textarea") ||
+  document.querySelector("input");
+
+const sendBtn =
+  document.querySelector(".send") ||
+  document.querySelector("button");
+
+// YOUR CHAT BOX (IMPORTANT — adjust if needed)
+const container =
+  document.querySelector(".msgs") ||
+  document.querySelector("#msg") ||
+  document.querySelector(".chat");
+
+// ===== SAFETY =====
+if(!textarea || !sendBtn){
+  console.log("Input or button not found");
+  return;
+}
+
+// ===== SEND =====
+sendBtn.addEventListener("click", sendMessage);
+
+textarea.addEventListener("keydown", function(e){
+  if(e.key === "Enter" && !e.shiftKey){
+    e.preventDefault();
+    sendMessage();
+  }
+});
+
+async function sendMessage(){
+  const msg = textarea.value.trim();
+  if(!msg) return;
+
+  addMessage(msg, "user");
+
+  try{
+    const res = await fetch("https://riya-backend-ujz7.onrender.com/api/chat",{
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({
+        messages:[{role:"user", content:msg}]
+      })
+    });
+
+    const data = await res.json();
+
+    typeMessage(data.reply);
+
+  }catch{
+    addMessage("Error 😢","ai");
+  }
+
+  textarea.value="";
+}
+
+// ===== ADD MESSAGE =====
+function addMessage(text, role){
+  const div = document.createElement("div");
+
+  div.className = "bub " + (role === "user" ? "us" : "ai");
+
+  div.innerHTML = marked.parse(text);
+
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+// ===== TYPING =====
+function typeMessage(text){
+  const div = document.createElement("div");
+  div.className = "bub ai";
+
+  container.appendChild(div);
+
+  let i = 0;
+
+  function type(){
+    if(i < text.length){
+      div.innerHTML = marked.parse(text.slice(0,i));
+      i++;
+      setTimeout(type, 8);
+    } else {
+      div.innerHTML = marked.parse(text);
+    }
+
+    container.scrollTop = container.scrollHeight;
+  }
+
+  type();
+}
+
+})();
+</script>
+  
 </body>
 </html>
