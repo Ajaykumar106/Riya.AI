@@ -836,6 +836,7 @@ function formatAI(text,container){
   return '';
 }
 
+  
 // Render messages
 function renderMessages(){
   var c=document.getElementById('msgs');if(!c)return;c.innerHTML='';
@@ -848,7 +849,273 @@ function renderMessages(){
 }
 
 function addMessage(m,anim){
-  var c=document.getElementByI
+  var c=document.getElementById('msgs');if(!c)return;
+  var isAi=m.role==='ai';
+  var g=document.createElement('div');g.className='msg-group '+(isAi?'ai':'user');if(anim)g.classList.add('anim');g.dataset.txt=m.text||'';
+  if(m.type==='image'){
+    var row=document.createElement('div');row.className='msg-row'+(isAi?'':' user');
+    var ib=document.createElement('div');ib.className='img-bubble';ib.innerHTML='<img src="'+esc(m.url||'')+'" loading="lazy"/><div class="img-caption">'+esc(m.text||'')+'</div>';
+    row.appendChild(ib);g.appendChild(row);
+  }else{
+    var row2=document.createElement('div');row2.className='msg-row'+(isAi?'':' user');
+    if(isAi){var av=document.createElement('div');av.className='ai-av';av.innerHTML=AI_ICON;row2.appendChild(av);}
+    var bub=document.createElement('div');bub.className='bubble '+(isAi?'ai':'user');
+    if(isAi){formatAI(m.text||'',bub);}else{bub.innerHTML=esc(m.text||'').replace(/\n/g,'<br>');}
+    row2.appendChild(bub);
+    if(!isAi){var uav=document.createElement('div');uav.className='user-av';var ph=prof.photo||(user&&user.photoURL)||'';if(ph){uav.innerHTML='<img src="'+ph+'" onerror="this.parentElement.textContent=\''+(prof.name&&prof.name[0]||'U')+'\'">';}else{uav.textContent=(prof.name&&prof.name[0])||'U';}row2.appendChild(uav);}
+    g.appendChild(row2);
+  }
+  if(isAi&&m.src&&m.src.length){
+    var sb=document.createElement('div');sb.className='sources';
+    sb.innerHTML='<div class="sources-label">Sources</div>'+m.src.map(function(s){try{var h=new URL(s.url).hostname.replace('www.','');return '<div class="source-item"><div class="source-icon">'+h.slice(0,2).toUpperCase()+'</div><a class="source-link" href="'+esc(s.url)+'" target="_blank">'+esc(s.title||s.url)+'</a></div>';}catch(e){return '';}}).join('');
+    g.appendChild(sb);
+  }
+  var acts=document.createElement('div');acts.className='msg-actions';
+  if(isAi){
+    [{t:'Copy',i:'<svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>'},{t:'Listen',i:'<svg viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>'}].forEach(function(btn,i){
+      var b=document.createElement('button');b.className='action-btn';b.title=btn.t;b.innerHTML=btn.i;
+      if(i===0)b.addEventListener('click',function(){navigator.clipboard&&navigator.clipboard.writeText(g.dataset.txt||'');this.innerHTML='<svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>';var self=this;setTimeout(function(){self.innerHTML=btn.i;},1400);});
+      if(i===1)b.addEventListener('click',function(){speak(g.dataset.txt||'');});
+      acts.appendChild(b);
+    });
+    var regen=document.createElement('button');regen.className='regen-btn';regen.textContent='â†º Regenerate';
+    regen.addEventListener('click',function(){var ch=getActive();if(!ch)return;var lastUser='';for(var i=ch.msgs.length-1;i>=0;i--){if(ch.msgs[i].role==='user'){lastUser=ch.msgs[i].text;break;}}var mi=ch.msgs.indexOf(m);if(mi>=0)ch.msgs=ch.msgs.slice(0,mi);renderMessages();if(lastUser)send(lastUser);});
+    g.appendChild(acts);g.appendChild(regen);
+  }else{
+    var editBtn=document.createElement('button');editBtn.className='action-btn';editBtn.title='Edit';
+    editBtn.innerHTML='<svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>';
+    editBtn.addEventListener('click',function(){
+      var bub2=g.querySelector('.bubble.user');if(!bub2)return;bub2.contentEditable='true';bub2.focus();
+      var range=document.createRange();range.selectNodeContents(bub2);range.collapse(false);window.getSelection().removeAllRanges();window.getSelection().addRange(range);
+      bub2.addEventListener('keydown',function handler(e){
+        if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();bub2.contentEditable='false';var nt=bub2.innerText.trim();if(!nt)return;m.text=nt;g.dataset.txt=nt;var ch=getActive();var mi=ch.msgs.indexOf(m);if(mi>=0)ch.msgs=ch.msgs.slice(0,mi);renderMessages();send(nt);bub2.removeEventListener('keydown',handler);}
+        if(e.key==='Escape'){bub2.contentEditable='false';bub2.removeEventListener('keydown',handler);}
+      });
+    });
+    acts.appendChild(editBtn);g.appendChild(acts);
+  }
+  document.getElementById('msgs').appendChild(g);if(anim)scrollBot();
+}
+
+// Send
+var mi=document.getElementById('msgInput');
+mi.addEventListener('input',function(){this.style.height='auto';this.style.height=Math.min(this.scrollHeight,120)+'px';updateSend();});
+mi.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}});
+document.getElementById('sendBtn').addEventListener('click',function(){send();});
+function updateSend(){document.getElementById('sendBtn').disabled=!(mi.value||'').trim()||loading;}
+
+function detectMood(t){
+  var l=t.toLowerCase();
+  if(/sad|upset|hurt|cry|fail|lonely|stressed|tired|frustrated|stuck|broke|miss|alone/.test(l))return'CARE';
+  if(/code|debug|error|fix|learn|study|explain|how|why|algorithm|function|api/.test(l))return'FOCUS';
+  if(/idea|build|create|startup|design|imagine|launch|project/.test(l))return'CREATE';
+  return'READY';
+}
+function moodLower(){var t=(document.getElementById('moodTag').textContent||'').toLowerCase();if(t==='care')return'care';if(t==='focus')return'focus';if(t==='create')return'creative';return'normal';}
+
+function send(pre){
+  var txt=(pre||mi.value||'').trim();if(!txt||loading)return;vibrate();
+  mi.value='';mi.style.height='auto';loading=true;updateSend();
+  var ch=getActive();if(!ch){loading=false;updateSend();return;}
+  if(ch.title==='New Chat')ch.title=txt.slice(0,40);
+  var uMsg={role:'user',text:txt};ch.msgs.push(uMsg);saveChat(ch);saveMsg(ch.id,uMsg,ch.msgs.length-1);
+  renderChatList();addMessage(uMsg,true);setMood(detectMood(txt));showThinking('Thinking...');
+  var WEB=['today','tonight','this week','right now','currently','latest','recent','news','2024','2025','2026','price','stock','weather','live','score','match','election','trending'];
+  var needsSearch=webSearch&&WEB.some(function(w){return txt.toLowerCase().includes(w);});
+  var src=[],wctx='',p=Promise.resolve();
+  if(needsSearch){
+    setSt('Searching...');
+    p=fetch(BACKEND+'/api/search',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query:txt})})
+      .then(function(r){return r.json();})
+      .then(function(d){if(d.results&&d.results.length){src=d.results.slice(0,4);wctx='\n\n[LIVE WEB]:\n'+src.map(function(r){return '* '+r.title+': '+(r.content||'').slice(0,250);}).join('\n');}setSt('Thinking...');})
+      .catch(function(){});
+  }
+  p.then(function(){
+    var fn=prof.name||(user?user.displayName||'':'');
+    var hist=ch.msgs.slice(-14).map(function(m){return{role:m.role==='ai'?'assistant':'user',content:m.text||''};});
+    hideThinking();
+    var aiMsg={role:'ai',text:'',src:src.length?src:null};ch.msgs.push(aiMsg);var idx=ch.msgs.length-1;
+    var aiG=document.createElement('div');aiG.className='msg-group ai anim';
+    var aiRow=document.createElement('div');aiRow.className='msg-row';
+    var aiAv=document.createElement('div');aiAv.className='ai-av';aiAv.innerHTML=AI_ICON;
+    var aiBub=document.createElement('div');aiBub.className='bubble ai streaming';
+    aiRow.appendChild(aiAv);aiRow.appendChild(aiBub);aiG.appendChild(aiRow);
+    document.getElementById('msgs').appendChild(aiG);scrollBot();
+    var fullText='';
+    fetch(BACKEND+'/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:hist,userName:fn,mood:moodLower(),plan:plan,stream:true,wctx:wctx,memory:userMemory,city:prof.city||'India'})})
+      .then(function(r){
+        var reader=r.body.getReader(),dec=new TextDecoder();
+        function read(){return reader.read().then(function(chunk){
+          if(chunk.done){
+            aiBub.classList.remove('streaming');aiBub.innerHTML='';formatAI(fullText,aiBub);
+            aiMsg.text=fullText;saveChat(ch);saveMsg(ch.id,aiMsg,idx);
+            autoMemory(ch);setSt('Online Â· Ready');loading=false;updateSend();
+            if(haptic&&navigator.vibrate)navigator.vibrate([5,3,5]);return;
+          }
+          dec.decode(chunk.value).split('\n').forEach(function(line){
+            if(line.startsWith('data: ')&&line!=='data: [DONE]'){try{var d=JSON.parse(line.slice(6));if(d.token){fullText+=d.token;aiBub.innerHTML=formatAI(fullText);scrollBot();}}catch(e){}}
+          });return read();
+        });}return read();
+      }).catch(function(){loading=false;updateSend();setSt('Online Â· Ready');aiBub.classList.remove('streaming');aiBub.innerHTML='Connection issue. Try again.';aiMsg.text='Connection issue. Try again.';saveChat(ch);});
+  });
+}
+
+// Auto memory
+function autoMemory(ch){
+  if(!ch||!ch.msgs||ch.msgs.length<4||!user)return;
+  fetch(BACKEND+'/api/summarize',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:ch.msgs.slice(-20),userName:prof.name,existingMemory:userMemory})})
+    .then(function(r){return r.json();}).then(function(d){if(d.memory&&d.memory.length>10){saveMem(d.memory);showMemory();}}).catch(function(){});
+}
+
+// Attach
+document.getElementById('attachBtn').addEventListener('click',function(){
+  document.getElementById('attachSheet').classList.add('show');
+  document.getElementById('attachSheet').addEventListener('click',function handler(e){if(e.target===this){this.classList.remove('show');this.removeEventListener('click',handler);}});
+});
+function triggerCamera(){document.getElementById('attachSheet').classList.remove('show');document.getElementById('fileCamera').click();}
+function triggerPhotos(){document.getElementById('attachSheet').classList.remove('show');document.getElementById('filePhoto').click();}
+function triggerFiles(){document.getElementById('attachSheet').classList.remove('show');document.getElementById('fileDoc').click();}
+function toggleWS(){
+  webSearch=!webSearch;
+  document.getElementById('wsToggle').className='ws-toggle'+(webSearch?'':' off');
+  document.getElementById('wsStatus').textContent=webSearch?'Live search enabled':'Search disabled';
+  document.getElementById('wsToggleSP').className='sp-toggle'+(webSearch?' on':'');
+}
+
+function handleImageFile(file){
+  if(!file)return;var reader=new FileReader();
+  reader.onload=function(e){
+    var b64=e.target.result.split(',')[1];setSt('Analyzing image...');showThinking('Analyzing image...');
+    fetch(BACKEND+'/api/analyze-image',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({imageBase64:b64,mimeType:file.type||'image/jpeg',userName:prof.name})})
+      .then(function(r){return r.json();}).then(function(d){
+        hideThinking();var ch=getActive();if(!ch)return;
+        var imgMsg={role:'user',type:'image',url:e.target.result,text:'Image'};ch.msgs.push(imgMsg);saveMsg(ch.id,imgMsg,ch.msgs.length-1);addMessage(imgMsg,true);
+        var aiMsg={role:'ai',text:d.reply||'Interesting!'};ch.msgs.push(aiMsg);saveMsg(ch.id,aiMsg,ch.msgs.length-1);addMessage(aiMsg,true);setSt('Online Â· Ready');
+      }).catch(function(){hideThinking();setSt('Online Â· Ready');});
+  };reader.readAsDataURL(file);
+}
+document.getElementById('fileCamera').addEventListener('change',function(){handleImageFile(this.files[0]);this.value='';});
+document.getElementById('filePhoto').addEventListener('change',function(){handleImageFile(this.files[0]);this.value='';});
+document.getElementById('fileDoc').addEventListener('change',function(){
+  var file=this.files[0];if(!file)return;this.value='';var reader=new FileReader();
+  reader.onload=function(e){
+    var b64=e.target.result.split(',')[1];setSt('Reading file...');showThinking('Reading file...');
+    fetch(BACKEND+'/api/analyze-file',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({fileBase64:b64,mimeType:file.type,fileName:file.name,userName:prof.name})})
+      .then(function(r){return r.json();}).then(function(d){
+        hideThinking();var ch=getActive();if(!ch)return;
+        var fileMsg={role:'user',text:'ðŸ“„ '+file.name};ch.msgs.push(fileMsg);saveMsg(ch.id,fileMsg,ch.msgs.length-1);addMessage(fileMsg,true);
+        var aiMsg={role:'ai',text:d.reply||'File analyzed.'};ch.msgs.push(aiMsg);saveMsg(ch.id,aiMsg,ch.msgs.length-1);addMessage(aiMsg,true);setSt('Online Â· Ready');
+      }).catch(function(){hideThinking();setSt('Online Â· Ready');});
+  };reader.readAsDataURL(file);
+});
+
+// Voice
+function speak(text){
+  if(!text)return;
+  if(!elevenKey){setSt('Add ElevenLabs key in Settings');setTimeout(function(){setSt('Online Â· Ready');},2000);return;}
+  setSt('Speaking...');
+  fetch(BACKEND+'/api/speak',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:text,userKey:elevenKey})})
+    .then(function(r){if(!r.ok)throw new Error();return r.blob();})
+    .then(function(blob){var url=URL.createObjectURL(blob);var a=new Audio(url);a.play();a.onended=function(){URL.revokeObjectURL(url);setSt('Online Â· Ready');};})
+    .catch(function(){setSt('Online Â· Ready');});
+}
+
+// Mic
+document.getElementById('micBtn').addEventListener('click',function(){
+  if(!('webkitSpeechRecognition'in window||'SpeechRecognition'in window)){setSt('Voice not supported');setTimeout(function(){setSt('Online Â· Ready');},2000);return;}
+  if(listening){recognition&&recognition.stop();listening=false;this.classList.remove('listening');setSt('Online Â· Ready');return;}
+  var recognition=new(window.SpeechRecognition||window.webkitSpeechRecognition)();
+  var micBtn=this;
+  recognition.lang='en-IN';recognition.interimResults=true;
+  recognition.onstart=function(){listening=true;micBtn.classList.add('listening');setSt('Listening...');};
+  recognition.onresult=function(e){var t=Array.from(e.results).map(function(r){return r[0].transcript;}).join('');document.getElementById('msgInput').value=t;updateSend();};
+  recognition.onend=function(){listening=false;micBtn.classList.remove('listening');setSt('Online Â· Ready');};
+  recognition.onerror=function(){listening=false;micBtn.classList.remove('listening');setSt('Online Â· Ready');};
+  recognition.start();
+});
+
+// Pricing
+function openPricing(){document.getElementById('pricingModal').classList.add('show');}
+document.getElementById('pricingModal').addEventListener('click',function(e){if(e.target===this)this.classList.remove('show');});
+function pay(amt,pl){
+  if(!rzKey){alert('Payment not configured yet.');return;}
+  var sc=document.createElement('script');sc.src='https://checkout.razorpay.com/v1/checkout.js';
+  sc.onload=function(){
+    new Razorpay({key:rzKey,amount:amt*100,currency:'INR',name:'Riya.AI',description:'Paid Plan',
+      prefill:{name:prof.name,email:user.email},theme:{color:'#1a1a2e'},
+      handler:function(res){plan=pl;saveUserData();updateUI();document.getElementById('pricingModal').classList.remove('show');if(user)db.collection('users').doc(user.uid).set({plan:pl,payId:res.razorpay_payment_id},{merge:true}).catch(function(){});}
+    }).open();
+  };document.head.appendChild(sc);
+}
+
+// Personal Space
+function openPersonalSpace(){
+  psCurrentPin='';updatePinDots();
+  document.getElementById('pinScreen').style.display='flex';
+  document.getElementById('psChat').style.display='none';
+  psUnlocked=false;
+  document.getElementById('personalSpace').classList.add('show');
+}
+function closePS(){document.getElementById('personalSpace').classList.remove('show');psUnlocked=false;}
+function lockPS(){psUnlocked=false;psCurrentPin='';document.getElementById('pinScreen').style.display='flex';document.getElementById('psChat').style.display='none';updatePinDots();}
+function resetPin(){if(!user)return;if(confirm('Reset PIN?'))localStorage.removeItem(PS_PIN_KEY+user.uid);}
+function updatePinDots(){for(var i=0;i<4;i++){var d=document.getElementById('pd'+i);if(!d)return;d.classList.remove('filled','error');if(i<psCurrentPin.length)d.classList.add('filled');}}
+
+document.querySelectorAll('.pin-key').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    if(this.id==='pinDel'){psCurrentPin=psCurrentPin.slice(0,-1);updatePinDots();return;}
+    if(this.classList.contains('pin-empty'))return;
+    var n=this.getAttribute('data-n');if(n===null)return;
+    if(psCurrentPin.length>=4)return;
+    psCurrentPin+=n;updatePinDots();vibrate();
+    if(psCurrentPin.length===4){
+      setTimeout(function(){
+        if(!user)return;
+        var saved=localStorage.getItem(PS_PIN_KEY+user.uid);
+        if(!saved){localStorage.setItem(PS_PIN_KEY+user.uid,psCurrentPin);psUnlocked=true;}
+        else if(saved===psCurrentPin){psUnlocked=true;}
+        else{
+          for(var i=0;i<4;i++){var d=document.getElementById('pd'+i);if(d){d.classList.remove('filled');d.classList.add('error');}}
+          psCurrentPin='';setTimeout(function(){for(var i=0;i<4;i++){var d=document.getElementById('pd'+i);if(d)d.classList.remove('error');}updatePinDots();},600);return;
+        }
+        if(psUnlocked){document.getElementById('pinScreen').style.display='none';document.getElementById('psChat').style.display='flex';loadPS();}
+      },150);
+    }
+  });
+});
+
+function loadPS(){try{psChats=JSON.parse(localStorage.getItem(PS_KEY+(user?user.uid:''))||'[]');}catch(e){psChats=[];}renderPS();}
+function savePS(){try{localStorage.setItem(PS_KEY+(user?user.uid:''),JSON.stringify(psChats.slice(-200)));}catch(e){}}
+function renderPS(){
+  var c=document.getElementById('psMsgs');if(!c)return;
+  if(!psChats.length){c.innerHTML='<div class="ps-empty"><div class="ps-empty-title">Personal Space ðŸ”’</div><div class="ps-empty-sub">Private. Only you and Riya. Write anything â€” thoughts, fears, dreams, secrets.</div></div>';return;}
+  c.innerHTML=psChats.map(function(m){var isAi=m.role==='ai';return '<div class="ps-msg '+(isAi?'ai':'user')+'"><div class="ps-bub '+(isAi?'ai':'user')+'">'+esc(m.text)+'</div></div>';}).join('');
+  c.scrollTop=c.scrollHeight;
+}
+document.getElementById('psSend').addEventListener('click',sendPS);
+document.getElementById('psInput').addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendPS();}});
+document.getElementById('psInput').addEventListener('input',function(){this.style.height='auto';this.style.height=Math.min(this.scrollHeight,100)+'px';});
+function sendPS(){
+  if(!psUnlocked)return;
+  var inp=document.getElementById('psInput');if(!inp)return;
+  var txt=inp.value.trim();if(!txt||psLoading)return;
+  psLoading=true;inp.value='';inp.style.height='auto';
+  psChats.push({role:'user',text:txt});savePS();renderPS();
+  var hist=psChats.slice(-10).map(function(m){return{role:m.role==='ai'?'assistant':'user',content:m.text};});
+  fetch(BACKEND+'/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:hist,userName:prof.name,mood:'care',plan:plan,stream:false,memory:userMemory,city:prof.city||'India'})})
+    .then(function(r){return r.json();}).then(function(d){psChats.push({role:'ai',text:d.reply||'I\'m here.'});savePS();renderPS();psLoading=false;})
+    .catch(function(){psLoading=false;});
+}
+
+// Warmup
+fetch(BACKEND+'/warmup').catch(function(){});
+
+// PWA
+if('serviceWorker'in navigator)window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});
+window.addEventListener('beforeunload',function(){var ch=getActive();if(ch&&ch.msgs&&ch.msgs.length>2)autoMemory(ch);});
+
+} // end boot
+</script>
     
 </body>
 </html>
